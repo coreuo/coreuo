@@ -12,17 +12,17 @@
 
         public int Revision { get; set; }
 
-        public int ReadClientConnect(IData data)
+        public int OnReadClientConnect(IData data)
         {
-            Seed = data.ReadInt(1);
+            Seed = data.OnReadInt(1);
 
-            MajorVersion = data.ReadInt(5);
+            MajorVersion = data.OnReadInt(5);
 
-            MinorVersion = data.ReadInt(9);
+            MinorVersion = data.OnReadInt(9);
 
-            Patch = data.ReadInt(13);
+            Patch = data.OnReadInt(13);
 
-            Revision = data.ReadInt(17);
+            Revision = data.OnReadInt(17);
 
             return 21;
         }

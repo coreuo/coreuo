@@ -1,28 +1,20 @@
-﻿namespace Shard.Message.Domain.Incoming
+﻿using Shard.Message.Domain.Shared;
+
+namespace Shard.Message.Domain.Incoming
 {
-    public interface ICharacterCreation
+    public interface ICharacterCreation :
+        IPattern,
+        ISlot,
+        IName,
+        IClientFlags,
+        IRace,
+        IStats
     {
-        public int Pattern { get; set; }
-
-        int Index { get; set; }
-
-        string Name { get; set; }
-
         string Password { get; set; }
 
         byte Profession { get; set; }
 
-        byte ClientFlags { get; set; }
-
         byte Gender { get; set; }
-
-        byte Race { get; set; }
-
-        short Strength { get; set; }
-
-        short Dexterity { get; set; }
-
-        short Intelligence { get; set; }
 
         short SkinColor { get; set; }
 
@@ -76,83 +68,83 @@
 
         short BeardColor { get; set; }
 
-        internal int ReadCharacterCreation(IData data)
+        internal int OnReadCharacterCreation(IData data)
         {
-            Pattern = data.ReadInt(3);
+            Pattern = data.OnReadInt(3);
 
-            Index = data.ReadInt(7);
+            Slot = data.OnReadInt(7);
 
-            Name = data.ReadString(11, 30);
+            Name = data.OnReadString(11, 30);
 
-            Password = data.ReadString(41, 30);
+            Password = data.OnReadString(41, 30);
 
-            Profession = data.ReadByte(71);
+            Profession = data.OnReadByte(71);
 
-            ClientFlags = data.ReadByte(72);
+            ClientFlags = data.OnReadByte(72);
 
-            Gender = data.ReadByte(73);
+            Gender = data.OnReadByte(73);
 
-            Race = data.ReadByte(74);
+            Race = data.OnReadByte(74);
 
-            Strength = data.ReadByte(75);
+            Strength = data.OnReadByte(75);
 
-            Dexterity = data.ReadByte(76);
+            Dexterity = data.OnReadByte(76);
 
-            Intelligence = data.ReadByte(77);
+            Intelligence = data.OnReadByte(77);
 
-            SkinColor = data.ReadShort(78);
+            SkinColor = data.OnReadShort(78);
 
-            UnknownCharacterCreationFirst = data.ReadInt(80);
+            UnknownCharacterCreationFirst = data.OnReadInt(80);
 
-            UnknownCharacterCreationSecond = data.ReadInt(84);
+            UnknownCharacterCreationSecond = data.OnReadInt(84);
 
-            SkillFirst = data.ReadByte(88);
+            SkillFirst = data.OnReadByte(88);
 
-            SkillFirstValue = data.ReadByte(89);
+            SkillFirstValue = data.OnReadByte(89);
 
-            SkillSecond = data.ReadByte(90);
+            SkillSecond = data.OnReadByte(90);
 
-            SkillSecondValue = data.ReadByte(91);
+            SkillSecondValue = data.OnReadByte(91);
 
-            SkillThird = data.ReadByte(92);
+            SkillThird = data.OnReadByte(92);
 
-            SkillThirdValue = data.ReadByte(93);
+            SkillThirdValue = data.OnReadByte(93);
 
-            SkillFourth = data.ReadByte(94);
+            SkillFourth = data.OnReadByte(94);
 
-            SkillFourthValue = data.ReadByte(95);
+            SkillFourthValue = data.OnReadByte(95);
 
-            UnknownCharacterCreationThird = data.ReadByteArray(96, 25);
+            UnknownCharacterCreationThird = data.OnReadByteArray(96, 25);
 
-            UnknownCharacterCreationFourth = data.ReadByte(121);
+            UnknownCharacterCreationFourth = data.OnReadByte(121);
 
-            HairColor = data.ReadShort(122);
+            HairColor = data.OnReadShort(122);
 
-            HairStyle = data.ReadShort(124);
+            HairStyle = data.OnReadShort(124);
 
-            UnknownCharacterCreationFifth = data.ReadByte(126);
+            UnknownCharacterCreationFifth = data.OnReadByte(126);
 
-            UnknownCharacterCreationSixth = data.ReadInt(127);
+            UnknownCharacterCreationSixth = data.OnReadInt(127);
 
-            UnknownCharacterCreationSeventh = data.ReadByte(131);
+            UnknownCharacterCreationSeventh = data.OnReadByte(131);
 
-            ShirtColor = data.ReadShort(132);
+            ShirtColor = data.OnReadShort(132);
 
-            ShirtStyle = data.ReadShort(134);
+            ShirtStyle = data.OnReadShort(134);
 
-            UnknownCharacterCreationEighth = data.ReadByte(136);
+            UnknownCharacterCreationEighth = data.OnReadByte(136);
 
-            FaceColor = data.ReadShort(137);
+            FaceColor = data.OnReadShort(137);
 
-            FaceStyle = data.ReadShort(139);
+            FaceStyle = data.OnReadShort(139);
 
-            UnknownCharacterCreationNinth = data.ReadByte(141);
+            UnknownCharacterCreationNinth = data.OnReadByte(141);
 
-            BeardStyle = data.ReadShort(142);
+            BeardStyle = data.OnReadShort(142);
 
-            BeardColor = data.ReadShort(144);
+            BeardColor = data.OnReadShort(144);
 
-            return data.ReadShort(1);
+            return data.OnReadShort(1);
         }
     }
 }

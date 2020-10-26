@@ -13,7 +13,7 @@ namespace Thread.Runner
 
             thread.Running = true;
 
-            new System.Threading.Thread(thread.Run).Start();
+            new System.Threading.Thread(thread.OnRun).Start();
         }
 
         public static void OnStop(IThread thread)

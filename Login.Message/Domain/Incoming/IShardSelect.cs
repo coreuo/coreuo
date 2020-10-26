@@ -4,9 +4,9 @@
     {
         public int ShardIndex { get; set; }
 
-        internal int ReadShardSelect(IData data)
+        internal int OnReadShardSelect(IData data)
         {
-            ShardIndex = data.ReadShort(1);
+            ShardIndex = data.OnReadShort(1);
 
             return 3;
         }

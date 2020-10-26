@@ -12,12 +12,12 @@ namespace Shard.Message.Domain
 
         public int Length { get; set; }
 
-        internal byte ReadByte(int offset)
+        internal byte OnReadByte(int offset)
         {
             return Value[Offset + offset];
         }
 
-        internal byte[] ReadByteArray(int offset, int length)
+        internal byte[] OnReadByteArray(int offset, int length)
         {
             var result = new byte[length];
 
@@ -26,12 +26,12 @@ namespace Shard.Message.Domain
             return result;
         }
 
-        internal short ReadShort(int offset)
+        internal short OnReadShort(int offset)
         {
             return (short)((Value[Offset + offset] << 8) | Value[Offset + offset + 1]);
         }
 
-        internal int ReadInt(int offset)
+        internal int OnReadInt(int offset)
         {
             return (Value[Offset + offset] << 24) |
                    (Value[Offset + offset + 1] << 16) |
@@ -39,62 +39,55 @@ namespace Shard.Message.Domain
                    Value[Offset + offset + 3];
         }
 
-        internal string ReadString(int offset, int length)
+        internal string OnReadString(int offset, int length)
         {
             return Encoding.ASCII.GetString(Value, Offset + offset, length).Replace("\0", "");
         }
 
-        internal void Write(int offset, byte value)
+        internal void OnWrite(int offset, byte value)
         {
             Value[Offset + offset] = value;
         }
 
-        internal void Write(int offset, byte[] value)
+        internal void OnWrite(int offset, byte[] value)
         {
             value.CopyTo(Value, Offset + offset);
         }
 
-        internal void Write(int offset, short value)
+        internal void OnWrite(int offset, short value)
         {
             Value[Offset + offset] = (byte)(value >> 8);
-            Value[Offset + offset + 1] = (byte)(value);
+            Value[Offset + offset + 1] = (byte)value;
         }
 
-        internal void Write(int offset, ushort value)
+        internal void OnWrite(int offset, ushort value)
         {
             Value[Offset + offset] = (byte)(value >> 8);
-            Value[Offset + offset + 1] = (byte)(value);
+            Value[Offset + offset + 1] = (byte)value;
         }
 
-        internal void Write(int offset, int value)
+        internal void OnWrite(int offset, int value)
         {
             Value[Offset + offset] = (byte)(value >> 24);
             Value[Offset + offset + 1] = (byte)(value >> 16);
             Value[Offset + offset + 2] = (byte)(value >> 8);
-            Value[Offset + offset + 3] = (byte)(value);
+            Value[Offset + offset + 3] = (byte)value;
         }
 
-        internal void Write(int offset, string text)
+        internal void OnWrite(int offset, string text, int? size = null)
         {
-            Encoding.ASCII.GetBytes(text).CopyTo(Value, Offset + offset);
+            Encoding.ASCII.GetBytes(text, 0, text.Length, Value, Offset + offset);
+
+            for (var i = text.Length; i < (size ?? text.Length); i++) Value[Offset + offset + i] = 0;
         }
 
-        internal void Compare(byte[] target)
+        internal int OnWriteUnicode(int offset, string text, int? size = null)
         {
-            for (var i = 0; i < Math.Min(Length, target.Length); i++)
-            {
-                var sourceByte = $"{i}:0x{Value[Offset + i]:X2} ";
+            var length = Encoding.Unicode.GetBytes(text, 0, text.Length, Value, Offset + offset);
 
-                var targetByte = $"{i}:0x{target[i]:X2} ";
+            for (var i = text.Length; i < (size ?? text.Length); i++) Value[Offset + offset + i] = 0;
 
-                Console.ForegroundColor = sourceByte == targetByte ? ConsoleColor.Gray : ConsoleColor.Red;
-
-                Console.Write(sourceByte);
-            }
-
-            Console.ForegroundColor = ConsoleColor.Gray;
-
-            Console.Write("\n");
+            return length;
         }
     }
 }

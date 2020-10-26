@@ -1,17 +1,12 @@
-﻿namespace Shard.Message.Domain.Outgoing
+﻿using Shard.Message.Domain.Shared;
+
+namespace Shard.Message.Domain.Outgoing
 {
-    public interface IMoveResponse<TCharacter>
-        where TCharacter : IMoveNotoriety
+    public interface IMoveResponse : IMove
     {
-        TCharacter Mobile { get; }
-
-        byte MoveNumber { get; set; }
-
-        internal void WriteMoveResponse(IData data)
+        internal void OnWriteMoveResponse(IData data)
         {
-            data.Write(1, MoveNumber);
-
-            Mobile.WriteMoveNotoriety(data);
+            data.OnWrite(1, MoveNumber);
         }
     }
 }

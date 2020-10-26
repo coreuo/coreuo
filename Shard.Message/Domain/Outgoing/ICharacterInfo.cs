@@ -1,12 +1,13 @@
-﻿namespace Shard.Message.Domain.Outgoing
-{
-    public interface ICharacterInfo
-    {
-        public string Name { get; set; }
+﻿using Shard.Message.Domain.Shared;
 
-        internal void WriteCharacter(int index, IData data)
+namespace Shard.Message.Domain.Outgoing
+{
+    public interface ICharacterInfo :
+        IName
+    {
+        internal void OnWriteCharacter(int index, IData data)
         {
-            data.Write(4 + index * 60, Name);
+            data.OnWrite(4 + index * 60, Name, 30);
         }
     }
 }

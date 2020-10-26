@@ -8,13 +8,13 @@ namespace Shard.Message.Domain.Outgoing
     {
         public List<TCity> Cities { get; }
 
-        internal void WriteCityList(int characterListSize, IData data)
+        internal void OnWriteCityList(int characterListSize, IData data)
         {
             var cityCount = Cities.Count;
 
-            data.Write(4 + characterListSize, (byte)cityCount);
+            data.OnWrite(4 + characterListSize, (byte)cityCount);
 
-            Enumerable.Range(0, cityCount).ToList().ForEach(i => Cities[i].WriteCity(characterListSize, i, data));
+            Enumerable.Range(0, cityCount).ToList().ForEach(i => Cities[i].OnWriteCity(characterListSize, i, data));
         }
     }
 }

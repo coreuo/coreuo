@@ -1,20 +1,20 @@
-﻿namespace Shard.Message.Domain.Incoming
+﻿using Shard.Message.Domain.Shared;
+
+namespace Shard.Message.Domain.Incoming
 {
-    public interface IMoveRequest
+    public interface IMoveRequest : IMove
     {
         public byte MoveDirection { get; set; }
 
-        public byte MoveNumber { get; set; }
-
         public int MoveKey { get; set; }
 
-        internal int ReadMoveRequest(IData data)
+        internal int OnReadMoveRequest(IData data)
         {
-            MoveDirection = data.ReadByte(1);
+            MoveDirection = data.OnReadByte(1);
 
-            MoveNumber = data.ReadByte(2);
+            MoveNumber = data.OnReadByte(2);
 
-            MoveKey = data.ReadInt(3);
+            MoveKey = data.OnReadInt(3);
 
             return 7;
         }

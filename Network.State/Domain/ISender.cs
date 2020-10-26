@@ -5,15 +5,15 @@ namespace Network.State.Domain
     public interface ISender<TData> : IState<TData>
         where TData : IData
     {
-        internal void BeginSend(TData data)
+        internal void OnBeginSend(TData data)
         {
             try
             {
-                BeginSend(data.Value, data.Offset, data.Length, f => OnSend(data, f));
+                OnBeginSend(data.Value, data.Offset, data.Length, f => OnSend(data, f));
             }
             catch (Exception exception)
             {
-                Info("Cannot begin send.", exception);
+                OnInfo("Cannot begin send.", exception);
 
                 Locked = false;
 
@@ -27,19 +27,19 @@ namespace Network.State.Domain
             {
                 data.Length = send();
 
-                Process(data);
+                OnProcess(data);
 
                 Last = DateTime.Now;
             }
             catch (ObjectDisposedException) when (!Locked)
             {
-                Info("stopped");
+                OnInfo("stopped");
 
                 Sending = -1;
             }
             catch(Exception exception)
             {
-                Info("Cannot send.", exception);
+                OnInfo("Cannot send.", exception);
 
                 Locked = false;
 
@@ -47,7 +47,7 @@ namespace Network.State.Domain
             }
         }
 
-        private void Process(TData data)
+        private void OnProcess(TData data)
         {
             if (data.Length > 0)
             {
@@ -56,12 +56,12 @@ namespace Network.State.Domain
                 return;
             }
 
-            Info("Cannot process send.");
+            OnInfo("Cannot process send.");
 
             Locked = false;
         }
 
-        private void Info(string text, Exception exception = null)
+        private void OnInfo(string text, Exception exception = null)
         {
             Output($"Sender: {text}{(exception != null ? $"\n{exception}" : null)}");
         }

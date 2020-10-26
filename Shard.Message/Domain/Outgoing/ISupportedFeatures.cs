@@ -4,9 +4,9 @@
     {
         int FeatureFlags { get; set; }
 
-        internal void WriteSupportedFeatures(IData data)
+        internal void OnWriteSupportedFeatures(IData data)
         {
-            data.Write(1, (ushort)FeatureFlags);
+            data.OnWrite(1, (ushort)FeatureFlags);
         }
     }
 }

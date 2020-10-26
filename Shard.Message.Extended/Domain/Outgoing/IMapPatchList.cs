@@ -8,13 +8,13 @@ namespace Shard.Message.Extended.Domain.Outgoing
     {
         List<TMapPatch> Patches { get; }
 
-        internal void WriteMapPatchList(IData data)
+        internal void OnWriteMapPatchList(IData data)
         {
             var length = Patches.Count;
 
-            data.Write(2, length);
+            data.OnWrite(2, length);
 
-            Enumerable.Range(0, length).ToList().ForEach(i => Patches[i].WriteMapPatch(i, data));
+            Enumerable.Range(0, length).ToList().ForEach(i => Patches[i].OnWriteMapPatch(i, data));
         }
     }
 }

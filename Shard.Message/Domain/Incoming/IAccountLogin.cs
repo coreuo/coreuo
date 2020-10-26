@@ -8,13 +8,13 @@
 
         string Password { get; set; }
 
-        internal int ReadAccountLogin(IData data)
+        internal int OnReadAccountLogin(IData data)
         {
-            AuthorizationId = data.ReadInt(1);
+            AuthorizationId = data.OnReadInt(1);
 
-            Name = data.ReadString(5, 30);
+            Name = data.OnReadString(5, 30);
 
-            Password = data.ReadString(35, 30);
+            Password = data.OnReadString(35, 30);
 
             return 65;
         }

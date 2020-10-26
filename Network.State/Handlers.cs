@@ -11,7 +11,7 @@ namespace Network.State
 
             receiver.Receiving = true;
 
-            receiver.BeginReceive();
+            receiver.OnBeginReceive();
         }
 
         public static void OnSend(ISender<TData> sender, TData data)
@@ -21,7 +21,7 @@ namespace Network.State
 
             sender.Sending++;
 
-            sender.BeginSend(data);
+            sender.OnBeginSend(data);
         }
 
         public static void OnStop(IState<TData> state)
@@ -31,10 +31,10 @@ namespace Network.State
 
             state.Locked = false;
 
-            state.BeginClose();
+            state.OnBeginClose();
         }
 
-        public static TData GetBuffer(IState<TData> state)
+        public static TData OnGetBuffer(IState<TData> state)
         {
             var data = state.BufferQueue.TryDequeue(out var buffer) ? buffer : new TData();
 

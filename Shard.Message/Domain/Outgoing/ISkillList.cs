@@ -8,11 +8,11 @@ namespace Shard.Message.Domain.Outgoing
     {
         List<TSkillInfo> Skills { get; }
 
-        internal void WriteSkillList(IData data)
+        internal void OnWriteSkillList(IData data)
         {
-            data.Write(3, (byte)0x02);
+            data.OnWrite(3, (byte)0x02);
 
-            Enumerable.Range(0, Skills.Count).ToList().ForEach(i => Skills[i].WriteSkillInfo(i, data));
+            Enumerable.Range(0, Skills.Count).ToList().ForEach(i => Skills[i].OnWriteSkillInfo(i, data));
         }
     }
 }

@@ -8,15 +8,15 @@ namespace Launcher.Domain
 {
     using NetworkStateHandlers = Network.State.Handlers<Data>;
     using CompressionHandlers = Shard.Message.Compression.Handlers<ShardState, Data>;
-    using ShardMessageHandlers = Shard.Message.Handlers<ShardServer, ShardState, Data, Mobile, City, Item, Skill>;
+    using ShardMessageHandlers = Shard.Message.Handlers<ShardServer, ShardState, Data, Entity, Mobile, City, Item, Skill, Map, Property>;
 
     public class ShardState :
         Network.Listener.Domain.ISocket,
         Network.State.Domain.IReceiver<Data>,
         Network.State.Domain.ISender<Data>,
         Network.Server.Domain.IState<Data>,
-        Shard.Message.Domain.IState<Data, Mobile, Item, Skill>,
-        Shard.Message.Extended.Domain.IState<Data, Mobile, Map, MapPatch>,
+        Shard.Message.Domain.IState<Data, Mobile, Item, Skill, Map>,
+        Shard.Message.Extended.Domain.IState<Data>,
         Shard.Message.Compression.Domain.IState<Data>,
         Shard.Server.Domain.IState<Mobile>
     {
@@ -94,7 +94,7 @@ namespace Launcher.Domain
 
         public int ClientType { get; set; }
 
-        public List<Mobile> Characters { get; } = new List<Mobile>();
+        public List<Mobile> Characters { get; } = new List<Mobile> {new Mobile {Serial = 1, Name = "Generic Player"}};
 
         public Mobile Mobile { get; set; }
 
@@ -104,8 +104,10 @@ namespace Launcher.Domain
 
         public Action<Data> Send => data => NetworkStateHandlers.OnSend(this, data);
 
-        public Func<Data> GetBuffer => () => NetworkStateHandlers.GetBuffer(this);
+        public Func<Data> GetBuffer => () => NetworkStateHandlers.OnGetBuffer(this);
 
         public Action<string> Output => text => Console.WriteLine($"[{DateTime.Now:O}] {Identity}.{text}");
+
+        public List<int> PropertiesQuerySerialList { get; set; }
     }
 }

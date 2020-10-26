@@ -3,7 +3,7 @@ using Login.Message.Domain.Outgoing;
 
 namespace Login.Message.Domain
 {
-    public interface IServer<TState, TData, TShard> :
+    public interface IServer<in TState, in TData, TShard> :
         IShardList<TShard>
         where TState : IState<TData>
         where TData : IData, new()
@@ -21,24 +21,24 @@ namespace Login.Message.Domain
 
         Action<string> Output { get; }
 
-        internal int Read(TState state, TData data)
+        internal int OnRead(TState state, TData data)
         {
             Decrypt(state, data);
 
-            var id = data.ReadByte(0);
+            var id = data.OnReadByte(0);
 
             return id switch
             {
-                0xEF => Process(state.ReadClientConnect, ClientConnect),
-                0x80 => Process(state.ReadAccountLogin, AccountLogin),
-                0xD9 => Process(state.ReadHardwareInfo, HardwareInfo),
-                0xA0 => Process(state.ReadShardSelect, ShardSelect),
+                0xEF => Process(state.OnReadClientConnect, ClientConnect),
+                0x80 => Process(state.OnReadAccountLogin, AccountLogin),
+                0xD9 => Process(state.OnReadHardwareInfo, HardwareInfo),
+                0xA0 => Process(state.OnReadShardSelect, ShardSelect),
                 _ => throw new InvalidOperationException($"Invalid message 0x{id:X2}.")
             };
 
             int Process(Func<IData, int> reader, Action<TState> @event)
             {
-                Info($"0x{id:X2} {reader.Method.Name}");
+                OnInfo($"0x{id:X2} {reader.Method.Name}");
 
                 var size = reader(data);
 
@@ -48,7 +48,7 @@ namespace Login.Message.Domain
             }
         }
 
-        private void Info(string text)
+        private void OnInfo(string text)
         {
             Output($"Message: {text}");
         }

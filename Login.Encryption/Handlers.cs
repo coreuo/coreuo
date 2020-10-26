@@ -11,12 +11,12 @@ namespace Login.Encryption
             if (!state.Encrypted)
                 return;
 
-            state.Decrypt(data.Value, data.Offset, data.Length);
+            state.OnDecrypt(data.Value, data.Offset, data.Length);
         }
 
         public static void OnClientConnect(TState state)
         {
-            state.Initialize();
+            state.OnInitialize();
         }
     }
 }

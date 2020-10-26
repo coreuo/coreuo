@@ -6,13 +6,13 @@
 
         string Town { get; set; }
 
-        internal void WriteCity(int characterListSize, int index, IData data)
+        internal void OnWriteCity(int characterListSize, int index, IData data)
         {
-            data.Write(4 + characterListSize + 1 + index * 63, index);
+            data.OnWrite(4 + characterListSize + 1 + index * 63, index);
 
-            data.Write(4 + characterListSize + 1 + index * 63 + 1, Name);
+            data.OnWrite(4 + characterListSize + 1 + index * 63 + 1, Name);
 
-            data.Write(4 + characterListSize + 1 + index * 63 + 1 + 31, Town);
+            data.OnWrite(4 + characterListSize + 1 + index * 63 + 1 + 31, Town);
         }
     }
 }

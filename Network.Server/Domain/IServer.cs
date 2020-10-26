@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Network.Server.Domain
 {
-    public interface IServer<TState, TData>
+    public interface IServer<TState, in TData>
         where TState : IState<TData>
         where TData : IData
     {
@@ -26,7 +26,7 @@ namespace Network.Server.Domain
 
         Action<string> Output { get; }
 
-        internal void ProcessListenQueue()
+        internal void OnProcessListenQueue()
         {
             while (ListenQueue.TryDequeue(out var state))
             {
@@ -36,17 +36,17 @@ namespace Network.Server.Domain
             }
         }
 
-        internal void RemoveInvalidStates()
+        internal void OnRemoveInvalidStates()
         {
             States.RemoveAll(s => s.Sending < 0 || !s.Receiving);
         }
 
-        internal void ProcessStates()
+        internal void OnProcessStates()
         {
-            States.ForEach(ProcessState);
+            States.ForEach(OnProcessState);
         }
 
-        private void ProcessState(TState state)
+        private void OnProcessState(TState state)
         {
             while (state.ReceiveQueue.TryDequeue(out var data))
             {
@@ -56,7 +56,7 @@ namespace Network.Server.Domain
                 }
                 catch (Exception exception)
                 {
-                    Info("Cannot process data.", exception);
+                    OnInfo("Cannot process data.", exception);
 
                     Locked = false;
                 }
@@ -65,7 +65,7 @@ namespace Network.Server.Domain
             }
         }
 
-        private void Info(string text, Exception exception = null)
+        private void OnInfo(string text, Exception exception = null)
         {
             Output($"Server: {text}{(exception != null ? $"\n{exception}" : null)}");
         }

@@ -6,11 +6,11 @@
 
         string Password { get; set; }
 
-        int ReadAccountLogin(IData data)
+        int OnReadAccountLogin(IData data)
         {
-            Name = data.ReadString(1, 30);
+            Name = data.OnReadString(1, 30);
 
-            Password = data.ReadString(31, 30);
+            Password = data.OnReadString(31, 30);
 
             return 62;
         }

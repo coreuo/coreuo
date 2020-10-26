@@ -1,12 +1,13 @@
-﻿namespace Shard.Message.Domain.Outgoing
-{
-    public interface IMoveNotoriety
-    {
-        byte Notoriety { get; }
+﻿using Shard.Message.Domain.Shared;
 
-        internal void WriteMoveNotoriety(IData data)
+namespace Shard.Message.Domain.Outgoing
+{
+    public interface IMoveNotoriety :
+        INotoriety
+    {
+        internal void OnWriteMoveNotoriety(IData data)
         {
-            data.Write(2, Notoriety);
+            data.OnWrite(2, Notoriety);
         }
     }
 }

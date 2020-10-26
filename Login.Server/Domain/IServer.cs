@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Login.Server.Domain
 {
-    public interface IServer<TState, TShard>
+    public interface IServer<in TState, TShard>
         where TState : IState
         where TShard : IShard
     {

@@ -32,7 +32,7 @@ namespace Launcher.Domain
 
         public string IpAddress { get; set; } = "127.0.0.1";
 
-        public int Port { get; set; } = 2593;
+        public int Port { get; set; } = 12593;
 
         public bool Locked { get; set; }
 

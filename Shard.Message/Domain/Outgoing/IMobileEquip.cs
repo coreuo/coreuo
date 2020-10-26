@@ -1,26 +1,26 @@
-﻿namespace Shard.Message.Domain.Outgoing
-{
-    public interface IMobileEquip
-    {
-        int Serial { get; set; }
+﻿using Shard.Message.Domain.Shared;
 
+namespace Shard.Message.Domain.Outgoing
+{
+    public interface IMobileEquip :
+        ISerial,
+        IHue
+    {
         ushort ItemId { get; set; }
 
         byte Layer { get; set; }
 
-        short Hue { get; set; }
+        internal bool OnHasHue() => (ItemId & 0x8000) > 0;
 
-        internal bool HasHue() => (ItemId & 0x8000) > 0;
-
-        internal void WriteMobileEquipment(int currentSize, IData data)
+        internal void OnWriteMobileEquipment(int currentSize, IData data)
         {
-            data.Write(19 + currentSize, Serial);
+            data.OnWrite(19 + currentSize, Serial);
 
-            data.Write(19 + currentSize + 4, ItemId);
+            data.OnWrite(19 + currentSize + 4, ItemId);
 
-            data.Write(19 + currentSize + 4 + 2, Layer);
+            data.OnWrite(19 + currentSize + 4 + 2, Layer);
 
-            if (HasHue()) data.Write(19 + currentSize + 4 + 2 + 1, Hue);
+            if (OnHasHue()) data.OnWrite(19 + currentSize + 4 + 2 + 1, Hue);
         }
     }
 }

@@ -1,26 +1,22 @@
 ﻿using System;
-using Shard.Message.Extended.Domain.Outgoing;
 
 namespace Shard.Message.Extended.Domain
 {
-    public interface IServer<TState, TData, TMobile, TMap, TMapPatch>
-        where TState : IState<TData, TMobile, TMap, TMapPatch>
+    public interface IServer<in TState, in TData>
+        where TState : IState<TData>
         where TData : IData
-        where TMobile : IMobile<TMap, TMapPatch>
-        where TMap : IMap<TMapPatch>
-        where TMapPatch : IMapPatch
     {
         Action<TState> ClientLanguage { get; }
 
         public string Identity { get; set; }
 
-        internal int Read(TState state, TData data)
+        internal int OnRead(TState state, TData data)
         {
-            var id = data.ReadShort(0);
+            var id = data.OnReadShort(0);
 
             return id switch
             {
-                0x000B => Process(state.ReadClientLanguage, ClientLanguage),
+                0x000B => Process(state.OnReadClientLanguage, ClientLanguage),
                 _ => throw new InvalidOperationException($"{Identity}.Message.Extended: Invalid message 0x{id:X}.")
             };
 

@@ -12,21 +12,21 @@ namespace Network.Listener.Domain
 
         IPEndPoint IpEndPoint => (IPEndPoint) EndPoint;
 
-        internal void Initialize()
+        internal void OnInitialize()
         {
             Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             EndPoint = new IPEndPoint(IPAddress.Parse(IpAddress), Port);
         }
 
-        internal void BeginListen(EndPoint endpoint)
+        internal void OnBeginListen(EndPoint endpoint)
         {
             Socket.Bind(endpoint);
 
             Socket.Listen(100);
         }
 
-        internal void BeginAccept<TState>(Action<Func<TState>> onAccept)
+        internal void OnBeginAccept<TState>(Action<Func<TState>> onAccept)
             where TState : ISocket, new()
         {
             Socket.BeginAccept(r => onAccept(() => CreateState(r)), Socket);
@@ -41,7 +41,7 @@ namespace Network.Listener.Domain
             }
         }
 
-        internal void BeginClose()
+        internal void OnBeginClose()
         {
             Socket.Close();
         }

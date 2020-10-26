@@ -13,7 +13,7 @@ namespace Login.Message
         {
             while (data.Offset < data.Length)
             {
-                var size = server.Read(state, data);
+                var size = server.OnRead(state, data);
 
                 data.Offset += size;
             }
@@ -21,12 +21,12 @@ namespace Login.Message
 
         public static void OnShardList(TServer server, TState state)
         {
-            state.Write(0xA8, 6 + 40 * server.Shards.Count, server.WriteShardList);
+            state.OnWrite(0xA8, 6 + 40 * server.Shards.Count, server.OnWriteShardList);
         }
 
         public static void OnShardServer(TServer server, TState state)
         {
-            state.Write(0x8C, 11, server.Shards[state.ShardIndex].WriteShardServer);
+            state.OnWrite(0x8C, 11, server.Shards[state.ShardIndex].OnWriteShardServer);
         }
     }
 }

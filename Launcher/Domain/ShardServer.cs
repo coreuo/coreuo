@@ -9,9 +9,9 @@ namespace Launcher.Domain
     using NetworkListenerHandlers = Network.Listener.Handlers<ShardState>;
     using NetworkStateHandlers = Network.State.Handlers<Data>;
     using NetworkServerHandlers = Network.Server.Handlers<ShardState, Data>;
-    using ShardMessageHandlers = Shard.Message.Handlers<ShardServer, ShardState, Data, Mobile, City, Item, Skill>;
+    using ShardMessageHandlers = Shard.Message.Handlers<ShardServer, ShardState, Data, Entity, Mobile, City, Item, Skill, Map, Property>;
     using ShardExtendedMessageHandler = Shard.Message.Extended.Handlers<ShardServer, ShardState, Data, Mobile, Map, MapPatch>;
-    using ShardServerHandlers = Shard.Server.Handlers<ShardServer,ShardState, Mobile>;
+    using ShardServerHandlers = Shard.Server.Handlers<ShardServer,ShardState,Entity,Mobile>;
 
     public class ShardServer :
         Login.Message.Domain.IShard,
@@ -20,15 +20,15 @@ namespace Launcher.Domain
         Thread.Runner.Domain.IThread,
         Network.Listener.Domain.IListener<ShardState>,
         Network.Server.Domain.IServer<ShardState, Data>,
-        Shard.Message.Domain.IServer<ShardState, Data, Mobile, City, Item, Skill>,
-        Shard.Message.Extended.Domain.IServer<ShardState, Data, Mobile, Map, MapPatch>,
-        Shard.Server.Domain.IServer<ShardState, Mobile>
+        Shard.Message.Domain.IServer<ShardState, Data, Mobile, City, Item, Skill, Map>,
+        Shard.Message.Extended.Domain.IServer<ShardState, Data>,
+        Shard.Server.Domain.IServer<ShardState, Entity, Mobile>
     {
         public string Identity { get; set; } = nameof(ShardServer);
 
         public string IpAddress { get; set; } = "127.0.0.1";
 
-        public int Port { get; set; } = 2594;
+        public int Port { get; set; } = 12594;
 
         public bool Locked { get; set; }
 
@@ -60,15 +60,7 @@ namespace Launcher.Domain
 
         public List<City> Cities { get; } = new List<City>
         {
-            new City {Name = "New Haven", Town = "New Haven Bank"},
-            new City {Name = "Yew", Town = "The Empath Abbey"},
-            new City {Name = "Minoc", Town = "The Barnacle"},
-            new City {Name = "Britain", Town = "The Wayfarer's Inn"},
-            new City {Name = "Moonglow", Town = "The Scholars Inn"},
-            new City {Name = "Trinsic", Town = "The Traveler's Inn"},
-            new City {Name = "Jhelom", Town = "The Mercenary Inn"},
-            new City {Name = "Skara Brae", Town = "The Falconer's Inn"},
-            new City {Name = "Vesper", Town = "The Ironwood Inn"}
+            new City {Name = "New Haven", Town = "New Haven Bank"}
         };
 
         public Action ThreadStart => () => NetworkListenerHandlers.OnStart(this);
@@ -110,7 +102,13 @@ namespace Launcher.Domain
 
         public Action<ShardState> ClientType => state => { };
 
+        public Action<ShardState, Mobile> CharacterLogin => (state, mobile) => ShardServerHandlers.OnCharacterLogin(this, state, mobile);
+
+        public Action<ShardState> PropertiesQuery => state => ShardServerHandlers.OnPropertiesQuery(this, state);
+
         public Action<ShardState> ClientLanguage => state => ShardServerHandlers.OnClientLanguage(this, state);
+
+        public Dictionary<int, Entity> Entities { get; } = new Dictionary<int, Entity>();
 
         public Action<ShardState> EncryptionRequest => ShardMessageHandlers.OnEncryptionRequest;
 
@@ -118,11 +116,11 @@ namespace Launcher.Domain
 
         public Action<ShardState> CharacterList => state => ShardMessageHandlers.OnCharacterList(this, state);
 
-        public Action<ShardState> LoginConfirm => ShardMessageHandlers.OnLoginConfirm;
+        public Action<ShardState, Mobile> LoginConfirm => ShardMessageHandlers.OnLoginConfirm;
 
-        public Action<ShardState> MapChange => ShardExtendedMessageHandler.OnMapChange;
+        public Action<ShardState, Mobile> MapChange => ShardExtendedMessageHandler.OnMapChange;
 
-        public Action<ShardState> MapPatches => ShardExtendedMessageHandler.OnMapPatch;
+        public Action<ShardState, Mobile> MapPatches => ShardExtendedMessageHandler.OnMapPatch;
 
         public Action<ShardState> SeasonChange => ShardMessageHandlers.OnSeasonChange;
 
@@ -146,7 +144,17 @@ namespace Launcher.Domain
 
         public Action<ShardState> PingResponse => ShardMessageHandlers.OnPingResponse;
 
-        public Action<ShardState> MoveResponse => ShardMessageHandlers.OnMoveResponse;
+        public Action<ShardState, Mobile> MoveResponse => ShardMessageHandlers.OnMoveResponse;
+
+        public Action<ShardState> ClientVersionRequest => ShardMessageHandlers.OnClientVersionRequest;
+
+        public Action<ShardState, Mobile> ServerChange => ShardMessageHandlers.OnServerChange;
+
+        public Action<ShardState, Entity> PropertyInfo => ShardMessageHandlers.OnPropertyInfo;
+
+        public Action<ShardState, Entity> PropertyList => ShardMessageHandlers.OnPropertyList;
+
+        public Action<ShardState, Mobile> MobileAttributes => ShardMessageHandlers.OnMobileAttributes;
 
         public Action<string> Output => text => Console.WriteLine($"[{DateTime.Now:O}] {Identity}.{text}");
     }

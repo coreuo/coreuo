@@ -12,17 +12,17 @@
 
         ushort Cap { get; set; }
 
-        internal void WriteSkillInfo(int index, IData data)
+        internal void OnWriteSkillInfo(int index, IData data)
         {
-            data.Write(6 + index * 9, Id);
+            data.OnWrite(6 + index * 9, Id);
 
-            data.Write(6 + index * 9 + 2, Value);
+            data.OnWrite(6 + index * 9 + 2, Value);
 
-            data.Write(6 + index * 9 + 2 + 2, Base);
+            data.OnWrite(6 + index * 9 + 2 + 2, Base);
 
-            data.Write(6 + index * 9 + 2 + 2 + 2, Lock);
+            data.OnWrite(6 + index * 9 + 2 + 2 + 2, Lock);
 
-            data.Write(6 + index * 9 + 2 + 2 + 2 + 1, Cap);
+            data.OnWrite(6 + index * 9 + 2 + 2 + 2 + 1, Cap);
         }
     }
 }

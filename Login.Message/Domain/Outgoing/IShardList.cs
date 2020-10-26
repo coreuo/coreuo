@@ -8,23 +8,23 @@ namespace Login.Message.Domain.Outgoing
     {
         public List<TShard> Shards { get; set; }
 
-        internal void WriteShardList(IData data)
+        internal void OnWriteShardList(IData data)
         {
-            data.Write(3, 0xFF);
+            data.OnWrite(3, 0xFF);
 
-            data.Write(4, (short)Shards.Count);
+            data.OnWrite(4, (short)Shards.Count);
 
             for (var i = 0; i < Shards.Count; i++)
             {
                 var shard = Shards[i];
 
-                data.Write(6 + 40 * i, (short)i);
+                data.OnWrite(6 + 40 * i, (short)i);
 
-                data.WriteString(6 + 40 * i + 2, shard.Identity);
+                data.OnWriteString(6 + 40 * i + 2, shard.Identity);
 
-                data.Write(6 + 40 * i + 34, (byte)shard.Percentage);
+                data.OnWrite(6 + 40 * i + 34, (byte)shard.Percentage);
 
-                data.Write(6 + 40 * i + 35, (byte)shard.TimeZone);
+                data.OnWrite(6 + 40 * i + 35, (byte)shard.TimeZone);
 
                 IPAddress.Parse(shard.IpAddress).GetAddressBytes().CopyTo(data.Value, 6 + 40 * i + 36);
             }

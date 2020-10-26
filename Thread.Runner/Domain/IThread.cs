@@ -20,20 +20,20 @@ namespace Thread.Runner.Domain
 
         Action<string> Output { get; }
 
-        internal void Run()
+        internal void OnRun()
         {
-            Info("started");
+            OnInfo("started");
 
             ThreadStart();
 
-            if(Locked) Info("locked");
+            if(Locked) OnInfo("locked");
 
             while (Locked)
             {
                 OnSlice();
             }
 
-            Info("unlocked");
+            OnInfo("unlocked");
 
             ThreadUnlock();
 
@@ -42,7 +42,7 @@ namespace Thread.Runner.Domain
                 OnSlice();
             }
 
-            Info("stopped");
+            OnInfo("stopped");
 
             ThreadStop();
         }
@@ -53,15 +53,15 @@ namespace Thread.Runner.Domain
 
             ThreadSlice();
 
-            Wait();
+            OnWait();
         }
 
-        private void Info(string text)
+        private void OnInfo(string text)
         {
             Output($"Thread: {text}");
         }
 
-        private static void Wait()
+        private static void OnWait()
         {
             System.Threading.Thread.Sleep(1);
         }

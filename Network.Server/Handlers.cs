@@ -9,11 +9,11 @@ namespace Network.Server
     {
         public static void OnSlice(IServer<TState, TData> server)
         {
-            server.ProcessListenQueue();
+            server.OnProcessListenQueue();
 
-            server.RemoveInvalidStates();
+            server.OnRemoveInvalidStates();
 
-            server.ProcessStates();
+            server.OnProcessStates();
 
             if (!server.Locked && !server.Listening && !server.States.Any())
                 server.Running = false;

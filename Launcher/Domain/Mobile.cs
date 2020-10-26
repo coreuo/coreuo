@@ -3,14 +3,14 @@ using System.Linq;
 
 namespace Launcher.Domain
 {
-    public class Mobile : 
-        Shard.Message.Domain.IMobile<Item, Skill>,
+    public class Mobile : Entity,
+        Shard.Message.Domain.IMobile<Item, Skill, Map>,
         Shard.Message.Extended.Domain.IMobile<Map, MapPatch>,
         Shard.Server.Domain.IMobile
     {
         public int Pattern { get; set; }
 
-        public int Index { get; set; }
+        public int Slot { get; set; }
 
         public string Name { get; set; }
 
@@ -24,9 +24,7 @@ namespace Launcher.Domain
 
         public byte CanBeRenamed { get; set; }
 
-        public byte ClientFlags { get; set; } = 0x6;
-
-        public int Serial { get; set; } = 1;
+        public int ClientFlags { get; set; } = 0x6;
 
         public byte LightLevel { get; set; } = 0;
 
@@ -247,6 +245,18 @@ namespace Launcher.Domain
 
         }).ToList();
 
-        public Map Map { get; } = new Map();
+        public Map Map { get; set; } = new Map();
+
+        public short FirstLoginCharacterUnknown { get; set; }
+
+        public int SecondLoginCharacterUnknown { get; set; }
+
+        public int LoginCount { get; set; }
+
+        public byte[] ThirdLoginCharacterUnknown { get; set; }
+
+        public int ClientIpAddress { get; set; }
+
+        public byte FirstUnknownServerChange { get; set; }
     }
 }

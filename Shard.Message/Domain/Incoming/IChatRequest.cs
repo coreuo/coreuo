@@ -4,9 +4,9 @@
     {
         public string ChatName { get; set; }
 
-        internal int ReadChatRequest(IData data)
+        internal int OnReadChatRequest(IData data)
         {
-            ChatName = data.ReadString(1, 63);
+            ChatName = data.OnReadString(1, 63);
 
             return 64;
         }

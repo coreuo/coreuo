@@ -3,10 +3,11 @@ using Shard.Server.Domain;
 
 namespace Shard.Server
 {
-    public static class Handlers<TServer, TState, TMobile>
-        where TServer : IServer<TState, TMobile>
+    public static class Handlers<TServer, TState, TEntity, TMobile>
+        where TServer : IServer<TState, TEntity, TMobile>
         where TState : IState<TMobile>
-        where TMobile : IMobile
+        where TEntity : IEntity
+        where TMobile : TEntity, IMobile
     {
         public static void OnClientSeed(TServer server, TState state)
         {
@@ -22,13 +23,15 @@ namespace Shard.Server
 
         public static void OnCharacterCreate(TServer server, TState state, TMobile mobile)
         {
+            server.Entities[mobile.Serial] = mobile;
+
             state.Mobile = mobile;
 
-            server.LoginConfirm(state);
+            server.LoginConfirm(state, mobile);
 
-            server.MapChange(state);
+            server.MapChange(state, mobile);
 
-            server.MapPatches(state);
+            server.MapPatches(state, mobile);
 
             server.SeasonChange(state);
 
@@ -61,12 +64,11 @@ namespace Shard.Server
                 _ => throw new InvalidOperationException($"Unknown mobile query type {state.MobileQueryType:X}.")
             };
 
-            action(state, state.Mobile);
+            action(state, (TMobile)server.Entities[state.MobileQuerySerial]);
         }
 
         public static void OnClientLanguage(TServer server, TState state)
         {
-
         }
 
         public static void OnChatRequest(TServer server, TState state)
@@ -81,7 +83,69 @@ namespace Shard.Server
 
         public static void OnMoveRequest(TServer server, TState state)
         {
-            server.MoveResponse(state);
+            server.MoveResponse(state, state.Mobile);
+        }
+
+        public static void OnCharacterLogin(TServer server, TState state, TMobile mobile)
+        {
+            server.Entities[mobile.Serial] = mobile;
+
+            state.Mobile = mobile;
+
+            server.ClientVersionRequest(state);
+
+            server.LoginConfirm(state, mobile);
+
+            server.MapChange(state, mobile);
+
+            server.MapPatches(state, mobile);
+
+            server.SeasonChange(state);
+
+            server.SupportedFeatures(state);
+
+            server.MobileUpdate(state, mobile);
+
+            server.MobileUpdate(state, mobile);
+
+            server.GlobalLight(state);
+
+            server.MobileLight(state, mobile);
+
+            server.MobileUpdate(state, mobile);
+
+            server.MobileIncoming(state, mobile);
+
+            server.MobileStatus(state, mobile);
+
+            server.WarMode(state);
+
+            server.MobileIncoming(state, mobile);
+
+            server.PropertyInfo(state, mobile);
+
+            server.SupportedFeatures(state);
+
+            server.MobileUpdate(state, mobile);
+
+            server.MobileStatus(state, mobile);
+
+            server.WarMode(state);
+
+            server.MobileIncoming(state, mobile);
+
+            server.LoginComplete(state);
+
+            server.ServerTime(state);
+
+            server.SeasonChange(state);
+
+            server.MapChange(state, mobile);
+        }
+
+        public static void OnPropertiesQuery(TServer server, TState state)
+        {
+            state.PropertiesQuerySerialList.ForEach(s => server.PropertyList(state, server.Entities[s]));
         }
     }
 }

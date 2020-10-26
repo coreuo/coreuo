@@ -2,7 +2,7 @@
 
 namespace Shard.Message.Extended.Domain
 {
-    public interface IMobile<TMap, TMapPatch>
+    public interface IMobile<out TMap, TMapPatch>
         where TMap : IMap<TMapPatch>
         where TMapPatch : IMapPatch
     {

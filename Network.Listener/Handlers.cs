@@ -9,11 +9,11 @@ namespace Network.Listener
         {
             listener.Listening = true;
 
-            listener.Initialize();
+            listener.OnInitialize();
 
-            listener.BeginListen();
+            listener.OnBeginListen();
 
-            if(listener.Listening) listener.BeginAccept();
+            if(listener.Listening) listener.OnBeginAccept();
         }
 
         public static void OnStop(IListener<TSocket> listener)
@@ -21,7 +21,7 @@ namespace Network.Listener
             if (!listener.Listening)
                 return;
 
-            listener.BeginClose();
+            listener.OnBeginClose();
         }
     }
 }

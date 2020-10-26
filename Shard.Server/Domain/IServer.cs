@@ -1,22 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Shard.Server.Domain
 {
-    public interface IServer<TState, TMobile>
+    public interface IServer<in TState, TEntity, in TMobile>
         where TState : IState<TMobile>
+        where TEntity : IEntity
         where TMobile : IMobile
     {
+        Dictionary<int, TEntity> Entities { get; }
+
         Action<TState> EncryptionRequest { get; }
 
         Action<TState> SupportedFeatures { get; }
 
         Action<TState> CharacterList { get; }
 
-        Action<TState> LoginConfirm { get; }
+        Action<TState, TMobile> LoginConfirm { get; }
 
-        Action<TState> MapChange { get; }
+        Action<TState, TMobile> MapChange { get; }
 
-        Action<TState> MapPatches { get; }
+        Action<TState, TMobile> MapPatches { get; }
 
         Action<TState> SeasonChange { get; }
 
@@ -40,6 +44,16 @@ namespace Shard.Server.Domain
 
         Action<TState> PingResponse { get; }
 
-        Action<TState> MoveResponse { get; }
+        Action<TState, TMobile> MoveResponse { get; }
+
+        Action<TState> ClientVersionRequest { get; }
+
+        Action<TState, TMobile> ServerChange { get; }
+
+        Action<TState, TEntity> PropertyInfo { get; }
+
+        Action<TState, TEntity> PropertyList { get; }
+
+        Action<TState, TMobile> MobileAttributes { get; }
     }
 }

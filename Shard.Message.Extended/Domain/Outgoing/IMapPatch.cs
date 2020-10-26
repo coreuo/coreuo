@@ -6,11 +6,11 @@
 
         int LandBlocks { get; set; }
 
-        internal void WriteMapPatch(int index, IData data)
+        internal void OnWriteMapPatch(int index, IData data)
         {
-            data.Write(6 + index * 8, StaticBlocks);
+            data.OnWrite(6 + index * 8, StaticBlocks);
 
-            data.Write(6 + index * 8 + 4, LandBlocks);
+            data.OnWrite(6 + index * 8 + 4, LandBlocks);
         }
     }
 }
