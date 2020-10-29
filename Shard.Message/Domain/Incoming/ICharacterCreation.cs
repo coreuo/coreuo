@@ -8,7 +8,7 @@ namespace Shard.Message.Domain.Incoming
         IName,
         IClientFlags,
         IRace,
-        IStats
+        IMobileStats
     {
         string Password { get; set; }
 
@@ -74,9 +74,9 @@ namespace Shard.Message.Domain.Incoming
 
             Slot = data.OnReadInt(7);
 
-            Name = data.OnReadString(11, 30);
+            Name = data.OnReadAscii(11, 30);
 
-            Password = data.OnReadString(41, 30);
+            Password = data.OnReadAscii(41, 30);
 
             Profession = data.OnReadByte(71);
 

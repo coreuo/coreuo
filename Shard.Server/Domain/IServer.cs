@@ -50,10 +50,14 @@ namespace Shard.Server.Domain
 
         Action<TState, TMobile> ServerChange { get; }
 
-        Action<TState, TEntity> PropertyInfo { get; }
+        Action<TState, TEntity> AttributeInfo { get; }
 
-        Action<TState, TEntity> PropertyList { get; }
+        Action<TState, TEntity> AttributeList { get; }
 
         Action<TState, TMobile> MobileAttributes { get; }
+
+        Action<TState, TMobile> OpenPaperDoll { get; }
+
+        Action<TState, TMobile> ProfileResponse { get; }
     }
 }

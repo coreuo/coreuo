@@ -2,7 +2,7 @@
 {
     public interface ICityInfo
     {
-        string Name { get; set; }
+        string Name { get; }
 
         string Town { get; set; }
 
@@ -10,9 +10,9 @@
         {
             data.OnWrite(4 + characterListSize + 1 + index * 63, index);
 
-            data.OnWrite(4 + characterListSize + 1 + index * 63 + 1, Name);
+            data.OnWriteAscii(4 + characterListSize + 1 + index * 63 + 1, Name, 31);
 
-            data.OnWrite(4 + characterListSize + 1 + index * 63 + 1 + 31, Town);
+            data.OnWriteAscii(4 + characterListSize + 1 + index * 63 + 1 + 31, Town, 31);
         }
     }
 }

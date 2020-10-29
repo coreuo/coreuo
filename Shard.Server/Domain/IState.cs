@@ -11,6 +11,12 @@ namespace Shard.Server.Domain
 
         public int MobileQuerySerial { get; set; }
 
-        List<int> PropertiesQuerySerialList { get; set; }
+        List<int> AttributesQuerySerialList { get; set; }
+
+        int DoubleClickSerial { get; set; }
+
+        byte RequestProfileMode { get; set; }
+
+        int RequestProfileSerial { get; set; }
     }
 }

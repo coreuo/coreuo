@@ -40,7 +40,11 @@ namespace Shard.Message.Domain
 
         public Action<TState, TMobile> CharacterLogin { get; }
 
-        public Action<TState> PropertiesQuery { get; }
+        public Action<TState> AttributesQuery { get; }
+
+        public Action<TState> DoubleClick { get; }
+
+        public Action<TState> RequestProfile { get; }
 
         Action<string> Output { get; }
 
@@ -61,7 +65,9 @@ namespace Shard.Message.Domain
                 0x02 => Process(state.OnReadMoveRequest, MoveRequest),
                 0xE1 => Process(state.OnReadClientType, ClientType),
                 0x5D => ProcessWith(state.Characters[data.OnReadInt(65)], (m, d) => m.OnReadLoginCharacter(d), CharacterLogin),
-                0xD6 => Process(state.OnReadPropertiesQuery, PropertiesQuery),
+                0xD6 => Process(state.OnReadAttributesQuery, AttributesQuery),
+                0x06 => Process(state.OnReadDoubleClick, DoubleClick),
+                0xB8 => Process(state.OnReadRequestProfile, RequestProfile),
                 _ => throw new InvalidOperationException($"Invalid message 0x{id:X2}.")
             };
 

@@ -2,9 +2,9 @@
 
 namespace Shard.Message.Domain
 {
-    public interface IEntity<TProperty> :
-        IPropertyList<TProperty>
-        where TProperty : IProperty
+    public interface IEntity<TAttribute> :
+        IAttributeList<TAttribute>
+        where TAttribute : IAttribute
     {
     }
 }

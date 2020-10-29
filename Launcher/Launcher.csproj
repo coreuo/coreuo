@@ -12,6 +12,7 @@
     <ProjectReference Include="..\Shard.Message.Compression\Shard.Message.Compression.csproj" />
     <ProjectReference Include="..\Shard.Message.Extended\Shard.Message.Extended.csproj" />
     <ProjectReference Include="..\Shard.Message\Shard.Message.csproj" />
+    <ProjectReference Include="..\Shard.Server.Validation\Shard.Server.Validation.csproj" />
     <ProjectReference Include="..\Shard.Server\Shard.Server.csproj" />
     <ProjectReference Include="..\Network.Listener\Network.Listener.csproj" />
     <ProjectReference Include="..\Network.Server\Network.Server.csproj" />

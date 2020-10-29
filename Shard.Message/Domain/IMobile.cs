@@ -15,7 +15,9 @@ namespace Shard.Message.Domain
         ICharacterCreation,
         ICharacterLogin,
         IServerChange<TMap>,
-        IMobileAttributes
+        IMobileAttributes,
+        IMobilePaperDoll,
+        IProfileResponse
         where TMobileEquip : IMobileEquip
         where TSkillInfo : ISkill
         where TMap : IMap

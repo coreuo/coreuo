@@ -22,7 +22,7 @@ namespace Shard.Message.Domain.Incoming
         {
             Pattern = data.OnReadInt(1);
 
-            Name = data.OnReadString(5, 30);
+            Name = data.OnReadAscii(5, 30);
 
             FirstLoginCharacterUnknown = data.OnReadShort(35);
 

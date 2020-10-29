@@ -1,6 +1,6 @@
 ﻿namespace Shard.Message.Domain.Shared
 {
-    public interface IStats
+    public interface IMobileStats
     {
         short Strength { get; set; }
 

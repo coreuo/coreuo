@@ -5,17 +5,17 @@ using Shard.Message.Domain.Outgoing;
 
 namespace Shard.Message
 {
-    public static class Handlers<TServer, TState, TData, TEntity, TMobile, TCity, TMobileEquip, TSkillInfo, TMap, TProperty>
+    public static class Handlers<TServer, TState, TData, TEntity, TMobile, TCity, TMobileEquip, TSkillInfo, TMap, TAttribute>
         where TServer : IServer<TState, TData, TMobile, TCity, TMobileEquip, TSkillInfo, TMap>
         where TState : IState<TData, TMobile, TMobileEquip, TSkillInfo, TMap>
-        where TEntity : IEntity<TProperty>
+        where TEntity : IEntity<TAttribute>
         where TData : IData, new()
         where TMobile : IMobile<TMobileEquip, TSkillInfo, TMap>, new()
         where TCity : ICityInfo
         where TMobileEquip : IMobileEquip
         where TSkillInfo : ISkill
         where TMap : IMap
-        where TProperty : IProperty
+        where TAttribute : IAttribute
     {
         public static void OnReceived(TServer server, TState state, TData data)
         {
@@ -96,7 +96,7 @@ namespace Shard.Message
 
         public static void OnMoveResponse(TState state, TMobile mobile)
         {
-            state.OnWrite(0x22, 3, data=>
+            state.OnWrite(0x22, 3, data =>
             {
                 state.OnWriteMoveResponse(data);
 
@@ -140,19 +140,35 @@ namespace Shard.Message
             state.OnWrite(0x76, 16, mobile.OnWriteServerChange);
         }
 
-        public static void OnPropertyList(TState state, TEntity entity)
+        public static void OnAttributeList(TState state, TEntity entity)
         {
-            state.OnWrite(0xD6, 15 + entity.OnGetPropertiesSizeList().Sum(e => e.size) + 4, entity.OnWritePropertyList);
+            state.OnWrite(0xD6, 15 + entity.OnGetAttributesSizeList().Sum(e => e.size) + 4, entity.OnWriteAttributeList);
         }
 
-        public static void OnPropertyInfo(TState state, TEntity entity)
+        public static void OnAttributeInfo(TState state, TEntity entity)
         {
-            state.OnWrite(0xDC, 9, entity.OnWritePropertyInfo);
+            state.OnWrite(0xDC, 9, entity.OnWriteAttributeInfo);
         }
 
         public static void OnMobileAttributes(TState state, TMobile mobile)
         {
             state.OnWrite(0x2D, 17, mobile.OnWriteMobileAttributes);
+        }
+
+        public static void OnOpenPaperDoll(TState state, TMobile mobile)
+        {
+            state.OnWrite(0x88, 66, data =>
+            {
+                mobile.OnWriteMobilePaperDoll(data);
+
+                state.OnWriteOpenPaperDoll(data);
+
+            }, writerName: nameof(state.OnWriteOpenPaperDoll));
+        }
+
+        public static void OnProfileResponse(TState state, TMobile mobile)
+        {
+            state.OnWrite(0xB8, 7 + mobile.ProfileHeader.Length + 1 + 2 * mobile.ProfileFooter.Length + 2 + 2 * mobile.ProfileBody.Length + 2, mobile.OnWriteProfileResponse);
         }
     }
 }

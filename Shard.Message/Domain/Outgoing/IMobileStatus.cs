@@ -5,9 +5,9 @@ namespace Shard.Message.Domain.Outgoing
     public interface IMobileStatus :
         ISerial,
         IName,
-        IAttributes,
+        Shared.IMobileAttributes,
         IClientFlags,
-        IStats,
+        IMobileStats,
         IRace
     {
         byte CanBeRenamed { get; set; }
@@ -104,7 +104,7 @@ namespace Shard.Message.Domain.Outgoing
         {
             data.OnWrite(3, Serial);
 
-            data.OnWrite(7, Name);
+            data.OnWriteAscii(7, Name, 30);
 
             data.OnWrite(37, CurrentHitPoints);
 

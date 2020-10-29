@@ -1,6 +1,6 @@
 ﻿namespace Shard.Message.Domain
 {
-    public interface IProperty
+    public interface IAttribute
     {
         int Number { get; set; }
 

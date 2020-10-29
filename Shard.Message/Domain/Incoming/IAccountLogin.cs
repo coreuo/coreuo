@@ -12,9 +12,9 @@
         {
             AuthorizationId = data.OnReadInt(1);
 
-            Name = data.OnReadString(5, 30);
+            Name = data.OnReadAscii(5, 30);
 
-            Password = data.OnReadString(35, 30);
+            Password = data.OnReadAscii(35, 30);
 
             return 65;
         }

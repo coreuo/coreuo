@@ -21,7 +21,10 @@ namespace Shard.Message.Domain
         IWarMode,
         IClientType,
         ILoginComplete,
-        IPropertiesQuery
+        IAttributesQuery,
+        IDoubleClick,
+        IOpenPaperDoll,
+        IRequestProfile
         where TData : IData, new()
         where TMobile : IMobile<TMobileEquip, TSkillInfo, TMap>
         where TMobileEquip : IMobileEquip

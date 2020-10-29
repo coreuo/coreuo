@@ -6,7 +6,7 @@
 
         internal int OnReadChatRequest(IData data)
         {
-            ChatName = data.OnReadString(1, 63);
+            ChatName = data.OnReadAscii(1, 63);
 
             return 64;
         }

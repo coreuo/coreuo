@@ -39,9 +39,14 @@ namespace Shard.Message.Domain
                    Value[Offset + offset + 3];
         }
 
-        internal string OnReadString(int offset, int length)
+        internal string OnReadAscii(int offset, int length)
         {
             return Encoding.ASCII.GetString(Value, Offset + offset, length).Replace("\0", "");
+        }
+
+        internal string OnReadUnicode(int offset, int length)
+        {
+            return Encoding.Unicode.GetString(Value, Offset + offset, length).Replace("\0", "");
         }
 
         internal void OnWrite(int offset, byte value)
@@ -74,20 +79,35 @@ namespace Shard.Message.Domain
             Value[Offset + offset + 3] = (byte)value;
         }
 
-        internal void OnWrite(int offset, string text, int? size = null)
+        internal int OnWriteAscii(int offset, string text, int? size = null)
         {
-            Encoding.ASCII.GetBytes(text, 0, text.Length, Value, Offset + offset);
+            return OnWriteText(Encoding.ASCII, offset, text, size);
+        }
 
-            for (var i = text.Length; i < (size ?? text.Length); i++) Value[Offset + offset + i] = 0;
+        internal int OnWriteAsciiTerminated(int offset, string text)
+        {
+            return OnWriteText(Encoding.ASCII, offset, text, terminated: 1);
         }
 
         internal int OnWriteUnicode(int offset, string text, int? size = null)
         {
-            var length = Encoding.Unicode.GetBytes(text, 0, text.Length, Value, Offset + offset);
+            return OnWriteText(Encoding.Unicode, offset, text, size);
+        }
 
-            for (var i = text.Length; i < (size ?? text.Length); i++) Value[Offset + offset + i] = 0;
+        internal int OnWriteBigUnicodeTerminated(int offset, string text)
+        {
+            return OnWriteText(Encoding.BigEndianUnicode, offset, text, terminated: 2);
+        }
 
-            return length;
+        internal int OnWriteText(Encoding encoding, int offset, string text, int? size = null, int terminated = 0)
+        {
+            var length = encoding.GetBytes(text, 0, text.Length, Value, Offset + offset);
+
+            var next = size ?? length + terminated;
+
+            for (var i = length; i < next; i++) Value[Offset + offset + i] = 0;
+
+            return next;
         }
     }
 }

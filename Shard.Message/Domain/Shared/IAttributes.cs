@@ -1,17 +1,9 @@
-﻿namespace Shard.Message.Domain.Shared
+﻿using System.Collections.Generic;
+
+namespace Shard.Message.Domain.Shared
 {
-    public interface IAttributes
+    public interface IAttributes<TAttribute>
     {
-        short CurrentHitPoints { get; set; }
-
-        short MaximumHitPoints { get; set; }
-
-        short CurrentStamina { get; set; }
-
-        short MaximumStamina { get; set; }
-
-        short CurrentMana { get; set; }
-
-        short MaximumMana { get; set; }
+        List<TAttribute> Attributes { get; set; }
     }
 }

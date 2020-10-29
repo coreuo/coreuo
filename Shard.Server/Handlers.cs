@@ -60,6 +60,7 @@ namespace Shard.Server
         {
             var action = state.MobileQueryType switch
             {
+                0x04 => server.MobileStatus,
                 0x05 => server.SkillInfo,
                 _ => throw new InvalidOperationException($"Unknown mobile query type {state.MobileQueryType:X}.")
             };
@@ -122,7 +123,7 @@ namespace Shard.Server
 
             server.MobileIncoming(state, mobile);
 
-            server.PropertyInfo(state, mobile);
+            server.AttributeInfo(state, mobile);
 
             server.SupportedFeatures(state);
 
@@ -143,9 +144,43 @@ namespace Shard.Server
             server.MapChange(state, mobile);
         }
 
-        public static void OnPropertiesQuery(TServer server, TState state)
+        public static void OnAttributesQuery(TServer server, TState state)
         {
-            state.PropertiesQuerySerialList.ForEach(s => server.PropertyList(state, server.Entities[s]));
+            state.AttributesQuerySerialList.ForEach(s => server.AttributeList(state, server.Entities[s]));
+        }
+
+        public static void OnDoubleClick(TServer server, TState state)
+        {
+            if ((state.DoubleClickSerial & ~0x7FFFFFFF) != 0)
+            {
+                server.OpenPaperDoll(state, state.Mobile);
+
+                return;
+            }
+
+            var entity = server.Entities[state.DoubleClickSerial];
+
+            Action action = entity switch
+            {
+                TMobile mobile => () => server.OpenPaperDoll(state, mobile),
+                _ => throw new InvalidOperationException($"Unknown entity type {entity.GetType().Name}.")
+            };
+
+            action();
+        }
+
+        public static void OnRequestProfile(TServer server, TState state)
+        {
+            var entity = server.Entities[state.RequestProfileSerial];
+
+            Action action = entity switch
+            {
+                TMobile mobile when state.RequestProfileMode == 0 => () => server.ProfileResponse(state, mobile),
+                TMobile _ when state.RequestProfileMode == 1 => () => { },
+                _ => throw new InvalidOperationException($"Unknown profile request of type {state.RequestProfileMode} for entity {entity.GetType().Name}.")
+            };
+
+            action();
         }
     }
 }

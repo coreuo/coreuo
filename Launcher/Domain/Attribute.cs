@@ -1,7 +1,7 @@
 ﻿namespace Launcher.Domain
 {
-    public class Property : 
-        Shard.Message.Domain.IProperty
+    public class Attribute : 
+        Shard.Message.Domain.IAttribute
     {
         public int Number { get; set; }
 

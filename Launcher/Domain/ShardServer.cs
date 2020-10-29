@@ -6,11 +6,12 @@ using System.Net.Sockets;
 
 namespace Launcher.Domain
 {
+    using Property = Shard.Server.Validation.Handlers<Validation>;
     using NetworkListenerHandlers = Network.Listener.Handlers<ShardState>;
     using NetworkStateHandlers = Network.State.Handlers<Data>;
     using NetworkServerHandlers = Network.Server.Handlers<ShardState, Data>;
-    using ShardMessageHandlers = Shard.Message.Handlers<ShardServer, ShardState, Data, Entity, Mobile, City, Item, Skill, Map, Property>;
-    using ShardExtendedMessageHandler = Shard.Message.Extended.Handlers<ShardServer, ShardState, Data, Mobile, Map, MapPatch>;
+    using ShardMessageHandlers = Shard.Message.Handlers<ShardServer, ShardState, Data, Entity, Mobile, City, Item, Skill, Map, Attribute>;
+    using ShardExtendedMessageHandlers = Shard.Message.Extended.Handlers<ShardServer, ShardState, Data, Mobile, Map, MapPatch>;
     using ShardServerHandlers = Shard.Server.Handlers<ShardServer,ShardState,Entity,Mobile>;
 
     public class ShardServer :
@@ -24,11 +25,23 @@ namespace Launcher.Domain
         Shard.Message.Extended.Domain.IServer<ShardState, Data>,
         Shard.Server.Domain.IServer<ShardState, Entity, Mobile>
     {
-        public string Identity { get; set; } = nameof(ShardServer);
+        public string Identity
+        {
+            get => Property.OnGet<string>(this, nameof(Identity));
+            set => Property.OnSet(this, nameof(Identity), value, () => nameof(ShardServer));
+        }
 
-        public string IpAddress { get; set; } = "127.0.0.1";
+        public string IpAddress
+        {
+            get => Property.OnGet<string>(this, nameof(IpAddress));
+            set => Property.OnSet(this, nameof(IpAddress), value, () => "127.0.0.1");
+        }
 
-        public int Port { get; set; } = 12594;
+        public int Port
+        {
+            get => Property.OnGet<int>(this, nameof(Port));
+            set => Property.OnSet(this, nameof(Port), value, () => 12594);
+        }
 
         public bool Locked { get; set; }
 
@@ -46,22 +59,50 @@ namespace Launcher.Domain
 
         public List<ShardState> States { get; } = new List<ShardState>();
 
-        public int Percentage { get; set; }
-
-        public int TimeZone { get; set; }
-
-        public int AuthorizationId { get; set; }
-
-        public int CharacterFlags { get; } = 1536;
-
-        public byte LightLevel { get; } = 12;
-
-        public int FeatureFlags { get; set; } = 0x92DB;
-
-        public List<City> Cities { get; } = new List<City>
+        public int Percentage
         {
-            new City {Name = "New Haven", Town = "New Haven Bank"}
-        };
+            get => Property.OnGet<int>(this, nameof(Percentage));
+            set => Property.OnSet(this, nameof(Percentage), value);
+        }
+
+        public int TimeZone
+        {
+            get => Property.OnGet<int>(this, nameof(TimeZone));
+            set => Property.OnSet(this, nameof(TimeZone), value);
+        }
+
+        public int AuthorizationId
+        {
+            get => Property.OnGet<int>(this, nameof(AuthorizationId));
+            set => Property.OnSet(this, nameof(AuthorizationId), value);
+        }
+
+        public int CharacterFlags
+        {
+            get => Property.OnGet<int>(this, nameof(CharacterFlags));
+            set => Property.OnSet(this, nameof(CharacterFlags), value, () => 1536);
+        }
+
+        public byte LightLevel
+        {
+            get => Property.OnGet<byte>(this, nameof(LightLevel));
+            set => Property.OnSet(this, nameof(LightLevel), value, () => 12);
+        }
+
+        public int FeatureFlags
+        {
+            get => Property.OnGet<int>(this, nameof(FeatureFlags));
+            set => Property.OnSet(this, nameof(FeatureFlags), value, () => 0x92DB);
+        }
+
+        public List<City> Cities
+        {
+            get => Property.OnGet<List<City>>(this, nameof(Cities));
+            set => Property.OnSet(this, nameof(Cities), value, () => new List<City>
+            {
+                new City {Name = "New Haven", Town = "New Haven Bank"}
+            });
+        }
 
         public Action ThreadStart => () => NetworkListenerHandlers.OnStart(this);
 
@@ -92,7 +133,7 @@ namespace Launcher.Domain
 
         public Action<ShardState> MobileQuery => state => ShardServerHandlers.OnMobileQuery(this, state);
 
-        public Action<ShardState, Data> ExtendedData => (state, data) => ShardExtendedMessageHandler.OnReceived(this, state, data);
+        public Action<ShardState, Data> ExtendedData => (state, data) => ShardExtendedMessageHandlers.OnReceived(this, state, data);
 
         public Action<ShardState> ChatRequest => state => ShardServerHandlers.OnChatRequest(this, state);
 
@@ -104,7 +145,11 @@ namespace Launcher.Domain
 
         public Action<ShardState, Mobile> CharacterLogin => (state, mobile) => ShardServerHandlers.OnCharacterLogin(this, state, mobile);
 
-        public Action<ShardState> PropertiesQuery => state => ShardServerHandlers.OnPropertiesQuery(this, state);
+        public Action<ShardState> AttributesQuery => state => ShardServerHandlers.OnAttributesQuery(this, state);
+
+        public Action<ShardState> DoubleClick => state => ShardServerHandlers.OnDoubleClick(this, state);
+
+        public Action<ShardState> RequestProfile => state => ShardServerHandlers.OnRequestProfile(this, state);
 
         public Action<ShardState> ClientLanguage => state => ShardServerHandlers.OnClientLanguage(this, state);
 
@@ -118,9 +163,9 @@ namespace Launcher.Domain
 
         public Action<ShardState, Mobile> LoginConfirm => ShardMessageHandlers.OnLoginConfirm;
 
-        public Action<ShardState, Mobile> MapChange => ShardExtendedMessageHandler.OnMapChange;
+        public Action<ShardState, Mobile> MapChange => ShardExtendedMessageHandlers.OnMapChange;
 
-        public Action<ShardState, Mobile> MapPatches => ShardExtendedMessageHandler.OnMapPatch;
+        public Action<ShardState, Mobile> MapPatches => ShardExtendedMessageHandlers.OnMapPatch;
 
         public Action<ShardState> SeasonChange => ShardMessageHandlers.OnSeasonChange;
 
@@ -150,12 +195,30 @@ namespace Launcher.Domain
 
         public Action<ShardState, Mobile> ServerChange => ShardMessageHandlers.OnServerChange;
 
-        public Action<ShardState, Entity> PropertyInfo => ShardMessageHandlers.OnPropertyInfo;
+        public Action<ShardState, Entity> AttributeInfo => ShardMessageHandlers.OnAttributeInfo;
 
-        public Action<ShardState, Entity> PropertyList => ShardMessageHandlers.OnPropertyList;
+        public Action<ShardState, Entity> AttributeList => ShardMessageHandlers.OnAttributeList;
 
         public Action<ShardState, Mobile> MobileAttributes => ShardMessageHandlers.OnMobileAttributes;
 
+        public Action<ShardState, Mobile> OpenPaperDoll => ShardMessageHandlers.OnOpenPaperDoll;
+
+        public Action<ShardState, Mobile> ProfileResponse => ShardMessageHandlers.OnProfileResponse;
+
         public Action<string> Output => text => Console.WriteLine($"[{DateTime.Now:O}] {Identity}.{text}");
+
+        public ShardServer()
+        {
+            Identity = default;
+            IpAddress = default;
+            Port = default;
+            Percentage = default;
+            TimeZone = default;
+            AuthorizationId = default;
+            CharacterFlags = default;
+            LightLevel = default;
+            FeatureFlags = default;
+            Cities = default;
+        }
     }
 }
