@@ -6,6 +6,6 @@ namespace Shard.Message.Extended.Domain
         where TMap : IMap<TMapPatch>
         where TMapPatch : IMapPatch
     {
-        TMap Map { get; }
+        public TMap Map { get; }
     }
 }

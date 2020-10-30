@@ -52,57 +52,57 @@
 
         string Language { get; set; }
 
-        public int OnReadHardwareInfo(IData data)
+        public int ReadHardwareInfo(IData data)
         {
-            OldClient = data.OnReadByte(1) > 0;
+            OldClient = data.ReadByte(1) > 0;
 
-            InstanceId = data.OnReadInt(2);
+            InstanceId = data.ReadInt(2);
 
-            OsMajor = data.OnReadInt(6);
+            OsMajor = data.ReadInt(6);
 
-            OsMinor = data.OnReadInt(10);
+            OsMinor = data.ReadInt(10);
 
-            OsRevision = data.OnReadInt(14);
+            OsRevision = data.ReadInt(14);
 
-            CpuManufacturer = data.OnReadByte(18);
+            CpuManufacturer = data.ReadByte(18);
 
-            CpuFamily = data.OnReadInt(19);
+            CpuFamily = data.ReadInt(19);
 
-            CpuModel = data.OnReadInt(23);
+            CpuModel = data.ReadInt(23);
 
-            CpuClockSpeed = data.OnReadInt(27);
+            CpuClockSpeed = data.ReadInt(27);
 
-            CpuQuantity = data.OnReadByte(31);
+            CpuQuantity = data.ReadByte(31);
 
-            PhysicalMemory = data.OnReadInt(32);
+            PhysicalMemory = data.ReadInt(32);
 
-            ScreenWidth = data.OnReadInt(36);
+            ScreenWidth = data.ReadInt(36);
 
-            ScreenHeight = data.OnReadInt(40);
+            ScreenHeight = data.ReadInt(40);
 
-            ScreenDepth = data.OnReadInt(44);
+            ScreenDepth = data.ReadInt(44);
 
-            DirectXMajor = data.OnReadShort(48);
+            DirectXMajor = data.ReadShort(48);
 
-            DirectXMinor = data.OnReadShort(50);
+            DirectXMinor = data.ReadShort(50);
 
-            VideoCardDescription = data.OnReadString(52, 128);
+            VideoCardDescription = data.ReadString(52, 128);
 
-            VideoCardVendorId = data.OnReadInt(180);
+            VideoCardVendorId = data.ReadInt(180);
 
-            VideoCardDeviceId = data.OnReadInt(184);
+            VideoCardDeviceId = data.ReadInt(184);
 
-            VideoCardMemory = data.OnReadInt(188);
+            VideoCardMemory = data.ReadInt(188);
 
-            Distribution = data.OnReadByte(192);
+            Distribution = data.ReadByte(192);
 
-            ClientsRunning = data.OnReadByte(193);
+            ClientsRunning = data.ReadByte(193);
 
-            ClientsInstalled = data.OnReadByte(194);
+            ClientsInstalled = data.ReadByte(194);
 
-            PartialInstalled = data.OnReadByte(195);
+            PartialInstalled = data.ReadByte(195);
 
-            Language = data.OnReadString(196, 6);
+            Language = data.ReadString(196, 6);
 
             return 268;
         }

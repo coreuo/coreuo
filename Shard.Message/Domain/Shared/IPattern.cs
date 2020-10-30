@@ -2,6 +2,6 @@
 {
     public interface IPattern
     {
-        int Pattern { get; set; }
+        public int Pattern { get; set; }
     }
 }

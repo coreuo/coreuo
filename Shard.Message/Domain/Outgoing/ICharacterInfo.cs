@@ -5,9 +5,9 @@ namespace Shard.Message.Domain.Outgoing
     public interface ICharacterInfo :
         IName
     {
-        internal void OnWriteCharacter(int index, IData data)
+        internal void WriteCharacter(int index, IData data)
         {
-            data.OnWriteAscii(4 + index * 60, Name, 30);
+            data.WriteAscii(4 + index * 60, Name, 30);
         }
     }
 }

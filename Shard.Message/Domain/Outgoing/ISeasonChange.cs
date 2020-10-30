@@ -6,11 +6,11 @@
 
         byte Sound { get; set; }
 
-        internal void OnWriteSeasonChange(IData data)
+        internal void WriteSeasonChange(IData data)
         {
-            data.OnWrite(1, Season);
+            data.Write(1, Season);
 
-            data.OnWrite(2, Sound);
+            data.Write(2, Sound);
         }
     }
 }

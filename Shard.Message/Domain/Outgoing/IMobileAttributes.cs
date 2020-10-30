@@ -6,21 +6,21 @@ namespace Shard.Message.Domain.Outgoing
         ISerial,
         Shared.IMobileAttributes
     {
-        internal void OnWriteMobileAttributes(IData data)
+        /*internal void WriteMobileAttributes(IData data)
         {
-            data.OnWrite(1, Serial);
+            data.Write(1, Serial);
 
-            data.OnWrite(5, MaximumHitPoints);
+            data.Write(5, MaximumHitPoints);
 
-            data.OnWrite(7, CurrentHitPoints);
+            data.Write(7, CurrentHitPoints);
 
-            data.OnWrite(9, MaximumMana);
+            data.Write(9, MaximumMana);
 
-            data.OnWrite(11, CurrentMana);
+            data.Write(11, CurrentMana);
 
-            data.OnWrite(13, MaximumStamina);
+            data.Write(13, MaximumStamina);
 
-            data.OnWrite(15, CurrentStamina);
-        }
+            data.Write(15, CurrentStamina);
+        }*/
     }
 }

@@ -26,7 +26,7 @@ namespace Network.Server.Domain
 
         Action<string> Output { get; }
 
-        internal void OnProcessListenQueue()
+        internal void ProcessListenQueue()
         {
             while (ListenQueue.TryDequeue(out var state))
             {
@@ -36,17 +36,17 @@ namespace Network.Server.Domain
             }
         }
 
-        internal void OnRemoveInvalidStates()
+        internal void RemoveInvalidStates()
         {
             States.RemoveAll(s => s.Sending < 0 || !s.Receiving);
         }
 
-        internal void OnProcessStates()
+        internal void ProcessStates()
         {
-            States.ForEach(OnProcessState);
+            States.ForEach(ProcessState);
         }
 
-        private void OnProcessState(TState state)
+        private void ProcessState(TState state)
         {
             while (state.ReceiveQueue.TryDequeue(out var data))
             {
@@ -56,7 +56,7 @@ namespace Network.Server.Domain
                 }
                 catch (Exception exception)
                 {
-                    OnInfo("Cannot process data.", exception);
+                    Info("Cannot process data.", exception);
 
                     Locked = false;
                 }
@@ -65,7 +65,7 @@ namespace Network.Server.Domain
             }
         }
 
-        private void OnInfo(string text, Exception exception = null)
+        private void Info(string text, Exception exception = null)
         {
             Output($"Server: {text}{(exception != null ? $"\n{exception}" : null)}");
         }

@@ -8,13 +8,13 @@ namespace Shard.Message.Domain.Incoming
 
         public int MoveKey { get; set; }
 
-        internal int OnReadMoveRequest(IData data)
+        internal int ReadMoveRequest(IData data)
         {
-            MoveDirection = data.OnReadByte(1);
+            MoveDirection = data.ReadByte(1);
 
-            MoveNumber = data.OnReadByte(2);
+            MoveNumber = data.ReadByte(2);
 
-            MoveKey = data.OnReadInt(3);
+            MoveKey = data.ReadInt(3);
 
             return 7;
         }

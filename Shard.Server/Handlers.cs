@@ -1,27 +1,69 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Shard.Server.Domain;
 
 namespace Shard.Server
 {
-    public static class Handlers<TServer, TState, TEntity, TMobile>
-        where TServer : IServer<TState, TEntity, TMobile>
+    public static class Handlers<TServer, TState, TEntity, TMobile, TItem>
+        where TServer : IServer<TServer, TState, TEntity, TMobile, TItem>
         where TState : IState<TMobile>
         where TEntity : IEntity
-        where TMobile : TEntity, IMobile
+        where TMobile : TEntity, IMobile, new()
+        where TItem : TEntity, IItem, new()
     {
-        public static void OnClientSeed(TServer server, TState state)
+        public static Dictionary<TMobile, Action<TServer, TMobile>[]> Mobiles = new Dictionary<TMobile, Action<TServer, TMobile>[]>();
+
+        public static Dictionary<TItem, Action<TServer, TItem>[]> Items = new Dictionary<TItem, Action<TServer, TItem>[]>();
+
+        public static Action<TServer, TItem>[] GetItemTypes(TItem item) => Items[item];
+
+        public static TMobile CreateMobile(TServer server, params Action<TServer, TMobile>[] types)
+        {
+            var mobile = new TMobile {Serial = server.MobileSerialPool.Pop()};
+
+            types.ToList().ForEach(t => t(server, mobile));
+
+            server.Entities[mobile.Serial] = mobile;
+
+            Mobiles[mobile] = types;
+
+            return mobile;
+        }
+
+        public static TItem CreateItem(TServer server, params Action<TServer, TItem>[] types)
+        {
+            var item = new TItem {Serial = server.ItemSerialPool.Pop()};
+
+            types.ToList().ForEach(t => t(server, item));
+
+            server.Entities[item.Serial] = item;
+
+            Items[item] = types;
+
+            return item;
+        }
+
+        public static void ClientSeed(TServer server, TState state)
         {
             server.EncryptionRequest(state);
         }
 
-        public static void OnAccountLogin(TServer server, TState state)
+        public static void AccountLogin(TServer server, TState state)
         {
+            state.Characters.Add(CreateMobile(server, server.Human, (s, m) =>
+            {
+                m.Serial = 1;
+
+                m.Name = "Generic Player";
+            }));
+
             server.SupportedFeatures(state);
 
             server.CharacterList(state);
         }
 
-        public static void OnCharacterCreate(TServer server, TState state, TMobile mobile)
+        public static void CharacterCreate(TServer server, TState state, TMobile mobile)
         {
             server.Entities[mobile.Serial] = mobile;
 
@@ -56,7 +98,7 @@ namespace Shard.Server
             server.SeasonChange(state);
         }
 
-        public static void OnMobileQuery(TServer server, TState state)
+        public static void MobileQuery(TServer server, TState state)
         {
             var action = state.MobileQueryType switch
             {
@@ -68,26 +110,26 @@ namespace Shard.Server
             action(state, (TMobile)server.Entities[state.MobileQuerySerial]);
         }
 
-        public static void OnClientLanguage(TServer server, TState state)
+        public static void ClientLanguage(TServer server, TState state)
         {
         }
 
-        public static void OnChatRequest(TServer server, TState state)
+        public static void ChatRequest(TServer server, TState state)
         {
 
         }
 
-        public static void OnPingRequest(TServer server, TState state)
+        public static void PingRequest(TServer server, TState state)
         {
             server.PingResponse(state);
         }
 
-        public static void OnMoveRequest(TServer server, TState state)
+        public static void MoveRequest(TServer server, TState state)
         {
             server.MoveResponse(state, state.Mobile);
         }
 
-        public static void OnCharacterLogin(TServer server, TState state, TMobile mobile)
+        public static void CharacterLogin(TServer server, TState state, TMobile mobile)
         {
             server.Entities[mobile.Serial] = mobile;
 
@@ -144,12 +186,12 @@ namespace Shard.Server
             server.MapChange(state, mobile);
         }
 
-        public static void OnAttributesQuery(TServer server, TState state)
+        public static void AttributesQuery(TServer server, TState state)
         {
             state.AttributesQuerySerialList.ForEach(s => server.AttributeList(state, server.Entities[s]));
         }
 
-        public static void OnDoubleClick(TServer server, TState state)
+        public static void DoubleClick(TServer server, TState state)
         {
             if ((state.DoubleClickSerial & ~0x7FFFFFFF) != 0)
             {
@@ -163,13 +205,14 @@ namespace Shard.Server
             Action action = entity switch
             {
                 TMobile mobile => () => server.OpenPaperDoll(state, mobile),
+                TItem item when server.IsContainer(item) => () => server.EntityDisplay(state, item),
                 _ => throw new InvalidOperationException($"Unknown entity type {entity.GetType().Name}.")
             };
 
             action();
         }
 
-        public static void OnRequestProfile(TServer server, TState state)
+        public static void RequestProfile(TServer server, TState state)
         {
             var entity = server.Entities[state.RequestProfileSerial];
 

@@ -4,9 +4,9 @@
     {
         int DoubleClickSerial { get; set; }
 
-        internal int OnReadDoubleClick(IData data)
+        internal int ReadDoubleClick(IData data)
         {
-            DoubleClickSerial = data.OnReadInt(1);
+            DoubleClickSerial = data.ReadInt(1);
 
             return 5;
         }

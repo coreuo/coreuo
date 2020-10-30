@@ -6,11 +6,11 @@ namespace Shard.Message.Domain.Outgoing
         ISerial,
         IName
     {
-        internal void OnWriteMobilePaperDoll(IData data)
+        internal void WriteMobilePaperDoll(IData data)
         {
-            data.OnWrite(1, Serial);
+            data.Write(1, Serial);
 
-            data.OnWriteAscii(5, Name + ", Legendary Alchemist", 60);
+            data.WriteAscii(5, Name + ", Legendary Alchemist", 60);
         }
     }
 }

@@ -4,9 +4,9 @@
     {
         public int Seed { get; set; }
 
-        internal int OnReadClientSeed(IData data)
+        internal int ReadClientSeed(IData data)
         {
-            Seed = data.OnReadInt(0);
+            Seed = data.ReadInt(0);
 
             return 4;
         }

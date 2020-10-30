@@ -2,6 +2,6 @@
 {
     public interface ISlot
     {
-        int Slot { get; set; }
+        public int Slot { get; set; }
     }
 }

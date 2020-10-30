@@ -5,6 +5,8 @@ namespace Shard.Server.Domain
     public interface IState<TMobile>
         where TMobile : IMobile
     {
+        List<TMobile> Characters { get; }
+
         TMobile Mobile { get; set; }
 
         public byte MobileQueryType { get; set; }

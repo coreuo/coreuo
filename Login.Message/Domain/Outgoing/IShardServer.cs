@@ -10,13 +10,13 @@ namespace Login.Message.Domain.Outgoing
 
         int AuthorizationId { get; set; }
 
-        internal void OnWriteShardServer(IData data)
+        internal void WriteShardServer(IData data)
         {
             IPAddress.Parse(IpAddress).GetAddressBytes().CopyTo(data.Value, 1);
 
-            data.OnWrite(5, (short)Port);
+            data.Write(5, (short)Port);
 
-            data.OnWrite(7, AuthorizationId);
+            data.Write(7, AuthorizationId);
         }
     }
 }

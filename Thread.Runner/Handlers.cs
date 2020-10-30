@@ -4,7 +4,7 @@ namespace Thread.Runner
 {
     public static class Handlers
     {
-        public static void OnStart(IThread thread)
+        public static void Start(IThread thread)
         {
             if (thread.Running)
                 return;
@@ -13,10 +13,10 @@ namespace Thread.Runner
 
             thread.Running = true;
 
-            new System.Threading.Thread(thread.OnRun).Start();
+            new System.Threading.Thread(thread.Run).Start();
         }
 
-        public static void OnStop(IThread thread)
+        public static void Stop(IThread thread)
         {
             if (!thread.Running)
                 return;

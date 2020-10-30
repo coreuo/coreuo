@@ -8,7 +8,7 @@ namespace Shard.Message.Extended.Domain
     {
         Action<int, Action<TData>, string> ExtendedData { get; }
 
-        internal void OnWrite(short id, int size, Action<IData> writer)
+        internal void Write(short id, int size, Action<IData> writer)
         {
             ExtendedData(size + 3, data =>
             {
@@ -16,7 +16,7 @@ namespace Shard.Message.Extended.Domain
 
                 data.ExtendedLength = size;
 
-                data.OnWrite(0, id);
+                data.Write(0, id);
 
                 writer?.Invoke(data);
 

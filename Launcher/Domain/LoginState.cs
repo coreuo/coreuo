@@ -114,9 +114,9 @@ namespace Launcher.Domain
 
         public int ShardIndex { get; set; }
 
-        public Func<Data> GetBuffer => () => NetworkStateHandlers.OnGetBuffer(this);
+        public Func<Data> GetBuffer => () => NetworkStateHandlers.GetBuffer(this);
 
-        public Action<Data> Send => data => NetworkStateHandlers.OnSend(this, data);
+        public Action<Data> Send => data => NetworkStateHandlers.Send(this, data);
 
         public Action<string> Output => text => Console.WriteLine($"[{DateTime.Now:O}] {Identity}.{text}");
 

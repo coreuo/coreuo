@@ -39,7 +39,7 @@
             0x4, 0x00D
         };
 
-        public static void OnCompress(byte[] input, int offset, int length, ref byte[] output, int outputOffset, out int outputLength)
+        public static void Compress(byte[] input, int offset, int length, ref byte[] output, int outputOffset, out int outputLength)
         {
             var holdCount = 0;
             var holdValue = 0;

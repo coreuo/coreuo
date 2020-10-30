@@ -6,14 +6,14 @@
     {
         public string Name
         {
-            get => Property.OnGet<string>(this, nameof(Name));
-            set => Property.OnSet(this, nameof(Name), value);
+            get => Property.Get<string>(this, nameof(Name));
+            set => Property.Set(this, nameof(Name), value);
         }
 
         public string Town
         {
-            get => Property.OnGet<string>(this, nameof(Town));
-            set => Property.OnSet(this, nameof(Town), value);
+            get => Property.Get<string>(this, nameof(Town));
+            set => Property.Set(this, nameof(Town), value);
         }
 
         public City()

@@ -12,12 +12,12 @@ namespace Shard.Message.Domain
 
         public int Length { get; set; }
 
-        internal byte OnReadByte(int offset)
+        internal byte ReadByte(int offset)
         {
             return Value[Offset + offset];
         }
 
-        internal byte[] OnReadByteArray(int offset, int length)
+        internal byte[] ReadByteArray(int offset, int length)
         {
             var result = new byte[length];
 
@@ -26,12 +26,12 @@ namespace Shard.Message.Domain
             return result;
         }
 
-        internal short OnReadShort(int offset)
+        internal short ReadShort(int offset)
         {
             return (short)((Value[Offset + offset] << 8) | Value[Offset + offset + 1]);
         }
 
-        internal int OnReadInt(int offset)
+        internal int ReadInt(int offset)
         {
             return (Value[Offset + offset] << 24) |
                    (Value[Offset + offset + 1] << 16) |
@@ -39,39 +39,39 @@ namespace Shard.Message.Domain
                    Value[Offset + offset + 3];
         }
 
-        internal string OnReadAscii(int offset, int length)
+        internal string ReadAscii(int offset, int length)
         {
             return Encoding.ASCII.GetString(Value, Offset + offset, length).Replace("\0", "");
         }
 
-        internal string OnReadUnicode(int offset, int length)
+        internal string ReadUnicode(int offset, int length)
         {
             return Encoding.Unicode.GetString(Value, Offset + offset, length).Replace("\0", "");
         }
 
-        internal void OnWrite(int offset, byte value)
+        internal void Write(int offset, byte value)
         {
             Value[Offset + offset] = value;
         }
 
-        internal void OnWrite(int offset, byte[] value)
+        internal void Write(int offset, byte[] value)
         {
             value.CopyTo(Value, Offset + offset);
         }
 
-        internal void OnWrite(int offset, short value)
+        internal void Write(int offset, short value)
         {
             Value[Offset + offset] = (byte)(value >> 8);
             Value[Offset + offset + 1] = (byte)value;
         }
 
-        internal void OnWrite(int offset, ushort value)
+        internal void Write(int offset, ushort value)
         {
             Value[Offset + offset] = (byte)(value >> 8);
             Value[Offset + offset + 1] = (byte)value;
         }
 
-        internal void OnWrite(int offset, int value)
+        internal void Write(int offset, int value)
         {
             Value[Offset + offset] = (byte)(value >> 24);
             Value[Offset + offset + 1] = (byte)(value >> 16);
@@ -79,27 +79,27 @@ namespace Shard.Message.Domain
             Value[Offset + offset + 3] = (byte)value;
         }
 
-        internal int OnWriteAscii(int offset, string text, int? size = null)
+        internal int WriteAscii(int offset, string text, int? size = null)
         {
-            return OnWriteText(Encoding.ASCII, offset, text, size);
+            return WriteText(Encoding.ASCII, offset, text, size);
         }
 
-        internal int OnWriteAsciiTerminated(int offset, string text)
+        internal int WriteAsciiTerminated(int offset, string text)
         {
-            return OnWriteText(Encoding.ASCII, offset, text, terminated: 1);
+            return WriteText(Encoding.ASCII, offset, text, terminated: 1);
         }
 
-        internal int OnWriteUnicode(int offset, string text, int? size = null)
+        internal int WriteUnicode(int offset, string text, int? size = null)
         {
-            return OnWriteText(Encoding.Unicode, offset, text, size);
+            return WriteText(Encoding.Unicode, offset, text, size);
         }
 
-        internal int OnWriteBigUnicodeTerminated(int offset, string text)
+        internal int WriteBigUnicodeTerminated(int offset, string text)
         {
-            return OnWriteText(Encoding.BigEndianUnicode, offset, text, terminated: 2);
+            return WriteText(Encoding.BigEndianUnicode, offset, text, terminated: 2);
         }
 
-        internal int OnWriteText(Encoding encoding, int offset, string text, int? size = null, int terminated = 0)
+        internal int WriteText(Encoding encoding, int offset, string text, int? size = null, int terminated = 0)
         {
             var length = encoding.GetBytes(text, 0, text.Length, Value, Offset + offset);
 

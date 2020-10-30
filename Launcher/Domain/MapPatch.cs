@@ -6,14 +6,14 @@
     {
         public int StaticBlocks
         {
-            get => Property.OnGet<int>(this, nameof(StaticBlocks));
-            set => Property.OnSet(this, nameof(StaticBlocks), value);
+            get => Property.Get<int>(this, nameof(StaticBlocks));
+            set => Property.Set(this, nameof(StaticBlocks), value);
         }
 
         public int LandBlocks
         {
-            get => Property.OnGet<int>(this, nameof(LandBlocks));
-            set => Property.OnSet(this, nameof(LandBlocks), value);
+            get => Property.Get<int>(this, nameof(LandBlocks));
+            set => Property.Set(this, nameof(LandBlocks), value);
         }
 
         public MapPatch()

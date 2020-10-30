@@ -5,23 +5,23 @@ namespace Network.Listener
     public static class Handlers<TSocket>
         where TSocket : ISocket, new()
     {
-        public static void OnStart(IListener<TSocket> listener)
+        public static void Start(IListener<TSocket> listener)
         {
             listener.Listening = true;
 
-            listener.OnInitialize();
+            listener.Initialize();
 
-            listener.OnBeginListen();
+            listener.BeginListen();
 
-            if(listener.Listening) listener.OnBeginAccept();
+            if(listener.Listening) listener.BeginAccept();
         }
 
-        public static void OnStop(IListener<TSocket> listener)
+        public static void Stop(IListener<TSocket> listener)
         {
             if (!listener.Listening)
                 return;
 
-            listener.OnBeginClose();
+            listener.BeginClose();
         }
     }
 }

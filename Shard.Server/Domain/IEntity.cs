@@ -2,5 +2,6 @@
 {
     public interface IEntity
     {
+        public int Serial { get; set; }
     }
 }

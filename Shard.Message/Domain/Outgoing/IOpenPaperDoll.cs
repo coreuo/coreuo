@@ -4,9 +4,9 @@
     {
         byte PaperDollFlags { get; set; }
 
-        internal void OnWriteOpenPaperDoll(IData data)
+        internal void WriteOpenPaperDoll(IData data)
         {
-            data.OnWrite(65, PaperDollFlags);
+            data.Write(65, PaperDollFlags);
         }
     }
 }

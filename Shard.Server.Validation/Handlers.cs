@@ -9,16 +9,20 @@ namespace Shard.Server.Validation
     {
         public static Dictionary<object, Dictionary<string, TValidation>> Collection = new Dictionary<object, Dictionary<string, TValidation>>();
 
-        public static void OnSet<TValue>(object instance, string property, TValue value, Func<TValue> defaultValueFactory = null, int permission = 0)
+        public static void Set<TInstance, TValue>(TInstance instance, string property, TValue value, Func<TValue> defaultValueFactory = null, int permission = 0, Action<TInstance, TValue> callback = null)
         {
             if (!Collection.TryGetValue(instance, out var properties)) properties = Collection[instance] = new Dictionary<string, TValidation>();
 
             if (!properties.TryGetValue(property, out var validation)) validation = properties[property] = new TValidation{Permission = permission, Instance = instance, Property = property};
 
-            validation.Value = EqualityComparer<TValue>.Default.Equals(value, default) && defaultValueFactory != null ? defaultValueFactory() : value;
+            var result = EqualityComparer<TValue>.Default.Equals(value, default) && defaultValueFactory != null ? defaultValueFactory() : value;
+
+            validation.Value = result;
+
+            callback?.Invoke(instance, result);
         }
 
-        public static TValue OnGet<TValue>(object instance, string property)
+        public static TValue Get<TValue>(object instance, string property)
         {
             if (!Collection.TryGetValue(instance, out var properties)) throw new InvalidOperationException($"Invalid instance of type {instance.GetType()}, instance not found.");
 

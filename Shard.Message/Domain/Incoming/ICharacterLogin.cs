@@ -8,35 +8,35 @@ namespace Shard.Message.Domain.Incoming
         IClientFlags,
         ISlot
     {
-        short FirstLoginCharacterUnknown { get; set; }
+        public short FirstLoginCharacterUnknown { get; set; }
 
-        int SecondLoginCharacterUnknown { get; set; }
+        public int SecondLoginCharacterUnknown { get; set; }
 
-        int LoginCount { get; set; }
+        public int LoginCount { get; set; }
 
-        byte[] ThirdLoginCharacterUnknown { get; set; }
+        public byte[] ThirdLoginCharacterUnknown { get; set; }
 
-        int ClientIpAddress { get; set; }
+        public int ClientIpAddress { get; set; }
 
-        internal int OnReadLoginCharacter(IData data)
+        internal int ReadLoginCharacter(IData data)
         {
-            Pattern = data.OnReadInt(1);
+            Pattern = data.ReadInt(1);
 
-            Name = data.OnReadAscii(5, 30);
+            Name = data.ReadAscii(5, 30);
 
-            FirstLoginCharacterUnknown = data.OnReadShort(35);
+            FirstLoginCharacterUnknown = data.ReadShort(35);
 
-            ClientFlags = data.OnReadInt(37);
+            ClientFlags = data.ReadInt(37);
 
-            SecondLoginCharacterUnknown = data.OnReadInt(41);
+            SecondLoginCharacterUnknown = data.ReadInt(41);
 
-            LoginCount = data.OnReadInt(45);
+            LoginCount = data.ReadInt(45);
 
-            ThirdLoginCharacterUnknown = data.OnReadByteArray(49, 16);
+            ThirdLoginCharacterUnknown = data.ReadByteArray(49, 16);
 
-            Slot = data.OnReadInt(65);
+            Slot = data.ReadInt(65);
 
-            ClientIpAddress = data.OnReadInt(69);
+            ClientIpAddress = data.ReadInt(69);
 
             return 73;
         }

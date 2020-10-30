@@ -5,9 +5,9 @@ namespace Shard.Message.Domain.Outgoing
     public interface IMoveNotoriety :
         INotoriety
     {
-        internal void OnWriteMoveNotoriety(IData data)
+        internal void WriteMoveNotoriety(IData data)
         {
-            data.OnWrite(2, Notoriety);
+            data.Write(2, Notoriety);
         }
     }
 }

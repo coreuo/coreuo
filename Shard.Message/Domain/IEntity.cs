@@ -3,7 +3,8 @@
 namespace Shard.Message.Domain
 {
     public interface IEntity<TAttribute> :
-        IAttributeList<TAttribute>
+        IAttributeList<TAttribute>,
+        IEntityDisplay
         where TAttribute : IAttribute
     {
     }

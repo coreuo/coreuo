@@ -8,13 +8,13 @@
 
         public int MobileQuerySerial { get; set; }
 
-        internal int OnReadMobileQuery(IData data)
+        internal int ReadMobileQuery(IData data)
         {
-            UnknownMobileQueryFirst = data.OnReadInt(1);
+            UnknownMobileQueryFirst = data.ReadInt(1);
 
-            MobileQueryType = data.OnReadByte(5);
+            MobileQueryType = data.ReadByte(5);
 
-            MobileQuerySerial = data.OnReadInt(6);
+            MobileQuerySerial = data.ReadInt(6);
 
             return 10;
         }

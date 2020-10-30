@@ -11,24 +11,24 @@ namespace Shard.Message.Extended
         where TMap : IMap<TMapPatch>
         where TMapPatch : IMapPatch
     {
-        public static void OnReceived(TServer server, TState state, TData data)
+        public static void Received(TServer server, TState state, TData data)
         {
             while (data.ExtendedOffset < data.ExtendedLength)
             {
-                var size = server.OnRead(state, data);
+                var size = server.Read(state, data);
 
                 data.ExtendedOffset += size;
             }
         }
 
-        public static void OnMapChange(TState state, TMobile mobile)
+        public static void MapChange(TState state, TMobile mobile)
         {
-            state.OnWrite(0x0008, 3, mobile.Map.OnWriteMapChange);
+            state.Write(0x0008, 3, mobile.Map.WriteMapChange);
         }
 
-        public static void OnMapPatch(TState state, TMobile mobile)
+        public static void MapPatch(TState state, TMobile mobile)
         {
-            state.OnWrite(0x0018, 6 + mobile.Map.Patches.Count * 8, mobile.Map.OnWriteMapPatchList);
+            state.Write(0x0018, 6 + mobile.Map.Patches.Count * 8, mobile.Map.WriteMapPatchList);
         }
     }
 }

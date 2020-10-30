@@ -10,31 +10,31 @@ namespace Shard.Message.Domain.Outgoing
         ILocation,
         IDirection
     {
-        byte UnknownMobileUpdateFirst { get; set; }
+        public byte UnknownMobileUpdateFirst { get; set; }
 
-        short UnknownMobileUpdateSecond { get; set; }
+        public short UnknownMobileUpdateSecond { get; set; }
 
-        internal void OnWriteMobileUpdate(IData data)
+        internal void WriteMobileUpdate(IData data)
         {
-            data.OnWrite(1, Serial);
+            data.Write(1, Serial);
 
-            data.OnWrite(5, Body);
+            data.Write(5, Body);
 
-            data.OnWrite(7, UnknownMobileUpdateFirst);
+            data.Write(7, UnknownMobileUpdateFirst);
 
-            data.OnWrite(8, Hue);
+            data.Write(8, Hue);
 
-            data.OnWrite(10, StatusFlags);
+            data.Write(10, StatusFlags);
 
-            data.OnWrite(11, LocationX);
+            data.Write(11, LocationX);
 
-            data.OnWrite(13, LocationY);
+            data.Write(13, LocationY);
 
-            data.OnWrite(15, UnknownMobileUpdateSecond);
+            data.Write(15, UnknownMobileUpdateSecond);
 
-            data.OnWrite(17, Direction);
+            data.Write(17, Direction);
 
-            data.OnWrite(18, LocationZ);
+            data.Write(18, LocationZ);
         }
     }
 }

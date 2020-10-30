@@ -5,23 +5,23 @@ namespace Shard.Message.Domain.Outgoing
     public interface IProfileResponse :
         ISerial
     {
-        string ProfileHeader { get; }
+        public string ProfileHeader { get; }
 
-        string ProfileBody { get; }
-         
-        string ProfileFooter { get; }
+        public string ProfileBody { get; }
 
-        void OnWriteProfileResponse(IData data)
+        public string ProfileFooter { get; }
+
+        void WriteProfileResponse(IData data)
         {
-            data.OnWrite(3, Serial);
+            data.Write(3, Serial);
 
-            var headerLength = data.OnWriteAsciiTerminated(7, ProfileHeader);
+            var headerLength = data.WriteAsciiTerminated(7, ProfileHeader);
 
-            var footerLength = data.OnWriteBigUnicodeTerminated(7 + headerLength, ProfileFooter);
+            var footerLength = data.WriteBigUnicodeTerminated(7 + headerLength, ProfileFooter);
 
-            var bodyLength = data.OnWriteBigUnicodeTerminated(7 + headerLength + footerLength, ProfileBody);
+            var bodyLength = data.WriteBigUnicodeTerminated(7 + headerLength + footerLength, ProfileBody);
 
-            data.OnWrite(1, (short)(7 + headerLength + footerLength + bodyLength));
+            data.Write(1, (short)(7 + headerLength + footerLength + bodyLength));
         }
     }
 }

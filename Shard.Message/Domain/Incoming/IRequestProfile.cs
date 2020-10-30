@@ -10,21 +10,21 @@
 
         string RequestProfileEditText { get; set; }
 
-        internal int OnReadRequestProfile(IData data)
+        internal int ReadRequestProfile(IData data)
         {
-            var length = data.OnReadShort(1);
+            var length = data.ReadShort(1);
 
-            RequestProfileMode = data.OnReadByte(3);
+            RequestProfileMode = data.ReadByte(3);
 
-            RequestProfileSerial = data.OnReadInt(4);
+            RequestProfileSerial = data.ReadInt(4);
 
             if (RequestProfileMode == 0) return length;
 
-            RequestProfileEditType = data.OnReadShort(8);
+            RequestProfileEditType = data.ReadShort(8);
 
-            var textLength = data.OnReadShort(10);
+            var textLength = data.ReadShort(10);
 
-            RequestProfileEditText = data.OnReadUnicode(12, textLength);
+            RequestProfileEditText = data.ReadUnicode(12, textLength);
 
             return length;
         }

@@ -7,19 +7,19 @@ namespace Network.Server
         where TState : IState<TData>
         where TData : IData
     {
-        public static void OnSlice(IServer<TState, TData> server)
+        public static void Slice(IServer<TState, TData> server)
         {
-            server.OnProcessListenQueue();
+            server.ProcessListenQueue();
 
-            server.OnRemoveInvalidStates();
+            server.RemoveInvalidStates();
 
-            server.OnProcessStates();
+            server.ProcessStates();
 
             if (!server.Locked && !server.Listening && !server.States.Any())
                 server.Running = false;
         }
 
-        public static void OnStop(IServer<TState, TData> server)
+        public static void Stop(IServer<TState, TData> server)
         {
             server.States.ForEach(s => server.StateStop(s));
         }

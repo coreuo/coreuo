@@ -6,17 +6,17 @@ namespace Login.Encryption
         where TState : IState
         where TData : IData
     {
-        public static void OnDecrypt(TState state, TData data)
+        public static void Decrypt(TState state, TData data)
         {
             if (!state.Encrypted)
                 return;
 
-            state.OnDecrypt(data.Value, data.Offset, data.Length);
+            state.Decrypt(data.Value, data.Offset, data.Length);
         }
 
-        public static void OnClientConnect(TState state)
+        public static void ClientConnect(TState state)
         {
-            state.OnInitialize();
+            state.Initialize();
         }
     }
 }

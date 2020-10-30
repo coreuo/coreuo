@@ -2,6 +2,6 @@
 {
     public interface IDirection
     {
-        byte Direction { get; set; }
+        public byte Direction { get; set; }
     }
 }

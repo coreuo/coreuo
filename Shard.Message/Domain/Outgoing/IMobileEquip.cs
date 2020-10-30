@@ -10,17 +10,19 @@ namespace Shard.Message.Domain.Outgoing
 
         byte Layer { get; set; }
 
-        internal bool OnHasHue() => (ItemId & 0x8000) > 0;
+        internal bool HasHue() => Hue > 0;
 
-        internal void OnWriteMobileEquipment(int currentSize, IData data)
+        internal void WriteMobileEquipment(int currentSize, IData data)
         {
-            data.OnWrite(19 + currentSize, Serial);
+            data.Write(19 + currentSize, Serial);
 
-            data.OnWrite(19 + currentSize + 4, ItemId);
+            var huedItemId = (ushort)(HasHue() ? ItemId | 0x8000 : ItemId);
 
-            data.OnWrite(19 + currentSize + 4 + 2, Layer);
+            data.Write(19 + currentSize + 4, huedItemId);
 
-            if (OnHasHue()) data.OnWrite(19 + currentSize + 4 + 2 + 1, Hue);
+            data.Write(19 + currentSize + 4 + 2, Layer);
+
+            if (HasHue()) data.Write(19 + currentSize + 4 + 2 + 1, Hue);
         }
     }
 }

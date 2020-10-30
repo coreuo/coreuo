@@ -16,24 +16,24 @@ namespace Login.Message.Domain
 
         Action<string> Output { get; }
 
-        internal void OnWrite(byte id, int size, Action<IData> message)
+        internal void Write(byte id, int size, Action<IData> message)
         {
-            OnInfo($"0x{id:X2} {message.Method.Name}");
+            Info($"0x{id:X2} {message.Method.Name}");
 
             var data = GetBuffer();
 
             data.Length = size;
 
-            data.OnWrite(0, id);
+            data.Write(0, id);
 
-            data.OnWrite(1, (short)size);
+            data.Write(1, (short)size);
 
             message(data);
 
             Send(data);
         }
 
-        private void OnInfo(string text)
+        private void Info(string text)
         {
             Output($"Message: {text}");
         }

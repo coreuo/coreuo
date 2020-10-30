@@ -2,6 +2,6 @@
 {
     public interface IRace
     {
-        byte Race { get; set; }
+        public byte Race { get; set; }
     }
 }

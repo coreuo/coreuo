@@ -2,10 +2,10 @@
 {
     public interface ILocation
     {
-        ushort LocationX { get; set; }
+        public ushort LocationX { get; set; }
 
-        ushort LocationY { get; set; }
+        public ushort LocationY { get; set; }
 
-        byte LocationZ { get; set; }
+        public byte LocationZ { get; set; }
     }
 }

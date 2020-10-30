@@ -12,17 +12,17 @@ namespace Network.Listener.Domain
 
         bool Listening { get; set; }
 
-        internal void OnBeginListen()
+        internal void BeginListen()
         {
             try
             {
-                OnBeginListen(EndPoint);
+                BeginListen(EndPoint);
 
-                OnInfo($"listening on {IpAddress}:{Port}");
+                Info($"listening on {IpAddress}:{Port}");
             }
             catch (Exception exception)
             {
-                OnInfo("Cannot begin listen.", exception);
+                Info("Cannot begin listen.", exception);
 
                 Locked = false;
 
@@ -30,15 +30,15 @@ namespace Network.Listener.Domain
             }
         }
 
-        internal void OnBeginAccept()
+        internal void BeginAccept()
         {
             try
             {
-                OnBeginAccept<TSocket>(OnAccept);
+                BeginAccept<TSocket>(Accept);
             }
             catch (Exception exception)
             {
-                OnInfo("Cannot begin accept.", exception);
+                Info("Cannot begin accept.", exception);
 
                 Locked = false;
 
@@ -46,19 +46,19 @@ namespace Network.Listener.Domain
             }
         }
 
-        private void OnAccept(Func<TSocket> socketFactory)
+        private void Accept(Func<TSocket> socketFactory)
         {
             try
             {
                 var socket = socketFactory();
 
-                OnProcess(socket);
+                Process(socket);
 
-                OnInfo($"accepted on {socket.IpAddress}:{socket.Port}");
+                Info($"accepted on {socket.IpAddress}:{socket.Port}");
             }
             catch (ObjectDisposedException) when (!Locked)
             {
-                OnInfo("closed");
+                Info("closed");
 
                 Listening = false;
 
@@ -66,7 +66,7 @@ namespace Network.Listener.Domain
             }
             catch (Exception exception)
             {
-                OnInfo("Cannot accept.", exception);
+                Info("Cannot accept.", exception);
 
                 Locked = false;
 
@@ -75,10 +75,10 @@ namespace Network.Listener.Domain
                 return;
             }
 
-            OnContinueAccept();
+            ContinueAccept();
         }
 
-        private void OnProcess(TSocket state)
+        private void Process(TSocket state)
         {
             state.Identity = Identity;
 
@@ -89,15 +89,15 @@ namespace Network.Listener.Domain
             ListenQueue.Enqueue(state);
         }
 
-        private void OnContinueAccept()
+        private void ContinueAccept()
         {
             try
             {
-                OnBeginAccept<TSocket>(OnAccept);
+                BeginAccept<TSocket>(Accept);
             }
             catch(Exception exception)
             {
-                OnInfo("Cannot continue accept.", exception);
+                Info("Cannot continue accept.", exception);
 
                 Locked = false;
 
@@ -105,7 +105,7 @@ namespace Network.Listener.Domain
             }
         }
 
-        private void OnInfo(string text, Exception exception = null)
+        private void Info(string text, Exception exception = null)
         {
             Output($"Listener: {text}{(exception != null ? $"\n{exception}" : null)}");
         }

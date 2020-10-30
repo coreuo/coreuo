@@ -6,13 +6,13 @@ namespace Shard.Message.Domain.Outgoing
     public interface ISkillList<TSkillInfo>
         where TSkillInfo : ISkillInfo
     {
-        List<TSkillInfo> Skills { get; }
+        public List<TSkillInfo> Skills { get; }
 
-        internal void OnWriteSkillList(IData data)
+        internal void WriteSkillList(IData data)
         {
-            data.OnWrite(3, (byte)0x02);
+            data.Write(3, (byte)0x02);
 
-            Enumerable.Range(0, Skills.Count).ToList().ForEach(i => Skills[i].OnWriteSkillInfo(i, data));
+            Enumerable.Range(0, Skills.Count).ToList().ForEach(i => Skills[i].WriteSkillInfo(i, data));
         }
     }
 }

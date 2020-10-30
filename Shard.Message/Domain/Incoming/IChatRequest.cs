@@ -4,9 +4,9 @@
     {
         public string ChatName { get; set; }
 
-        internal int OnReadChatRequest(IData data)
+        internal int ReadChatRequest(IData data)
         {
-            ChatName = data.OnReadAscii(1, 63);
+            ChatName = data.ReadAscii(1, 63);
 
             return 64;
         }

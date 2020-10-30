@@ -8,23 +8,23 @@ namespace Network.State.Domain
     {
         ConcurrentQueue<TData> ReceiveQueue { get; }
 
-        internal void OnBeginReceive()
+        internal void BeginReceive()
         {
             var data = GetBuffer();
 
             try
             {
-                OnBeginReceive(data.Value, data.Offset, data.Length, f => OnReceive(data, f));
+                BeginReceive(data.Value, data.Offset, data.Length, f => Receive(data, f));
             }
             catch (ObjectDisposedException) when (!Locked)
             {
-                OnInfo("stopped");
+                Info("stopped");
 
                 Receiving = false;
             }
             catch (Exception exception)
             {
-                OnInfo("Cannot begin receive.", exception);
+                Info("Cannot begin receive.", exception);
 
                 Locked = false;
 
@@ -32,19 +32,19 @@ namespace Network.State.Domain
             }
         }
 
-        private void OnReceive(TData data, Func<int> receive)
+        private void Receive(TData data, Func<int> receive)
         {
             try
             {
                 data.Length = receive();
 
-                OnProcess(data);
+                Process(data);
 
                 Last = DateTime.Now;
             }
             catch (ObjectDisposedException) when (!Locked)
             {
-                OnInfo($"stopped on {IpAddress}:{Port}");
+                Info($"stopped on {IpAddress}:{Port}");
 
                 Receiving = false;
 
@@ -52,7 +52,7 @@ namespace Network.State.Domain
             }
             catch (Exception exception)
             {
-                OnInfo("Cannot receive.", exception);
+                Info("Cannot receive.", exception);
 
                 Locked = false;
 
@@ -61,10 +61,10 @@ namespace Network.State.Domain
                 return;
             }
 
-            if (Locked) OnContinueReceive();
+            if (Locked) ContinueReceive();
         }
 
-        private void OnProcess(TData data)
+        private void Process(TData data)
         {
             if (data.Length > 0)
             {
@@ -72,7 +72,7 @@ namespace Network.State.Domain
             }
             else
             {
-                OnInfo($"stopped on {IpAddress}:{Port}");
+                Info($"stopped on {IpAddress}:{Port}");
 
                 Locked = false;
 
@@ -80,15 +80,15 @@ namespace Network.State.Domain
             }
         }
 
-        private void OnContinueReceive()
+        private void ContinueReceive()
         {
             try
             {
-                OnBeginReceive();
+                BeginReceive();
             }
             catch (Exception exception)
             {
-                OnInfo("Cannot continue receive.", exception);
+                Info("Cannot continue receive.", exception);
 
                 Locked = false;
 
@@ -96,7 +96,7 @@ namespace Network.State.Domain
             }
         }
 
-        private void OnInfo(string text, Exception exception = null)
+        private void Info(string text, Exception exception = null)
         {
             Output($"Receiver: {text}{(exception != null ? $"\n{exception}" : null)}");
         }

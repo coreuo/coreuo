@@ -2,6 +2,6 @@
 {
     public interface IBody
     {
-        short Body { get; set; }
+        public short Body { get; set; }
     }
 }

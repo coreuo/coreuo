@@ -6,11 +6,11 @@
 
         public int ClientType { get; set; }
 
-        internal int OnReadClientType(IData data)
+        internal int ReadClientType(IData data)
         {
-            UnknownClientTypeFirst = data.OnReadShort(3);
+            UnknownClientTypeFirst = data.ReadShort(3);
 
-            ClientType = data.OnReadInt(5);
+            ClientType = data.ReadInt(5);
 
             return 9;
         }

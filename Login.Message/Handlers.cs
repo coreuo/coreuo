@@ -9,24 +9,24 @@ namespace Login.Message
         where TData : IData, new()
         where TShard : IShard, IShardServer
     {
-        public static void OnReceived(TServer server, TState state, TData data)
+        public static void Received(TServer server, TState state, TData data)
         {
             while (data.Offset < data.Length)
             {
-                var size = server.OnRead(state, data);
+                var size = server.Read(state, data);
 
                 data.Offset += size;
             }
         }
 
-        public static void OnShardList(TServer server, TState state)
+        public static void ShardList(TServer server, TState state)
         {
-            state.OnWrite(0xA8, 6 + 40 * server.Shards.Count, server.OnWriteShardList);
+            state.Write(0xA8, 6 + 40 * server.Shards.Count, server.WriteShardList);
         }
 
-        public static void OnShardServer(TServer server, TState state)
+        public static void ShardServer(TServer server, TState state)
         {
-            state.OnWrite(0x8C, 11, server.Shards[state.ShardIndex].OnWriteShardServer);
+            state.Write(0x8C, 11, server.Shards[state.ShardIndex].WriteShardServer);
         }
     }
 }

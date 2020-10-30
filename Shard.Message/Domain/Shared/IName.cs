@@ -2,6 +2,6 @@
 {
     public interface IName
     {
-        string Name { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -8,12 +8,12 @@ namespace Login.Server
         where TState : IState
         where TShard : IShard
     {
-        public static void OnAccountLogin(TServer server, TState state)
+        public static void AccountLogin(TServer server, TState state)
         {
             server.ShardList(state);
         }
 
-        public static void OnShardSelect(TServer server, TState state)
+        public static void ShardSelect(TServer server, TState state)
         {
             if(state.ShardIndex < 0 || !(state.ShardIndex < server.Shards.Count))
                 throw new InvalidOperationException("Invalid shard index.");

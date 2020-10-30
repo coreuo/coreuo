@@ -4,9 +4,9 @@ namespace Shard.Message.Domain.Outgoing
 {
     public interface IMoveResponse : IMove
     {
-        internal void OnWriteMoveResponse(IData data)
+        internal void WriteMoveResponse(IData data)
         {
-            data.OnWrite(1, MoveNumber);
+            data.Write(1, MoveNumber);
         }
     }
 }

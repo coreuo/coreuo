@@ -2,6 +2,6 @@
 {
     public interface ISerial
     {
-        int Serial { get; set; }
+        public int Serial { get; set; }
     }
 }

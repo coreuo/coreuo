@@ -5,15 +5,15 @@ namespace Network.State.Domain
     public interface ISender<TData> : IState<TData>
         where TData : IData
     {
-        internal void OnBeginSend(TData data)
+        internal void BeginSend(TData data)
         {
             try
             {
-                OnBeginSend(data.Value, data.Offset, data.Length, f => OnSend(data, f));
+                BeginSend(data.Value, data.Offset, data.Length, f => Send(data, f));
             }
             catch (Exception exception)
             {
-                OnInfo("Cannot begin send.", exception);
+                Info("Cannot begin send.", exception);
 
                 Locked = false;
 
@@ -21,25 +21,25 @@ namespace Network.State.Domain
             }
         }
 
-        private void OnSend(TData data, Func<int> send)
+        private void Send(TData data, Func<int> send)
         {
             try
             {
                 data.Length = send();
 
-                OnProcess(data);
+                Process(data);
 
                 Last = DateTime.Now;
             }
             catch (ObjectDisposedException) when (!Locked)
             {
-                OnInfo("stopped");
+                Info("stopped");
 
                 Sending = -1;
             }
             catch(Exception exception)
             {
-                OnInfo("Cannot send.", exception);
+                Info("Cannot send.", exception);
 
                 Locked = false;
 
@@ -47,7 +47,7 @@ namespace Network.State.Domain
             }
         }
 
-        private void OnProcess(TData data)
+        private void Process(TData data)
         {
             if (data.Length > 0)
             {
@@ -56,12 +56,12 @@ namespace Network.State.Domain
                 return;
             }
 
-            OnInfo("Cannot process send.");
+            Info("Cannot process send.");
 
             Locked = false;
         }
 
-        private void OnInfo(string text, Exception exception = null)
+        private void Info(string text, Exception exception = null)
         {
             Output($"Sender: {text}{(exception != null ? $"\n{exception}" : null)}");
         }

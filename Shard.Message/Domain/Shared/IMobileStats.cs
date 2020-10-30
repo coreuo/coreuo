@@ -2,10 +2,10 @@
 {
     public interface IMobileStats
     {
-        short Strength { get; set; }
+        public short Strength { get; set; }
 
-        short Dexterity { get; set; }
+        public short Dexterity { get; set; }
 
-        short Intelligence { get; set; }
+        public short Intelligence { get; set; }
     }
 }

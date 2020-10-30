@@ -4,9 +4,9 @@
     {
         public byte Number { get; set; }
 
-        internal int OnReadPingRequest(IData data)
+        internal int ReadPingRequest(IData data)
         {
-            Number = data.OnReadByte(1);
+            Number = data.ReadByte(1);
 
             return 2;
         }

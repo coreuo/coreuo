@@ -39,22 +39,22 @@ namespace Shard.Message.Domain
 
         Action<string> Output { get; }
 
-        internal void OnWrite(byte id, int size, Action<IData> writer = null, bool compress = true, string writerName = null)
+        internal void Write(byte id, int size, Action<IData> writer = null, bool compress = true, string writerName = null)
         {
-            OnGenericWrite(id, size, data => writer?.Invoke(data), compress, writerName ?? writer?.Method.Name);
+            GenericWrite(id, size, data => writer?.Invoke(data), compress, writerName ?? writer?.Method.Name);
         }
 
-        internal void OnGenericWrite(byte id, int size, Action<TData> writer = null, bool compress = true, string writerName = null)
+        internal void GenericWrite(byte id, int size, Action<TData> writer = null, bool compress = true, string writerName = null)
         {
-            OnInfo($"0x{id:X2} {writerName ?? writer?.Method.Name}");
+            Info($"0x{id:X2} {writerName ?? writer?.Method.Name}");
 
             var data = GetBuffer();
 
             data.Length = size;
 
-            data.OnWrite(0, id);
+            data.Write(0, id);
 
-            if (size > 2) data.OnWrite(1, (short)size);
+            if (size > 2) data.Write(1, (short)size);
 
             writer?.Invoke(data);
 
@@ -63,7 +63,7 @@ namespace Shard.Message.Domain
             Send(data);
         }
 
-        private void OnInfo(string text)
+        private void Info(string text)
         {
             Output($"Message: {text}");
         }

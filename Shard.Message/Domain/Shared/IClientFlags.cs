@@ -2,6 +2,6 @@
 {
     public interface IClientFlags
     {
-        int ClientFlags { get; set; }
+        public int ClientFlags { get; set; }
     }
 }

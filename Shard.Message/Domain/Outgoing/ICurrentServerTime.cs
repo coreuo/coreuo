@@ -6,13 +6,13 @@ namespace Shard.Message.Domain.Outgoing
     {
         DateTime DateTime { get; }
 
-        internal void OnWriteCurrentServerTime(IData data)
+        internal void WriteCurrentServerTime(IData data)
         {
-            data.OnWrite(1, (byte)DateTime.Hour);
+            data.Write(1, (byte)DateTime.Hour);
 
-            data.OnWrite(2, (byte)DateTime.Minute);
+            data.Write(2, (byte)DateTime.Minute);
 
-            data.OnWrite(3, (byte)DateTime.Second);
+            data.Write(3, (byte)DateTime.Second);
         }
     }
 }

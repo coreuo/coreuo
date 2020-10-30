@@ -4,6 +4,6 @@ namespace Shard.Message.Domain.Shared
 {
     public interface IAttributes<TAttribute>
     {
-        List<TAttribute> Attributes { get; set; }
+        public List<TAttribute> Attributes { get; set; }
     }
 }

@@ -4,9 +4,9 @@
     {
         byte PingNumber { get; set; }
 
-        internal void OnWritePingResponse(IData data)
+        internal void WritePingResponse(IData data)
         {
-            data.OnWrite(1, PingNumber);
+            data.Write(1, PingNumber);
         }
     }
 }

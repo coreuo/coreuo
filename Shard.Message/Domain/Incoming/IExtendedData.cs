@@ -6,9 +6,9 @@
 
         public int ExtendedLength { get; set; }
 
-        internal int OnReadExtendedData(IData data)
+        internal int ReadExtendedData(IData data)
         {
-            var size = data.OnReadShort(1);
+            var size = data.ReadShort(1);
 
             ExtendedOffset = data.Offset + 3;
 

@@ -2,6 +2,6 @@
 {
     public interface IMobile : IEntity
     {
-        int Serial { get; set; }
+        public string Name { get; set; }
     }
 }

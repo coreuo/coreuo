@@ -10,13 +10,13 @@ namespace Shard.Message.Extended.Domain
 
         public string Identity { get; set; }
 
-        internal int OnRead(TState state, TData data)
+        internal int Read(TState state, TData data)
         {
-            var id = data.OnReadShort(0);
+            var id = data.ReadShort(0);
 
             return id switch
             {
-                0x000B => Process(state.OnReadClientLanguage, ClientLanguage),
+                0x000B => Process(state.ReadClientLanguage, ClientLanguage),
                 _ => throw new InvalidOperationException($"{Identity}.Message.Extended: Invalid message 0x{id:X}.")
             };
 

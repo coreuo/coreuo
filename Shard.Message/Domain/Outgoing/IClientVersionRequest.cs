@@ -2,7 +2,7 @@
 {
     public interface IClientVersionRequest
     {
-        internal void OnWriteClientVersionRequest(IData data)
+        internal void WriteClientVersionRequest(IData data)
         {
         }
     }

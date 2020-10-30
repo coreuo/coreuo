@@ -2,7 +2,7 @@
 {
     public interface ILoginComplete
     {
-        internal void OnLoginComplete(IData data)
+        internal void LoginComplete(IData data)
         {
         }
     }

@@ -4,9 +4,9 @@
     {
         byte Id { get; set; }
 
-        internal void OnWriteMapChange(IData data)
+        internal void WriteMapChange(IData data)
         {
-            data.OnWrite(2, Id);
+            data.Write(2, Id);
         }
     }
 }

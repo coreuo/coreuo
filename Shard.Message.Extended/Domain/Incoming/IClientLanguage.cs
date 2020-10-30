@@ -4,9 +4,9 @@
     {
         public string ClientLanguage { get; set; }
 
-        internal int OnReadClientLanguage(IData data)
+        internal int ReadClientLanguage(IData data)
         {
-            ClientLanguage = data.OnReadString(2, 3);
+            ClientLanguage = data.ReadString(2, 3);
 
             return 3;
         }

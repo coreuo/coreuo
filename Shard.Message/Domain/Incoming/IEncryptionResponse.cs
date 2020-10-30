@@ -6,13 +6,13 @@
 
         public byte[] PublicKey { get; set; }
 
-        internal int OnReadEncryptionResponse(IData data)
+        internal int ReadEncryptionResponse(IData data)
         {
-            PublicKeyLength = data.OnReadInt(3);
+            PublicKeyLength = data.ReadInt(3);
 
-            PublicKey = data.OnReadByteArray(7, PublicKeyLength);
+            PublicKey = data.ReadByteArray(7, PublicKeyLength);
 
-            return data.OnReadShort(1);
+            return data.ReadShort(1);
         }
     }
 }

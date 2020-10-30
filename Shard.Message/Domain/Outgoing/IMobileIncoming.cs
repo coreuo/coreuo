@@ -14,38 +14,38 @@ namespace Shard.Message.Domain.Outgoing
         INotoriety
         where TMobileEquip : IMobileEquip
     {
-        List<TMobileEquip> Equipment { get; set; }
+        public List<TMobileEquip> Equipment { get; set; }
 
-        internal void OnWriteMobileIncoming(IData data)
+        internal void WriteMobileIncoming(IData data)
         {
-            data.OnWrite(3, Serial);
+            data.Write(3, Serial);
 
-            data.OnWrite(7, Body);
+            data.Write(7, Body);
 
-            data.OnWrite(9, LocationX);
+            data.Write(9, LocationX);
 
-            data.OnWrite(11, LocationY);
+            data.Write(11, LocationY);
 
-            data.OnWrite(13, LocationZ);
+            data.Write(13, LocationZ);
 
-            data.OnWrite(14, Direction);
+            data.Write(14, Direction);
 
-            data.OnWrite(15, Hue);
+            data.Write(15, Hue);
 
-            data.OnWrite(17, StatusFlags);
+            data.Write(17, StatusFlags);
 
-            data.OnWrite(18, Notoriety);
+            data.Write(18, Notoriety);
 
-            Enumerable.Range(0, Equipment.Count).ToList().ForEach(i => Equipment[i].OnWriteMobileEquipment(OnEquipmentSize(i), data));
+            Enumerable.Range(0, Equipment.Count).ToList().ForEach(i => Equipment[i].WriteMobileEquipment(EquipmentSize(i), data));
 
-            data.OnWrite(19 + OnEquipmentSize() , 0);
+            data.Write(19 + EquipmentSize() , 0);
         }
 
-        internal int OnEquipmentSize(int? index = null)
+        internal int EquipmentSize(int? index = null)
         {
             var filtered = index == null ? Equipment : Equipment.Take(index.Value);
 
-            return filtered.Sum(e => e.OnHasHue() ? 9 : 7);
+            return filtered.Sum(e => e.HasHue() ? 9 : 7);
         }
     }
 }

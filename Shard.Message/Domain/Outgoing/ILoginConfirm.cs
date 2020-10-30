@@ -8,55 +8,55 @@ namespace Shard.Message.Domain.Outgoing
         ILocation,
         IDirection
     {
-        int LoginUnknownFirst { get; set; }
+        public int LoginUnknownFirst { get; set; }
 
-        byte LoginUnknownSecond { get; set; }
+        public byte LoginUnknownSecond { get; set; }
 
-        int LoginUnknownThird { get; set; }
+        public int LoginUnknownThird { get; set; }
 
-        int LoginUnknownFourth { get; set; }
+        public int LoginUnknownFourth { get; set; }
 
-        byte LoginUnknownFifth { get; set; }
+        public byte LoginUnknownFifth { get; set; }
 
-        ushort BoundaryWidth { get; set; }
+        public ushort BoundaryWidth { get; set; }
 
-        ushort BoundaryHeight { get; set; }
+        public ushort BoundaryHeight { get; set; }
 
-        ushort LoginUnknownSixth { get; set; }
+        public ushort LoginUnknownSixth { get; set; }
 
-        int LoginUnknownSeventh { get; set; }
+        public int LoginUnknownSeventh { get; set; }
 
-        internal void OnWriteLoginConfirm(IData data)
+        internal void WriteLoginConfirm(IData data)
         {
-            data.OnWrite(1, Serial);
+            data.Write(1, Serial);
 
-            data.OnWrite(5, LoginUnknownFirst);
+            data.Write(5, LoginUnknownFirst);
 
-            data.OnWrite(9, Body);
+            data.Write(9, Body);
 
-            data.OnWrite(11, LocationX);
+            data.Write(11, LocationX);
 
-            data.OnWrite(13, LocationY);
+            data.Write(13, LocationY);
 
-            data.OnWrite(15, LoginUnknownSecond);
+            data.Write(15, LoginUnknownSecond);
 
-            data.OnWrite(16, LocationZ);
+            data.Write(16, LocationZ);
 
-            data.OnWrite(17, Direction);
+            data.Write(17, Direction);
 
-            data.OnWrite(18, LoginUnknownThird);
+            data.Write(18, LoginUnknownThird);
 
-            data.OnWrite(22, LoginUnknownFourth);
+            data.Write(22, LoginUnknownFourth);
 
-            data.OnWrite(26, LoginUnknownFifth);
+            data.Write(26, LoginUnknownFifth);
 
-            data.OnWrite(27, BoundaryWidth);
+            data.Write(27, BoundaryWidth);
 
-            data.OnWrite(29, BoundaryHeight);
+            data.Write(29, BoundaryHeight);
 
-            data.OnWrite(31, LoginUnknownSixth);
+            data.Write(31, LoginUnknownSixth);
 
-            data.OnWrite(33, LoginUnknownSeventh);
+            data.Write(33, LoginUnknownSeventh);
 
         }
     }

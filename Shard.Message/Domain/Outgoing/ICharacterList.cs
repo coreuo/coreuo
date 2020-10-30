@@ -9,13 +9,13 @@ namespace Shard.Message.Domain.Outgoing
     {
         List<TCharacter> Characters { get; }
 
-        internal void OnWriteCharacterList(IData data)
+        internal void WriteCharacterList(IData data)
         {
             var slotCount = Math.Max(Characters.Count, 7);
 
-            data.OnWrite(3, (byte) slotCount);
+            data.Write(3, (byte) slotCount);
 
-            Enumerable.Range(0, Characters.Count).ToList().ForEach(i => Characters[i].OnWriteCharacter(i, data));
+            Enumerable.Range(0, Characters.Count).ToList().ForEach(i => Characters[i].WriteCharacter(i, data));
         }
     }
 }

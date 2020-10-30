@@ -20,48 +20,48 @@ namespace Thread.Runner.Domain
 
         Action<string> Output { get; }
 
-        internal void OnRun()
+        internal void Run()
         {
-            OnInfo("started");
+            Info("started");
 
             ThreadStart();
 
-            if(Locked) OnInfo("locked");
+            if(Locked) Info("locked");
 
             while (Locked)
             {
-                OnSlice();
+                Slice();
             }
 
-            OnInfo("unlocked");
+            Info("unlocked");
 
             ThreadUnlock();
 
             while (Running)
             {
-                OnSlice();
+                Slice();
             }
 
-            OnInfo("stopped");
+            Info("stopped");
 
             ThreadStop();
         }
 
-        private void OnSlice()
+        private void Slice()
         {
             DateTime = DateTime.Now;
 
             ThreadSlice();
 
-            OnWait();
+            Wait();
         }
 
-        private void OnInfo(string text)
+        private void Info(string text)
         {
             Output($"Thread: {text}");
         }
 
-        private static void OnWait()
+        private static void Wait()
         {
             System.Threading.Thread.Sleep(1);
         }

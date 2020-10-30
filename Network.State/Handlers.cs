@@ -5,36 +5,36 @@ namespace Network.State
     public static class Handlers<TData>
         where TData : IData, new()
     {
-        public static void OnStart(IReceiver<TData> receiver)
+        public static void Start(IReceiver<TData> receiver)
         {
             receiver.Locked = true;
 
             receiver.Receiving = true;
 
-            receiver.OnBeginReceive();
+            receiver.BeginReceive();
         }
 
-        public static void OnSend(ISender<TData> sender, TData data)
+        public static void Send(ISender<TData> sender, TData data)
         {
             if (!sender.Locked)
                 return;
 
             sender.Sending++;
 
-            sender.OnBeginSend(data);
+            sender.BeginSend(data);
         }
 
-        public static void OnStop(IState<TData> state)
+        public static void Stop(IState<TData> state)
         {
             if (!state.Locked || state.Sending < 0 || !state.Receiving)
                 return;
 
             state.Locked = false;
 
-            state.OnBeginClose();
+            state.BeginClose();
         }
 
-        public static TData OnGetBuffer(IState<TData> state)
+        public static TData GetBuffer(IState<TData> state)
         {
             var data = state.BufferQueue.TryDequeue(out var buffer) ? buffer : new TData();
 

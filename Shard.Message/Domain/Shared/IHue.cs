@@ -2,6 +2,6 @@
 {
     public interface IHue
     {
-        short Hue { get; set; }
+        public short Hue { get; set; }
     }
 }

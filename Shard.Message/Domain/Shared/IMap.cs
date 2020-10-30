@@ -3,6 +3,6 @@
     public interface IMap<TMap>
         where TMap : IMap
     {
-        TMap Map { get; set; }
+        //public TMap Map { get; set; }
     }
 }

@@ -20,11 +20,11 @@
 
         bool Encrypted { get; set; }
 
-        public void OnInitialize()
+        public void Initialize()
         {
-            FirstClientKey = OnGetFirstClientKey((uint)MajorVersion, (uint)MinorVersion, (uint)Patch);
+            FirstClientKey = GetFirstClientKey((uint)MajorVersion, (uint)MinorVersion, (uint)Patch);
 
-            SecondClientKey = OnGetSecondClientKey((uint)MajorVersion, (uint)MinorVersion, (uint)Patch);
+            SecondClientKey = GetSecondClientKey((uint)MajorVersion, (uint)MinorVersion, (uint)Patch);
 
             var seed = (uint)Seed;
 
@@ -35,7 +35,7 @@
             Encrypted = true;
         }
 
-        internal void OnDecrypt(byte[] buffer, int offset, int length)
+        internal void Decrypt(byte[] buffer, int offset, int length)
         {
             for (var i = offset; i < length; i++)
             {
@@ -49,7 +49,7 @@
             }
         }
 
-        private static uint OnGetFirstClientKey(uint ver1, uint ver2, uint ver3)
+        private static uint GetFirstClientKey(uint ver1, uint ver2, uint ver3)
         {
             var num1 = ver3;
             var num2 = ver1;
@@ -79,7 +79,7 @@
             return num2 ^ 0x2c13a5fd;
         }
 
-        private static uint OnGetSecondClientKey(uint ver1, uint ver2, uint ver3)
+        private static uint GetSecondClientKey(uint ver1, uint ver2, uint ver3)
         {
             var num1 = ver3;
             var num3 = ver2;

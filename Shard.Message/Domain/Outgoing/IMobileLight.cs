@@ -5,13 +5,13 @@ namespace Shard.Message.Domain.Outgoing
     public interface IMobileLight :
         ISerial
     {
-        byte LightLevel { get; set; }
+        public byte LightLevel { get; set; }
 
-        internal void OnWriteMobileLight(IData data)
+        internal void WriteMobileLight(IData data)
         {
-            data.OnWrite(1, Serial);
+            data.Write(1, Serial);
 
-            data.OnWrite(5, LightLevel);
+            data.Write(5, LightLevel);
         }
     }
 }

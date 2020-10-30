@@ -7,25 +7,25 @@ namespace Shard.Message.Domain.Outgoing
         IMap<TMap>
         where TMap : IMap
     {
-        byte FirstUnknownServerChange { get; set; }
+        /*public byte FirstUnknownServerChange { get; set; }
 
-        internal void OnWriteServerChange(IData data)
+        internal void WriteServerChange(IData data)
         {
-            data.OnWrite(1, LocationX);
+            data.Write(1, LocationX);
 
-            data.OnWrite(3, LocationY);
+            data.Write(3, LocationY);
 
-            data.OnWrite(5, (short)LocationZ);
+            data.Write(5, (short)LocationZ);
 
-            data.OnWrite(7, FirstUnknownServerChange);
+            data.Write(7, FirstUnknownServerChange);
 
-            data.OnWrite(8, Map.MinimumX);
+            data.Write(8, Map.MinimumX);
 
-            data.OnWrite(10, Map.MinimumY);
+            data.Write(10, Map.MinimumY);
 
-            data.OnWrite(12, Map.MaximumX);
+            data.Write(12, Map.MaximumX);
 
-            data.OnWrite(14, Map.MaximumY);
-        }
+            data.Write(14, Map.MaximumY);
+        }*/
     }
 }

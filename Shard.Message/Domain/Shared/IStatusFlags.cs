@@ -2,6 +2,6 @@
 {
     public interface IStatusFlags
     {
-        byte StatusFlags { get; set; }
+        public byte StatusFlags { get; set; }
     }
 }

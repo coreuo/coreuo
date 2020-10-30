@@ -17,158 +17,163 @@ namespace Shard.Message
         where TMap : IMap
         where TAttribute : IAttribute
     {
-        public static void OnReceived(TServer server, TState state, TData data)
+        public static void Received(TServer server, TState state, TData data)
         {
             while (data.Offset < data.Length)
             {
-                var size = server.OnRead(state, data);
+                var size = server.Read(state, data);
 
                 data.Offset += size;
             }
         }
 
-        public static void OnClientVersionRequest(TState state)
+        public static void ClientVersionRequest(TState state)
         {
-            state.OnWrite(0xBD, 3, state.OnWriteClientVersionRequest);
+            state.Write(0xBD, 3, state.WriteClientVersionRequest);
         }
 
-        public static void OnServerTime(TServer server, TState state)
+        public static void ServerTime(TServer server, TState state)
         {
-            state.OnWrite(0x5B, 4, server.OnWriteCurrentServerTime);
+            state.Write(0x5B, 4, server.WriteCurrentServerTime);
         }
 
-        public static void OnEncryptionRequest(TState state)
+        public static void EncryptionRequest(TState state)
         {
-            state.OnWrite(0xE3, 7 + state.EncryptionBase.Length + 4 + state.EncryptionPrime.Length + 4 + state.EncryptionPublicKey.Length + 4 + 4 + state.EncryptionIv.Length, state.OnWriteEncryptionRequest, false);
+            state.Write(0xE3, 7 + state.EncryptionBase.Length + 4 + state.EncryptionPrime.Length + 4 + state.EncryptionPublicKey.Length + 4 + 4 + state.EncryptionIv.Length, state.WriteEncryptionRequest, false);
         }
 
-        public static void OnGlobalLight(TServer server, TState state)
+        public static void GlobalLight(TServer server, TState state)
         {
-            state.OnWrite(0x4F, 2, server.OnWriteGlobalLight);
+            state.Write(0x4F, 2, server.WriteGlobalLight);
         }
 
-        public static void OnCharacterList(TServer server, TState state)
+        public static void CharacterList(TServer server, TState state)
         {
             var characterListSize = 4 + Math.Max(state.Characters.Count, 7) * 60;
 
             var cityListSize = 1 + server.Cities.Count * 63;
 
-            state.OnWrite(0xA9, characterListSize + cityListSize + 4 + 28, data =>
+            state.Write(0xA9, characterListSize + cityListSize + 4 + 28, data =>
             {
-                state.OnWriteCharacterList(data);
+                state.WriteCharacterList(data);
 
-                server.OnWriteCityList(characterListSize, data);
+                server.WriteCityList(characterListSize, data);
 
-                server.OnWriteCharacterFeatures(characterListSize, cityListSize, data);
+                server.WriteCharacterFeatures(characterListSize, cityListSize, data);
 
-            }, writerName: nameof(state.OnWriteCharacterList));
+            }, writerName: nameof(state.WriteCharacterList));
         }
 
-        public static void OnLoginComplete(TState state)
+        public static void LoginComplete(TState state)
         {
-            state.OnWrite(0x55, 1, state.OnLoginComplete);
+            state.Write(0x55, 1, state.LoginComplete);
         }
 
-        public static void OnLoginConfirm(TState state, TMobile mobile)
+        public static void LoginConfirm(TState state, TMobile mobile)
         {
-            state.OnWrite(0x1B, 37, mobile.OnWriteLoginConfirm);
+            state.Write(0x1B, 37, mobile.WriteLoginConfirm);
         }
 
-        public static void OnMobileIncoming(TState state, TMobile mobile)
+        public static void MobileIncoming(TState state, TMobile mobile)
         {
-            state.OnWrite(0x78, 18 + mobile.OnEquipmentSize() + 1, mobile.OnWriteMobileIncoming);
+            state.Write(0x78, 18 + mobile.EquipmentSize() + 1, mobile.WriteMobileIncoming);
         }
 
-        public static void OnMobileLight(TState state, TMobile mobile)
+        public static void MobileLight(TState state, TMobile mobile)
         {
-            state.OnWrite(0x4E, 6, mobile.OnWriteMobileLight);
+            state.Write(0x4E, 6, mobile.WriteMobileLight);
         }
 
-        public static void OnMobileStatus(TState state, TMobile mobile)
+        public static void MobileStatus(TState state, TMobile mobile)
         {
-            state.OnWrite(0x11, 167, mobile.OnWriteMobileStatus);
+            state.Write(0x11, 167, mobile.WriteMobileStatus);
         }
 
-        public static void OnMobileUpdate(TState state, TMobile mobile)
+        public static void MobileUpdate(TState state, TMobile mobile)
         {
-            state.OnWrite(0x20, 19, mobile.OnWriteMobileUpdate);
+            state.Write(0x20, 19, mobile.WriteMobileUpdate);
         }
 
-        public static void OnMoveResponse(TState state, TMobile mobile)
+        public static void MoveResponse(TState state, TMobile mobile)
         {
-            state.OnWrite(0x22, 3, data =>
+            state.Write(0x22, 3, data =>
             {
-                state.OnWriteMoveResponse(data);
+                state.WriteMoveResponse(data);
 
-                mobile.OnWriteMoveNotoriety(data);
+                mobile.WriteMoveNotoriety(data);
 
-            }, writerName: nameof(state.OnWriteMoveResponse));
+            }, writerName: nameof(state.WriteMoveResponse));
         }
 
-        public static void OnPingResponse(TState state)
+        public static void PingResponse(TState state)
         {
-            state.OnWrite(0x73, 2, state.OnWritePingResponse);
+            state.Write(0x73, 2, state.WritePingResponse);
         }
 
-        public static void OnSeasonChange(TState state)
+        public static void SeasonChange(TState state)
         {
-            state.OnWrite(0xBC, 3, state.OnWriteSeasonChange);
+            state.Write(0xBC, 3, state.WriteSeasonChange);
         }
 
-        public static void OnSkillInfo(TState state, TMobile mobile)
+        public static void SkillInfo(TState state, TMobile mobile)
         {
-            state.OnWrite(0x3A, 6 + mobile.Skills.Count * 9, mobile.OnWriteSkillList);
+            state.Write(0x3A, 6 + mobile.Skills.Count * 9, mobile.WriteSkillList);
         }
 
-        public static void OnSupportedFeatures(TServer server, TState state)
+        public static void SupportedFeatures(TServer server, TState state)
         {
-            state.OnWrite(0xB9, 3, server.OnWriteSupportedFeatures);
+            state.Write(0xB9, 3, server.WriteSupportedFeatures);
         }
 
-        public static void OnWarMode(TState state)
+        public static void WarMode(TState state)
         {
-            state.OnWrite(0x72, 5, state.OnWriteWarMode);
+            state.Write(0x72, 5, state.WriteWarMode);
         }
 
-        public static void OnExtendedData(TState state, int size, Action<TData> writer, string writerName)
+        public static void ExtendedData(TState state, int size, Action<TData> writer, string writerName)
         {
-            state.OnGenericWrite(0xBF, size, writer, writerName: writerName);
+            state.GenericWrite(0xBF, size, writer, writerName: writerName);
         }
 
-        public static void OnServerChange(TState state, TMobile mobile)
+        /*public static void ServerChange(TState state, TMobile mobile)
         {
-            state.OnWrite(0x76, 16, mobile.OnWriteServerChange);
+            state.Write(0x76, 16, mobile.WriteServerChange);
+        }*/
+
+        public static void AttributeList(TState state, TEntity entity)
+        {
+            state.Write(0xD6, 15 + entity.GetAttributesSizeList().Sum(e => e.size) + 4, entity.WriteAttributeList);
         }
 
-        public static void OnAttributeList(TState state, TEntity entity)
+        public static void AttributeInfo(TState state, TEntity entity)
         {
-            state.OnWrite(0xD6, 15 + entity.OnGetAttributesSizeList().Sum(e => e.size) + 4, entity.OnWriteAttributeList);
+            state.Write(0xDC, 9, entity.WriteAttributeInfo);
         }
 
-        public static void OnAttributeInfo(TState state, TEntity entity)
+        /*public static void MobileAttributes(TState state, TMobile mobile)
         {
-            state.OnWrite(0xDC, 9, entity.OnWriteAttributeInfo);
-        }
+            state.Write(0x2D, 17, mobile.WriteMobileAttributes);
+        }*/
 
-        public static void OnMobileAttributes(TState state, TMobile mobile)
+        public static void OpenPaperDoll(TState state, TMobile mobile)
         {
-            state.OnWrite(0x2D, 17, mobile.OnWriteMobileAttributes);
-        }
-
-        public static void OnOpenPaperDoll(TState state, TMobile mobile)
-        {
-            state.OnWrite(0x88, 66, data =>
+            state.Write(0x88, 66, data =>
             {
-                mobile.OnWriteMobilePaperDoll(data);
+                mobile.WriteMobilePaperDoll(data);
 
-                state.OnWriteOpenPaperDoll(data);
+                state.WriteOpenPaperDoll(data);
 
-            }, writerName: nameof(state.OnWriteOpenPaperDoll));
+            }, writerName: nameof(state.WriteOpenPaperDoll));
         }
 
-        public static void OnProfileResponse(TState state, TMobile mobile)
+        public static void ProfileResponse(TState state, TMobile mobile)
         {
-            state.OnWrite(0xB8, 7 + mobile.ProfileHeader.Length + 1 + 2 * mobile.ProfileFooter.Length + 2 + 2 * mobile.ProfileBody.Length + 2, mobile.OnWriteProfileResponse);
+            state.Write(0xB8, 7 + mobile.ProfileHeader.Length + 1 + 2 * mobile.ProfileFooter.Length + 2 + 2 * mobile.ProfileBody.Length + 2, mobile.WriteProfileResponse);
+        }
+
+        public static void EntityDisplay(TState state, TEntity entity)
+        {
+            state.Write(0x24, 7, entity.WriteEntityDisplay);
         }
     }
 }

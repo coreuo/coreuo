@@ -7,17 +7,17 @@ namespace Network.State.Domain
     {
         Socket Socket { get; set; }
 
-        internal void OnBeginReceive(byte[] buffer, int offset, int length, Action<Func<int>> onReceive)
+        internal void BeginReceive(byte[] buffer, int offset, int length, Action<Func<int>> onReceive)
         {
             Socket.BeginReceive(buffer, offset, length, SocketFlags.None, r => onReceive(() => Socket.EndReceive(r)), null);
         }
 
-        internal void OnBeginSend(byte[] buffer, int offset, int length, Action<Func<int>> onSend)
+        internal void BeginSend(byte[] buffer, int offset, int length, Action<Func<int>> onSend)
         {
             Socket.BeginSend(buffer, offset, length, SocketFlags.None, r => onSend(() => Socket.EndSend(r)), null);
         }
 
-        internal void OnBeginClose()
+        internal void BeginClose()
         {
             Socket.Close();
         }

@@ -4,9 +4,9 @@
     {
         byte LightLevel { get; }
 
-        internal void OnWriteGlobalLight(IData data)
+        internal void WriteGlobalLight(IData data)
         {
-            data.OnWrite(1, LightLevel);
+            data.Write(1, LightLevel);
         }
     }
 }

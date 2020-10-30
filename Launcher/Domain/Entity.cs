@@ -10,8 +10,8 @@ namespace Launcher.Domain
     {
         public int Serial
         {
-            get => Property.OnGet<int>(this, nameof(Serial));
-            set => Property.OnSet(this, nameof(Serial), value);
+            get => Property.Get<int>(this, nameof(Serial));
+            set => Property.Set(this, nameof(Serial), value);
         }
 
         public List<Attribute> Attributes { get; set; } = new List<Attribute>
@@ -23,6 +23,13 @@ namespace Launcher.Domain
         public Entity()
         {
             Serial = default;
+            EntityDisplayId = default;
+        }
+
+        public short EntityDisplayId
+        {
+            get => Property.Get<short>(this, nameof(EntityDisplayId));
+            set => Property.Set(this, nameof(EntityDisplayId), value);
         }
     }
 }
