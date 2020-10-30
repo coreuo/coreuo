@@ -3,10 +3,10 @@ using System.Linq;
 
 namespace Launcher.Domain
 {
-    using Property = Shard.Server.Validation.Handlers<Validation>;
+    using Property = Shard.Validation.Handlers<Validation>;
 
     public class Mobile : Entity,
-        Shard.Message.Domain.IMobile<Item, Skill, Map>,
+        Shard.Message.Domain.IMobile<Item, Skill>,
         Shard.Message.Extended.Domain.IMobile<Map, MapPatch>,
         Shard.Server.Domain.IMobile,
         Shard.Mobiles.Domain.IMobile<Item>

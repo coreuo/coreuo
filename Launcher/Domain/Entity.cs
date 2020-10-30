@@ -2,7 +2,7 @@
 
 namespace Launcher.Domain
 {
-    using Property = Shard.Server.Validation.Handlers<Validation>;
+    using Property = Shard.Validation.Handlers<Validation>;
 
     public class Entity :
         Shard.Server.Domain.IEntity,

@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shard.Message.Extended", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shard.Message.Compression", "Shard.Message.Compression\Shard.Message.Compression.csproj", "{F789B6CA-40BC-459C-828B-82243547FD95}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shard.Server.Validation", "Shard.Server.Validation\Shard.Server.Validation.csproj", "{9B0C6A95-4407-413E-B145-90535A063646}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shard.Validation", "Shard.Validation\Shard.Validation.csproj", "{9B0C6A95-4407-413E-B145-90535A063646}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shard.Items", "Shard.Items\Shard.Items.csproj", "{0B8BF79F-1155-4E00-BE77-AEBD70ABCBE4}"
 EndProject

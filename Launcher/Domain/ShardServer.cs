@@ -7,11 +7,11 @@ using System.Net.Sockets;
 
 namespace Launcher.Domain
 {
-    using Property = Shard.Server.Validation.Handlers<Validation>;
+    using Property = Shard.Validation.Handlers<Validation>;
     using NetworkListenerHandlers = Network.Listener.Handlers<ShardState>;
     using NetworkStateHandlers = Network.State.Handlers<Data>;
     using NetworkServerHandlers = Network.Server.Handlers<ShardState, Data>;
-    using ShardMessageHandlers = Shard.Message.Handlers<ShardServer, ShardState, Data, Entity, Mobile, City, Item, Skill, Map, Attribute>;
+    using ShardMessageHandlers = Shard.Message.Handlers<ShardServer, ShardState, Data, Entity, Mobile, City, Item, Skill, Attribute>;
     using ShardExtendedMessageHandlers = Shard.Message.Extended.Handlers<ShardServer, ShardState, Data, Mobile, Map, MapPatch>;
     using ShardServerHandlers = Shard.Server.Handlers<ShardServer,ShardState,Entity,Mobile,Item>;
     using ItemType = Shard.Items.Handlers<ShardServer, Item>;
@@ -24,7 +24,7 @@ namespace Launcher.Domain
         Thread.Runner.Domain.IThread,
         Network.Listener.Domain.IListener<ShardState>,
         Network.Server.Domain.IServer<ShardState, Data>,
-        Shard.Message.Domain.IServer<ShardState, Data, Mobile, City, Item, Skill, Map>,
+        Shard.Message.Domain.IServer<ShardState, Data, Mobile, City, Item, Skill>,
         Shard.Message.Extended.Domain.IServer<ShardState, Data>,
         Shard.Server.Domain.IServer<ShardServer, ShardState, Entity, Mobile, Item>,
         Shard.Mobiles.Domain.IServer<ShardServer, Item>
@@ -129,7 +129,7 @@ namespace Launcher.Domain
 
         public Action<ShardState> ClientSeed => state => ShardServerHandlers.ClientSeed(this, state);
 
-        public Action<ShardState> EncryptionResponse => state => { };
+        public Action<ShardState> EncryptionResponse => _ => { };
 
         public Action<ShardState> AccountLogin => state => ShardServerHandlers.AccountLogin(this, state);
 
@@ -145,7 +145,7 @@ namespace Launcher.Domain
 
         public Action<ShardState> MoveRequest => state => ShardServerHandlers.MoveRequest(this, state);
 
-        public Action<ShardState> ClientType => state => { };
+        public Action<ShardState> ClientType => _ => { };
 
         public Action<ShardState, Mobile> CharacterLogin => (state, mobile) => ShardServerHandlers.CharacterLogin(this, state, mobile);
 

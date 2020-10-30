@@ -3,7 +3,7 @@ using Shard.Message.Domain.Outgoing;
 
 namespace Shard.Message.Domain
 {
-    public interface IMobile<TMobileEquip, TSkillInfo, TMap> :
+    public interface IMobile<TMobileEquip, TSkillInfo> :
         ICharacterInfo, 
         ILoginConfirm, 
         IMobileIncoming<TMobileEquip>, 
@@ -14,13 +14,12 @@ namespace Shard.Message.Domain
         ISkillList<TSkillInfo>, 
         ICharacterCreation,
         ICharacterLogin,
-        IServerChange<TMap>,
+        IServerChange,
         IMobileAttributes,
         IMobilePaperDoll,
         IProfileResponse
         where TMobileEquip : IMobileEquip
         where TSkillInfo : ISkill
-        where TMap : IMap
     {
     }
 }

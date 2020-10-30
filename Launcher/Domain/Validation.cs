@@ -1,7 +1,7 @@
 ﻿namespace Launcher.Domain
 {
     public class Validation :
-        Shard.Server.Validation.Domain.IValidation
+        Shard.Validation.Domain.IValidation
     {
         public int Permission { get; set; }
 

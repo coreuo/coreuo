@@ -4,19 +4,18 @@ using Shard.Message.Domain.Outgoing;
 
 namespace Shard.Message.Domain
 {
-    public interface IServer<in TState, in TData, in TMobile, TCity, TMobileEquip, TSkillInfo, TMap> :
+    public interface IServer<in TState, in TData, in TMobile, TCity, TMobileEquip, TSkillInfo> :
         ICityList<TCity>,
         ICharacterFeatures,
         ICurrentServerTime,
         IGlobalLight,
         ISupportedFeatures
-        where TState : IState<TData, TMobile, TMobileEquip, TSkillInfo, TMap>
+        where TState : IState<TData, TMobile, TMobileEquip, TSkillInfo>
         where TData : IData, new()
-        where TMobile : IMobile<TMobileEquip, TSkillInfo, TMap>, new()
+        where TMobile : IMobile<TMobileEquip, TSkillInfo>, new()
         where TCity : ICityInfo
         where TMobileEquip : IMobileEquip
         where TSkillInfo : ISkill
-        where TMap : IMap
     {
         public Action<TState> ClientSeed { get; }
 

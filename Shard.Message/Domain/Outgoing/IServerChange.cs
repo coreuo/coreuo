@@ -2,10 +2,9 @@
 
 namespace Shard.Message.Domain.Outgoing
 {
-    public interface IServerChange<TMap> :
+    public interface IServerChange :
         ILocation,
-        IMap<TMap>
-        where TMap : IMap
+        Shared.IMap
     {
         /*public byte FirstUnknownServerChange { get; set; }
 

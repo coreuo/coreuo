@@ -81,7 +81,7 @@ namespace Launcher.Domain
 
         public Action<LoginState> ShardSelect => state => LoginServerHandlers.ShardSelect(this, state);
 
-        public Action<LoginState> HardwareInfo => state => { };
+        public Action<LoginState> HardwareInfo => _ => { };
 
         public Action<LoginState> ShardList => state => LoginMessageHandlers.ShardList(this, state);
 

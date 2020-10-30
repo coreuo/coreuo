@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Shard.Server.Validation.Domain;
+using Shard.Validation.Domain;
 
-namespace Shard.Server.Validation
+namespace Shard.Validation
 {
     public static class Handlers<TValidation>
         where TValidation : IValidation, new()

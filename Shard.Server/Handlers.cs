@@ -51,7 +51,7 @@ namespace Shard.Server
 
         public static void AccountLogin(TServer server, TState state)
         {
-            state.Characters.Add(CreateMobile(server, server.Human, (s, m) =>
+            state.Characters.Add(CreateMobile(server, server.Human, (_, m) =>
             {
                 m.Serial = 1;
 
@@ -219,7 +219,7 @@ namespace Shard.Server
             Action action = entity switch
             {
                 TMobile mobile when state.RequestProfileMode == 0 => () => server.ProfileResponse(state, mobile),
-                TMobile _ when state.RequestProfileMode == 1 => () => { },
+                TMobile when state.RequestProfileMode == 1 => () => { },
                 _ => throw new InvalidOperationException($"Unknown profile request of type {state.RequestProfileMode} for entity {entity.GetType().Name}.")
             };
 

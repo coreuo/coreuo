@@ -2,7 +2,7 @@
 
 namespace Launcher.Domain
 {
-    using Property = Shard.Server.Validation.Handlers<Validation>;
+    using Property = Shard.Validation.Handlers<Validation>;
 
     public class Map :
         Shard.Message.Extended.Domain.IMap<MapPatch>,

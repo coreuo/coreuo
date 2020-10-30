@@ -1,4 +1,4 @@
-﻿namespace Shard.Server.Validation.Domain
+﻿namespace Shard.Validation.Domain
 {
     public interface IValidation
     {

@@ -5,16 +5,15 @@ using Shard.Message.Domain.Outgoing;
 
 namespace Shard.Message
 {
-    public static class Handlers<TServer, TState, TData, TEntity, TMobile, TCity, TMobileEquip, TSkillInfo, TMap, TAttribute>
-        where TServer : IServer<TState, TData, TMobile, TCity, TMobileEquip, TSkillInfo, TMap>
-        where TState : IState<TData, TMobile, TMobileEquip, TSkillInfo, TMap>
+    public static class Handlers<TServer, TState, TData, TEntity, TMobile, TCity, TMobileEquip, TSkillInfo, TAttribute>
+        where TServer : IServer<TState, TData, TMobile, TCity, TMobileEquip, TSkillInfo>
+        where TState : IState<TData, TMobile, TMobileEquip, TSkillInfo>
         where TEntity : IEntity<TAttribute>
         where TData : IData, new()
-        where TMobile : IMobile<TMobileEquip, TSkillInfo, TMap>, new()
+        where TMobile : IMobile<TMobileEquip, TSkillInfo>, new()
         where TCity : ICityInfo
         where TMobileEquip : IMobileEquip
         where TSkillInfo : ISkill
-        where TMap : IMap
         where TAttribute : IAttribute
     {
         public static void Received(TServer server, TState state, TData data)

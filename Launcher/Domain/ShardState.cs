@@ -6,17 +6,17 @@ using System.Net.Sockets;
 
 namespace Launcher.Domain
 {
-    using Property = Shard.Server.Validation.Handlers<Validation>;
+    using Property = Shard.Validation.Handlers<Validation>;
     using NetworkStateHandlers = Network.State.Handlers<Data>;
     using CompressionHandlers = Shard.Message.Compression.Handlers<ShardState, Data>;
-    using ShardMessageHandlers = Shard.Message.Handlers<ShardServer, ShardState, Data, Entity, Mobile, City, Item, Skill, Map, Attribute>;
+    using ShardMessageHandlers = Shard.Message.Handlers<ShardServer, ShardState, Data, Entity, Mobile, City, Item, Skill, Attribute>;
 
     public class ShardState :
         Network.Listener.Domain.ISocket,
         Network.State.Domain.IReceiver<Data>,
         Network.State.Domain.ISender<Data>,
         Network.Server.Domain.IState<Data>,
-        Shard.Message.Domain.IState<Data, Mobile, Item, Skill, Map>,
+        Shard.Message.Domain.IState<Data, Mobile, Item, Skill>,
         Shard.Message.Extended.Domain.IState<Data>,
         Shard.Message.Compression.Domain.IState<Data>,
         Shard.Server.Domain.IState<Mobile>

@@ -1,6 +1,6 @@
 ﻿namespace Launcher.Domain
 {
-    using Property = Shard.Server.Validation.Handlers<Validation>;
+    using Property = Shard.Validation.Handlers<Validation>;
 
     public class City : Shard.Message.Domain.Outgoing.ICityInfo
     {
