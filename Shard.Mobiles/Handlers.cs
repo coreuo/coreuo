@@ -100,7 +100,12 @@ namespace Shard.Mobiles
 
             mobile.Equipment = new List<TItem>
             {
-                server.CreateItem(server.Backpack),
+                server.CreateItem(server.Backpack, (_,b) =>
+                {
+                    server.AddItem(b, server.CreateItem(server.Robe));
+
+                    server.AddItem(b, server.CreateItem(server.Shirt));
+                }),
 
                 server.CreateItem(server.LeatherChest),
 

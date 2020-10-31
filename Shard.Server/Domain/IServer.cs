@@ -9,7 +9,7 @@ namespace Shard.Server.Domain
         where TState : IState<TMobile>
         where TEntity : IEntity
         where TMobile : IMobile
-        where TItem : IItem
+        where TItem : IItem<TItem>
     {
         Dictionary<int, TEntity> Entities { get; }
 
@@ -72,6 +72,8 @@ namespace Shard.Server.Domain
         internal bool IsContainer(TItem item) => GetItemTypes(item).Any(t => Containers.Contains(t));
 
         Action<TState, TEntity> EntityDisplay { get; }
+
+        Action<TState, TEntity> EntityContent { get; }
 
         Action<TServer, TMobile> Human { get; }
 

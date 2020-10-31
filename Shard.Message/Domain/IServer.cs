@@ -4,17 +4,17 @@ using Shard.Message.Domain.Outgoing;
 
 namespace Shard.Message.Domain
 {
-    public interface IServer<in TState, in TData, in TMobile, TCity, TMobileEquip, TSkillInfo> :
+    public interface IServer<in TState, in TData, TMobile, TCity, TItem, TSkillInfo> :
         ICityList<TCity>,
         ICharacterFeatures,
         ICurrentServerTime,
         IGlobalLight,
         ISupportedFeatures
-        where TState : IState<TData, TMobile, TMobileEquip, TSkillInfo>
+        where TState : IState<TData, TMobile, TItem, TSkillInfo>
         where TData : IData, new()
-        where TMobile : IMobile<TMobileEquip, TSkillInfo>, new()
+        where TMobile : IMobile<TItem, TSkillInfo>, new()
         where TCity : ICityInfo
-        where TMobileEquip : IMobileEquip
+        where TItem : IItem
         where TSkillInfo : ISkill
     {
         public Action<TState> ClientSeed { get; }
@@ -22,6 +22,8 @@ namespace Shard.Message.Domain
         public Action<TState> EncryptionResponse { get; }
 
         public Action<TState> AccountLogin { get; }
+
+        public Func<TState, TMobile> BeforeCharacterCreate { get; }
 
         public Action<TState, TMobile> CharacterCreate { get; }
 
@@ -36,6 +38,8 @@ namespace Shard.Message.Domain
         public Action<TState> MoveRequest { get; }
 
         public Action<TState> ClientType { get; }
+
+        public Func<TState, int, TMobile> BeforeCharacterLogin { get; }
 
         public Action<TState, TMobile> CharacterLogin { get; }
 
@@ -56,14 +60,14 @@ namespace Shard.Message.Domain
                 0xFF => Process(state.ReadClientSeed, ClientSeed),
                 0xE4 => Process(state.ReadEncryptionResponse, EncryptionResponse),
                 0x91 => Process(state.ReadAccountLogin, AccountLogin),
-                0x8D => ProcessWith(new TMobile(), (m, d) => m.ReadCharacterCreation(d), CharacterCreate),
+                0x8D => ProcessWith(BeforeCharacterCreate(state), (m, d) => m.ReadCharacterCreation(d), CharacterCreate),
                 0x34 => Process(state.ReadMobileQuery, MobileQuery),
                 0xBF => ProcessWith(data, (e, d) => e.ReadExtendedData(d), ExtendedData),
                 0xB5 => Process(state.ReadChatRequest, ChatRequest),
                 0x73 => Process(state.ReadPingRequest, PingRequest),
                 0x02 => Process(state.ReadMoveRequest, MoveRequest),
                 0xE1 => Process(state.ReadClientType, ClientType),
-                0x5D => ProcessWith(state.Characters[data.ReadInt(65)], (m, d) => m.ReadLoginCharacter(d), CharacterLogin),
+                0x5D => ProcessWith(BeforeCharacterLogin(state, data.ReadInt(65)), (m, d) => m.ReadLoginCharacter(d), CharacterLogin),
                 0xD6 => Process(state.ReadAttributesQuery, AttributesQuery),
                 0x06 => Process(state.ReadDoubleClick, DoubleClick),
                 0xB8 => Process(state.ReadRequestProfile, RequestProfile),

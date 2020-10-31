@@ -133,6 +133,8 @@ namespace Launcher.Domain
 
         public Action<ShardState> AccountLogin => state => ShardServerHandlers.AccountLogin(this, state);
 
+        public Func<ShardState, Mobile> BeforeCharacterCreate => state => ShardServerHandlers.BeforeCharacterCreate(this, state);
+
         public Action<ShardState, Mobile> CharacterCreate => (state, mobile) => ShardServerHandlers.CharacterCreate(this, state, mobile);
 
         public Action<ShardState> MobileQuery => state => ShardServerHandlers.MobileQuery(this, state);
@@ -146,6 +148,8 @@ namespace Launcher.Domain
         public Action<ShardState> MoveRequest => state => ShardServerHandlers.MoveRequest(this, state);
 
         public Action<ShardState> ClientType => _ => { };
+
+        public Func<ShardState, int, Mobile> BeforeCharacterLogin => (state, index) => ShardServerHandlers.BeforeCharacterLogin(this, state, index);
 
         public Action<ShardState, Mobile> CharacterLogin => (state, mobile) => ShardServerHandlers.CharacterLogin(this, state, mobile);
 
@@ -219,6 +223,8 @@ namespace Launcher.Domain
 
         public Action<ShardState, Entity> EntityDisplay => ShardMessageHandlers.EntityDisplay;
 
+        public Action<ShardState, Entity> EntityContent => ShardMessageHandlers.EntityContent;
+
         public Action<ShardServer, Mobile> Human => MobileType.Human;
 
         public Action<ShardServer, Item>[] GetItemTypes(Item item) => ShardServerHandlers.GetItemTypes(item);
@@ -238,6 +244,8 @@ namespace Launcher.Domain
         }
 
         public Item CreateItem(params Action<ShardServer, Item>[] types) => ShardServerHandlers.CreateItem(this, types);
+
+        public void AddItem(Item parent, Item child) => ShardServerHandlers.AddItem(this, parent, child);
 
         public Action<ShardServer, Item> Backpack => ItemType.Backpack;
 

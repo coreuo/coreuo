@@ -5,9 +5,21 @@
     public class Item : Entity,
         Shard.Message.Domain.IItem,
         Shard.Items.Domain.IItem,
-        Shard.Server.Domain.IItem,
+        Shard.Server.Domain.IItem<Item>,
         Shard.Mobiles.Domain.IItem
     {
+        public Item()
+        {
+            ItemId = default;
+            Layer = default;
+            Hue = default;
+            Amount = default;
+            LocationX = default;
+            LocationY = default;
+            LocationZ = default;
+            GridIndex = default;
+        }
+
         public ushort ItemId
         {
             get => Property.Get<ushort>(this, nameof(ItemId));
@@ -26,11 +38,34 @@
             set => Property.Set(this, nameof(Hue), value);
         }
 
-        public Item()
+        public ushort Amount
         {
-            ItemId = default;
-            Layer = default;
-            Hue = default;
+            get => Property.Get<ushort>(this, nameof(Amount));
+            set => Property.Set(this, nameof(Amount), value);
+        }
+
+        public ushort LocationX
+        {
+            get => Property.Get<ushort>(this, nameof(LocationX));
+            set => Property.Set(this, nameof(LocationX), value);
+        }
+
+        public ushort LocationY
+        {
+            get => Property.Get<ushort>(this, nameof(LocationY));
+            set => Property.Set(this, nameof(LocationY), value);
+        }
+
+        public byte LocationZ
+        {
+            get => Property.Get<byte>(this, nameof(LocationZ));
+            set => Property.Set(this, nameof(LocationZ), value);
+        }
+
+        public byte GridIndex
+        {
+            get => Property.Get<byte>(this, nameof(GridIndex));
+            set => Property.Set(this, nameof(GridIndex), value);
         }
     }
 }

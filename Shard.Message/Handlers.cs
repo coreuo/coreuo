@@ -5,14 +5,14 @@ using Shard.Message.Domain.Outgoing;
 
 namespace Shard.Message
 {
-    public static class Handlers<TServer, TState, TData, TEntity, TMobile, TCity, TMobileEquip, TSkillInfo, TAttribute>
-        where TServer : IServer<TState, TData, TMobile, TCity, TMobileEquip, TSkillInfo>
-        where TState : IState<TData, TMobile, TMobileEquip, TSkillInfo>
-        where TEntity : IEntity<TAttribute>
+    public static class Handlers<TServer, TState, TData, TEntity, TMobile, TCity, TItem, TSkillInfo, TAttribute>
+        where TServer : IServer<TState, TData, TMobile, TCity, TItem, TSkillInfo>
+        where TState : IState<TData, TMobile, TItem, TSkillInfo>
+        where TEntity : IEntity<TAttribute, TItem>
         where TData : IData, new()
-        where TMobile : IMobile<TMobileEquip, TSkillInfo>, new()
+        where TMobile : IMobile<TItem, TSkillInfo>, new()
         where TCity : ICityInfo
-        where TMobileEquip : IMobileEquip
+        where TItem : IItem
         where TSkillInfo : ISkill
         where TAttribute : IAttribute
     {
@@ -173,6 +173,11 @@ namespace Shard.Message
         public static void EntityDisplay(TState state, TEntity entity)
         {
             state.Write(0x24, 7, entity.WriteEntityDisplay);
+        }
+
+        public static void EntityContent(TState state, TEntity entity)
+        {
+            state.Write(0x3C, 5 + entity.Items.Count * 20, entity.WriteEntityContent);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Launcher.Domain
 
     public class Entity :
         Shard.Server.Domain.IEntity,
-        Shard.Message.Domain.IEntity<Attribute>
+        Shard.Message.Domain.IEntity<Attribute, Item>
     {
         public int Serial
         {
@@ -24,12 +24,19 @@ namespace Launcher.Domain
         {
             Serial = default;
             EntityDisplayId = default;
+            Items = default;
         }
 
         public short EntityDisplayId
         {
             get => Property.Get<short>(this, nameof(EntityDisplayId));
             set => Property.Set(this, nameof(EntityDisplayId), value);
+        }
+
+        public List<Item> Items
+        {
+            get => Property.Get<List<Item>>(this, nameof(Items));
+            set => Property.Set(this, nameof(Items), value, () => new List<Item>());
         }
     }
 }

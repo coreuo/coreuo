@@ -8,6 +8,8 @@ namespace Shard.Mobiles.Domain
     {
         TItem CreateItem(params Action<TServer, TItem>[] types);
 
+        void AddItem(TItem parent, TItem child);
+
         Action<TServer, TItem> Backpack { get; }
 
         Action<TServer, TItem> LeatherChest { get; }

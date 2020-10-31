@@ -2,7 +2,9 @@
 
 namespace Shard.Message.Domain
 {
-    public interface IItem : IMobileEquip
+    public interface IItem : 
+        IMobileEquip,
+        IEntityContentItem
     {
     }
 }

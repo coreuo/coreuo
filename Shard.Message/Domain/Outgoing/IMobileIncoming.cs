@@ -36,7 +36,7 @@ namespace Shard.Message.Domain.Outgoing
 
             data.Write(18, Notoriety);
 
-            Enumerable.Range(0, Equipment.Count).ToList().ForEach(i => Equipment[i].WriteMobileEquipment(EquipmentSize(i), data));
+            foreach (var (equip, index) in Equipment.Select((e,i) => (e,i))) equip.WriteMobileEquipment(EquipmentSize(index), data);
 
             data.Write(19 + EquipmentSize() , 0);
         }

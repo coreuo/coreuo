@@ -10,7 +10,7 @@ namespace Shard.Server
         where TState : IState<TMobile>
         where TEntity : IEntity
         where TMobile : TEntity, IMobile, new()
-        where TItem : TEntity, IItem, new()
+        where TItem : TEntity, IItem<TItem>, new()
     {
         public static Dictionary<TMobile, Action<TServer, TMobile>[]> Mobiles = new Dictionary<TMobile, Action<TServer, TMobile>[]>();
 
@@ -44,6 +44,17 @@ namespace Shard.Server
             return item;
         }
 
+        public static void AddItem(TServer server, TItem parent, TItem child)
+        {
+            var grid = new List<byte>(Enumerable.Range(0, parent.Items.Count + 1).Select(i => (byte)i));
+
+            grid.RemoveAll(e => parent.Items.Any(i => i.GridIndex == e));
+
+            child.GridIndex = grid.First();
+
+            parent.Items.Add(child);
+        }
+
         public static void ClientSeed(TServer server, TState state)
         {
             server.EncryptionRequest(state);
@@ -51,16 +62,16 @@ namespace Shard.Server
 
         public static void AccountLogin(TServer server, TState state)
         {
-            state.Characters.Add(CreateMobile(server, server.Human, (_, m) =>
-            {
-                m.Serial = 1;
-
-                m.Name = "Generic Player";
-            }));
+            state.Characters.Add(CreateMobile(server, server.Human, (_, m) => m.Name = "Generic Player"));
 
             server.SupportedFeatures(state);
 
             server.CharacterList(state);
+        }
+
+        public static TMobile BeforeCharacterCreate(TServer server, TState state)
+        {
+            return CreateMobile(server, server.Human);
         }
 
         public static void CharacterCreate(TServer server, TState state, TMobile mobile)
@@ -127,6 +138,11 @@ namespace Shard.Server
         public static void MoveRequest(TServer server, TState state)
         {
             server.MoveResponse(state, state.Mobile);
+        }
+
+        public static TMobile BeforeCharacterLogin(TServer server, TState state, int index)
+        {
+            return state.Characters[index];
         }
 
         public static void CharacterLogin(TServer server, TState state, TMobile mobile)
@@ -205,7 +221,16 @@ namespace Shard.Server
             Action action = entity switch
             {
                 TMobile mobile => () => server.OpenPaperDoll(state, mobile),
-                TItem item when server.IsContainer(item) => () => server.EntityDisplay(state, item),
+                TItem container when server.IsContainer(container) => () =>
+                {
+                    server.EntityDisplay(state, container);
+
+                    if (!container.Items.Any()) return;
+
+                    server.EntityContent(state, container);
+
+                    container.Items.ForEach(i => server.AttributeInfo(state, i));
+                },
                 _ => throw new InvalidOperationException($"Unknown entity type {entity.GetType().Name}.")
             };
 

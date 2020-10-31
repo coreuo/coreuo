@@ -1,6 +1,13 @@
-﻿namespace Shard.Server.Domain
+﻿using System.Collections.Generic;
+
+namespace Shard.Server.Domain
 {
-    public interface IItem : IEntity
+    public interface IItem<TItem> : 
+        IEntity
+        where TItem : IItem<TItem>
     {
+        List<TItem> Items { get; set; }
+
+        byte GridIndex { get; set; }
     }
 }

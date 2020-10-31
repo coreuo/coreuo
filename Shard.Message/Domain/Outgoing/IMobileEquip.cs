@@ -4,10 +4,9 @@ namespace Shard.Message.Domain.Outgoing
 {
     public interface IMobileEquip :
         ISerial,
+        IItemId,
         IHue
     {
-        ushort ItemId { get; set; }
-
         byte Layer { get; set; }
 
         internal bool HasHue() => Hue > 0;
