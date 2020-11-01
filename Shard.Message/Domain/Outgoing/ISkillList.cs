@@ -12,7 +12,7 @@ namespace Shard.Message.Domain.Outgoing
         {
             data.Write(3, (byte)0x02);
 
-            Enumerable.Range(0, Skills.Count).ToList().ForEach(i => Skills[i].WriteSkillInfo(i, data));
+            foreach (var (skill, index) in Skills.Select((s, i) => (s, i))) skill.WriteSkillInfo(index, data);
         }
     }
 }

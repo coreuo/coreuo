@@ -19,7 +19,7 @@ namespace Launcher.Domain
         Shard.Message.Domain.IState<Data, Mobile, Item, Skill>,
         Shard.Message.Extended.Domain.IState<Data>,
         Shard.Message.Compression.Domain.IState<Data>,
-        Shard.Server.Domain.IState<Mobile>
+        Shard.Server.Domain.IState<Mobile, Item>
     {
         public ShardState()
         {

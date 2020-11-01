@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
@@ -163,9 +162,21 @@ namespace Launcher.Domain
 
         public Dictionary<int, Entity> Entities { get; } = new Dictionary<int, Entity>();
 
-        public Stack<int> MobileSerialPool { get; } = new Stack<int>(Enumerable.Range(1, 1000000).Reverse());
+        public Queue<int> MobileSerialPool
+        {
+            get => Property.Get<Queue<int>>(this, nameof(MobileSerialPool));
+            set => Property.Set(this, nameof(MobileSerialPool), value, () => new Queue<int>());
+        }
 
-        public Stack<int> ItemSerialPool { get; } = new Stack<int>(Enumerable.Range(0x40000001, 1000000).Reverse());
+        public int MaximumMobileSerial { get; set; }
+
+        public Queue<int> ItemSerialPool
+        {
+            get => Property.Get<Queue<int>>(this, nameof(ItemSerialPool));
+            set => Property.Set(this, nameof(ItemSerialPool), value, () => new Queue<int>());
+        }
+
+        public int MaximumItemSerial { get; set; } = 0x40000000;
 
         public Action<ShardState> EncryptionRequest => ShardMessageHandlers.EncryptionRequest;
 
@@ -241,6 +252,8 @@ namespace Launcher.Domain
             LightLevel = default;
             FeatureFlags = default;
             Cities = default;
+            MobileSerialPool = default;
+            ItemSerialPool = default;
         }
 
         public Item CreateItem(params Action<ShardServer, Item>[] types) => ShardServerHandlers.CreateItem(this, types);

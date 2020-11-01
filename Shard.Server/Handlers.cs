@@ -7,9 +7,9 @@ namespace Shard.Server
 {
     public static class Handlers<TServer, TState, TEntity, TMobile, TItem>
         where TServer : IServer<TServer, TState, TEntity, TMobile, TItem>
-        where TState : IState<TMobile>
+        where TState : IState<TMobile, TItem>
         where TEntity : IEntity
-        where TMobile : TEntity, IMobile, new()
+        where TMobile : TEntity, IMobile<TItem>, new()
         where TItem : TEntity, IItem<TItem>, new()
     {
         public static Dictionary<TMobile, Action<TServer, TMobile>[]> Mobiles = new Dictionary<TMobile, Action<TServer, TMobile>[]>();
@@ -20,9 +20,9 @@ namespace Shard.Server
 
         public static TMobile CreateMobile(TServer server, params Action<TServer, TMobile>[] types)
         {
-            var mobile = new TMobile {Serial = server.MobileSerialPool.Pop()};
+            var mobile = new TMobile {Serial = server.MobileSerialPool.TryDequeue(out var serial) ? serial : ++server.MaximumMobileSerial};
 
-            types.ToList().ForEach(t => t(server, mobile));
+            foreach(var type in types) type(server, mobile);
 
             server.Entities[mobile.Serial] = mobile;
 
@@ -33,9 +33,9 @@ namespace Shard.Server
 
         public static TItem CreateItem(TServer server, params Action<TServer, TItem>[] types)
         {
-            var item = new TItem {Serial = server.ItemSerialPool.Pop()};
+            var item = new TItem {Serial = server.ItemSerialPool.TryDequeue(out var serial) ? serial : ++server.MaximumItemSerial};
 
-            types.ToList().ForEach(t => t(server, item));
+            foreach (var type in types) type(server, item);
 
             server.Entities[item.Serial] = item;
 
@@ -46,13 +46,13 @@ namespace Shard.Server
 
         public static void AddItem(TServer server, TItem parent, TItem child)
         {
-            var grid = new List<byte>(Enumerable.Range(0, parent.Items.Count + 1).Select(i => (byte)i));
+            var index = 0;
 
-            grid.RemoveAll(e => parent.Items.Any(i => i.GridIndex == e));
+            while (parent.Items.ContainsKey(index)) index++;
 
-            child.GridIndex = grid.First();
+            child.GridIndex = (byte)index;
 
-            parent.Items.Add(child);
+            parent.Items[index] = child;
         }
 
         public static void ClientSeed(TServer server, TState state)
@@ -209,18 +209,19 @@ namespace Shard.Server
 
         public static void DoubleClick(TServer server, TState state)
         {
-            if ((state.DoubleClickSerial & ~0x7FFFFFFF) != 0)
-            {
-                server.OpenPaperDoll(state, state.Mobile);
-
-                return;
-            }
-
-            var entity = server.Entities[state.DoubleClickSerial];
+            var entity = (state.DoubleClickSerial & ~0x7FFFFFFF) == 0 ? server.Entities[state.DoubleClickSerial] : state.Mobile;
 
             Action action = entity switch
             {
-                TMobile mobile => () => server.OpenPaperDoll(state, mobile),
+                TMobile mobile => () =>
+                {
+                    server.OpenPaperDoll(state, mobile);
+
+                    if (!mobile.Equipment.Any()) return;
+
+                    foreach (var item in mobile.Equipment) server.AttributeInfo(state, item);
+                }
+                ,
                 TItem container when server.IsContainer(container) => () =>
                 {
                     server.EntityDisplay(state, container);
@@ -229,7 +230,7 @@ namespace Shard.Server
 
                     server.EntityContent(state, container);
 
-                    container.Items.ForEach(i => server.AttributeInfo(state, i));
+                    foreach (var item in container.Items.Values) server.AttributeInfo(state, item);
                 },
                 _ => throw new InvalidOperationException($"Unknown entity type {entity.GetType().Name}.")
             };

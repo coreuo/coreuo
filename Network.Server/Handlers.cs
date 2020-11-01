@@ -21,7 +21,7 @@ namespace Network.Server
 
         public static void Stop(IServer<TState, TData> server)
         {
-            server.States.ForEach(s => server.StateStop(s));
+            server.States.ForEach(server.StateStop);
         }
     }
 }

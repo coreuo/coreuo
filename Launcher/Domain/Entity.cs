@@ -33,10 +33,10 @@ namespace Launcher.Domain
             set => Property.Set(this, nameof(EntityDisplayId), value);
         }
 
-        public List<Item> Items
+        public Dictionary<int, Item> Items
         {
-            get => Property.Get<List<Item>>(this, nameof(Items));
-            set => Property.Set(this, nameof(Items), value, () => new List<Item>());
+            get => Property.Get<Dictionary<int, Item>>(this, nameof(Items));
+            set => Property.Set(this, nameof(Items), value, () => new Dictionary<int, Item>());
         }
     }
 }

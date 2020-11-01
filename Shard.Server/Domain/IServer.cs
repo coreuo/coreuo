@@ -6,16 +6,20 @@ namespace Shard.Server.Domain
 {
     public interface IServer<TServer, in TState, TEntity, in TMobile, TItem>
         where TServer : IServer<TServer, TState, TEntity, TMobile, TItem>
-        where TState : IState<TMobile>
+        where TState : IState<TMobile, TItem>
         where TEntity : IEntity
-        where TMobile : IMobile
+        where TMobile : IMobile<TItem>
         where TItem : IItem<TItem>
     {
         Dictionary<int, TEntity> Entities { get; }
 
-        Stack<int> MobileSerialPool { get; }
+        Queue<int> MobileSerialPool { get; }
 
-        Stack<int> ItemSerialPool { get; }
+        int MaximumMobileSerial { get; set; }
+
+        Queue<int> ItemSerialPool { get; }
+
+        int MaximumItemSerial { get; set; }
 
         Action<TState> EncryptionRequest { get; }
 

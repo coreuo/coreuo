@@ -8,7 +8,7 @@ namespace Launcher.Domain
     public class Mobile : Entity,
         Shard.Message.Domain.IMobile<Item, Skill>,
         Shard.Message.Extended.Domain.IMobile<Map, MapPatch>,
-        Shard.Server.Domain.IMobile,
+        Shard.Server.Domain.IMobile<Item>,
         Shard.Mobiles.Domain.IMobile<Item>
     {
         public Mobile()

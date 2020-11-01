@@ -6,7 +6,7 @@ namespace Shard.Server.Domain
         IEntity
         where TItem : IItem<TItem>
     {
-        List<TItem> Items { get; set; }
+        Dictionary<int,TItem> Items { get; set; }
 
         byte GridIndex { get; set; }
     }

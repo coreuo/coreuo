@@ -2,8 +2,9 @@
 
 namespace Shard.Server.Domain
 {
-    public interface IState<TMobile>
-        where TMobile : IMobile
+    public interface IState<TMobile, TItem>
+        where TMobile : IMobile<TItem>
+        where TItem : IItem<TItem>
     {
         List<TMobile> Characters { get; }
 

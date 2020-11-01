@@ -10,11 +10,9 @@ namespace Shard.Message.Domain.Outgoing
 
         internal void WriteCityList(int characterListSize, IData data)
         {
-            var cityCount = Cities.Count;
+            data.Write(4 + characterListSize, (byte)Cities.Count);
 
-            data.Write(4 + characterListSize, (byte)cityCount);
-
-            Enumerable.Range(0, cityCount).ToList().ForEach(i => Cities[i].WriteCity(characterListSize, i, data));
+            foreach (var (city, index) in Cities.Select((c, i) => (c, i))) city.WriteCity(characterListSize, index, data);
         }
     }
 }
