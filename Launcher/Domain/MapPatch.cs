@@ -1,25 +1,12 @@
-﻿namespace Launcher.Domain
-{
-    using Property = Shard.Validation.Handlers<Validation>;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
+namespace Launcher.Domain
+{
+    [NotMapped]
     public class MapPatch : Shard.Message.Extended.Domain.Outgoing.IMapPatch
     {
-        public int StaticBlocks
-        {
-            get => Property.Get<int>(this, nameof(StaticBlocks));
-            set => Property.Set(this, nameof(StaticBlocks), value);
-        }
+        public int StaticBlocks { get; set; }
 
-        public int LandBlocks
-        {
-            get => Property.Get<int>(this, nameof(LandBlocks));
-            set => Property.Set(this, nameof(LandBlocks), value);
-        }
-
-        public MapPatch()
-        {
-            StaticBlocks = default;
-            LandBlocks = default;
-        }
+        public int LandBlocks { get; set; }
     }
 }

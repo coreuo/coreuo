@@ -5,26 +5,29 @@ using Shard.Server.Domain;
 
 namespace Shard.Server
 {
-    public static class Handlers<TServer, TState, TEntity, TMobile, TItem>
-        where TServer : IServer<TServer, TState, TEntity, TMobile, TItem>
+    public static class Handlers<TServer, TSave, TState, TEntity, TMobile, TItem>
+        where TServer : IServer<TServer, TSave, TState, TEntity, TMobile, TItem>
+        where TSave : ISave<TSave, TMobile, TItem>
         where TState : IState<TMobile, TItem>
         where TEntity : IEntity
-        where TMobile : TEntity, IMobile<TItem>, new()
-        where TItem : TEntity, IItem<TItem>, new()
+        where TMobile : TEntity, IMobile<TItem>
+        where TItem : TEntity, IItem<TItem>
     {
         public static Dictionary<TMobile, Action<TServer, TMobile>[]> Mobiles = new Dictionary<TMobile, Action<TServer, TMobile>[]>();
 
         public static Dictionary<TItem, Action<TServer, TItem>[]> Items = new Dictionary<TItem, Action<TServer, TItem>[]>();
 
-        public static Action<TServer, TItem>[] GetItemTypes(TItem item) => Items[item];
+        //public static Action<TServer, TItem>[] GetItemTypes(TItem item) => Items[item];
 
         public static TMobile CreateMobile(TServer server, params Action<TServer, TMobile>[] types)
         {
-            var mobile = new TMobile {Serial = server.MobileSerialPool.TryDequeue(out var serial) ? serial : ++server.MaximumMobileSerial};
+            var mobile = server.Save.InitializeMobile();
+
+            mobile.Serial = server.MobileSerialPool.TryDequeue(out var serial) ? serial : ++server.MaximumMobileSerial;
 
             foreach(var type in types) type(server, mobile);
 
-            server.Entities[mobile.Serial] = mobile;
+            server.Entities.Add(mobile);
 
             Mobiles[mobile] = types;
 
@@ -33,11 +36,13 @@ namespace Shard.Server
 
         public static TItem CreateItem(TServer server, params Action<TServer, TItem>[] types)
         {
-            var item = new TItem {Serial = server.ItemSerialPool.TryDequeue(out var serial) ? serial : ++server.MaximumItemSerial};
+            var item = server.Save.InitializeItem();
+
+            item.Serial = server.ItemSerialPool.TryDequeue(out var serial) ? serial : ++server.MaximumItemSerial;
 
             foreach (var type in types) type(server, item);
 
-            server.Entities[item.Serial] = item;
+            server.Entities.Add(item);
 
             Items[item] = types;
 
@@ -48,11 +53,11 @@ namespace Shard.Server
         {
             var index = 0;
 
-            while (parent.Items.ContainsKey(index)) index++;
+            while (parent.Items.Any(i => i.GridIndex == index)) index++;
 
             child.GridIndex = (byte)index;
 
-            parent.Items[index] = child;
+            parent.Items.Add(child);
         }
 
         public static void ClientSeed(TServer server, TState state)
@@ -62,7 +67,7 @@ namespace Shard.Server
 
         public static void AccountLogin(TServer server, TState state)
         {
-            state.Characters.Add(CreateMobile(server, server.Human, (_, m) => m.Name = "Generic Player"));
+            state.Characters = server.Entities.OfType<TMobile>().ToList();
 
             server.SupportedFeatures(state);
 
@@ -76,8 +81,6 @@ namespace Shard.Server
 
         public static void CharacterCreate(TServer server, TState state, TMobile mobile)
         {
-            server.Entities[mobile.Serial] = mobile;
-
             state.Mobile = mobile;
 
             server.LoginConfirm(state, mobile);
@@ -118,7 +121,7 @@ namespace Shard.Server
                 _ => throw new InvalidOperationException($"Unknown mobile query type {state.MobileQueryType:X}.")
             };
 
-            action(state, (TMobile)server.Entities[state.MobileQuerySerial]);
+            action(state, server.Entities.OfType<TMobile>().Single(e => e.Serial == state.MobileQuerySerial));
         }
 
         public static void ClientLanguage(TServer server, TState state)
@@ -147,8 +150,6 @@ namespace Shard.Server
 
         public static void CharacterLogin(TServer server, TState state, TMobile mobile)
         {
-            server.Entities[mobile.Serial] = mobile;
-
             state.Mobile = mobile;
 
             server.ClientVersionRequest(state);
@@ -204,12 +205,12 @@ namespace Shard.Server
 
         public static void AttributesQuery(TServer server, TState state)
         {
-            state.AttributesQuerySerialList.ForEach(s => server.AttributeList(state, server.Entities[s]));
+            state.AttributesQuerySerialList.ForEach(s => server.AttributeList(state, server.Entities.Single(e => e.Serial == s)));
         }
 
         public static void DoubleClick(TServer server, TState state)
         {
-            var entity = (state.DoubleClickSerial & ~0x7FFFFFFF) == 0 ? server.Entities[state.DoubleClickSerial] : state.Mobile;
+            var entity = (state.DoubleClickSerial & ~0x7FFFFFFF) == 0 ? server.Entities.Single(e => e.Serial == state.DoubleClickSerial) : state.Mobile;
 
             Action action = entity switch
             {
@@ -217,9 +218,9 @@ namespace Shard.Server
                 {
                     server.OpenPaperDoll(state, mobile);
 
-                    if (!mobile.Equipment.Any()) return;
+                    if (!mobile.Items.Any()) return;
 
-                    foreach (var item in mobile.Equipment) server.AttributeInfo(state, item);
+                    foreach (var item in mobile.Items) server.AttributeInfo(state, item);
                 }
                 ,
                 TItem container when server.IsContainer(container) => () =>
@@ -230,7 +231,7 @@ namespace Shard.Server
 
                     server.EntityContent(state, container);
 
-                    foreach (var item in container.Items.Values) server.AttributeInfo(state, item);
+                    foreach (var item in container.Items) server.AttributeInfo(state, item);
                 },
                 _ => throw new InvalidOperationException($"Unknown entity type {entity.GetType().Name}.")
             };
@@ -240,7 +241,7 @@ namespace Shard.Server
 
         public static void RequestProfile(TServer server, TState state)
         {
-            var entity = server.Entities[state.RequestProfileSerial];
+            var entity = server.Entities.Single(e => e.Serial == state.RequestProfileSerial);
 
             Action action = entity switch
             {

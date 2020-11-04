@@ -8,13 +8,13 @@ namespace Shard.Message.Domain.Outgoing
         ISerial
         where TItem : IEntityContentItem
     {
-        Dictionary<int, TItem> Items { get; }
+        List<TItem> Items { get; }
 
         internal void WriteEntityContent(IData data)
         {
             data.Write(3, (ushort)Items.Count);
 
-            foreach (var (pair, index) in Items.Select((e, i) => (e, i))) pair.Value.WriteEntityContentItem(Serial, 20 * index, data);
+            foreach (var (item, index) in Items.Select((e, i) => (e, i))) item.WriteEntityContentItem(Serial, 20 * index, data);
         }
     }
 }

@@ -1,5 +1,8 @@
-﻿namespace Launcher.Domain
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Launcher.Domain
 {
+    [NotMapped]
     public class Data :
         Network.State.Domain.IData,
         Network.Server.Domain.IData,

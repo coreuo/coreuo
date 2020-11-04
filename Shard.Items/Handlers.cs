@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using Shard.Items.Domain;
+﻿using Shard.Items.Domain;
 
 namespace Shard.Items
 {
     public static class Handlers<TServer, TItem>
         where TItem : IItem
     {
-        public static HashSet<Action<TServer, TItem>> Containers()
+        /*public static HashSet<Action<TServer, TItem>> Containers()
         {
             return new HashSet<Action<TServer, TItem>>
             {
                 Backpack
             };
-        }
+        }*/
 
         public static void Backpack(TServer server, TItem item)
         {

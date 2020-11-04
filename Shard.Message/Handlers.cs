@@ -10,7 +10,7 @@ namespace Shard.Message
         where TState : IState<TData, TMobile, TItem, TSkillInfo>
         where TEntity : IEntity<TAttribute, TItem>
         where TData : IData, new()
-        where TMobile : IMobile<TItem, TSkillInfo>, new()
+        where TMobile : IMobile<TItem, TSkillInfo>
         where TCity : ICityInfo
         where TItem : IItem
         where TSkillInfo : ISkill
@@ -65,7 +65,7 @@ namespace Shard.Message
 
         public static void LoginComplete(TState state)
         {
-            state.Write(0x55, 1, state.LoginComplete);
+            state.Write(0x55, 1, state.WriteLoginComplete);
         }
 
         public static void LoginConfirm(TState state, TMobile mobile)

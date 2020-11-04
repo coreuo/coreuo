@@ -98,7 +98,7 @@ namespace Shard.Mobiles
 
             mobile.Notoriety = 3;
 
-            mobile.Equipment = new List<TItem>
+            mobile.Items = new List<TItem>
             {
                 server.CreateItem(server.Backpack, (_,b) =>
                 {

@@ -1,12 +1,12 @@
-﻿namespace Shard.Validation.Domain
+﻿namespace Shard.Save.Domain
 {
-    public interface IValidation
+    public interface IProperty
     {
         int Permission { get; set; }
 
         object Instance { get; set; }
 
-        string Property { get; set; }
+        string Name { get; set; }
 
         object Value { get; set; }
     }

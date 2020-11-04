@@ -12,7 +12,7 @@ namespace Shard.Message.Domain
         ISupportedFeatures
         where TState : IState<TData, TMobile, TItem, TSkillInfo>
         where TData : IData, new()
-        where TMobile : IMobile<TItem, TSkillInfo>, new()
+        where TMobile : IMobile<TItem, TSkillInfo>
         where TCity : ICityInfo
         where TItem : IItem
         where TSkillInfo : ISkill

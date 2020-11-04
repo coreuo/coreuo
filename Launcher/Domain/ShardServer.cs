@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
 using System.Net.Sockets;
 
 namespace Launcher.Domain
 {
-    using Property = Shard.Validation.Handlers<Validation>;
     using NetworkListenerHandlers = Network.Listener.Handlers<ShardState>;
     using NetworkStateHandlers = Network.State.Handlers<Data>;
     using NetworkServerHandlers = Network.Server.Handlers<ShardState, Data>;
     using ShardMessageHandlers = Shard.Message.Handlers<ShardServer, ShardState, Data, Entity, Mobile, City, Item, Skill, Attribute>;
     using ShardExtendedMessageHandlers = Shard.Message.Extended.Handlers<ShardServer, ShardState, Data, Mobile, Map, MapPatch>;
-    using ShardServerHandlers = Shard.Server.Handlers<ShardServer,ShardState,Entity,Mobile,Item>;
+    using ShardServerHandlers = Shard.Server.Handlers<ShardServer,ShardSave,ShardState,Entity,Mobile,Item>;
     using ItemType = Shard.Items.Handlers<ShardServer, Item>;
     using MobileType = Shard.Mobiles.Handlers<ShardServer, Mobile, Item>;
 
@@ -25,87 +25,75 @@ namespace Launcher.Domain
         Network.Server.Domain.IServer<ShardState, Data>,
         Shard.Message.Domain.IServer<ShardState, Data, Mobile, City, Item, Skill>,
         Shard.Message.Extended.Domain.IServer<ShardState, Data>,
-        Shard.Server.Domain.IServer<ShardServer, ShardState, Entity, Mobile, Item>,
-        Shard.Mobiles.Domain.IServer<ShardServer, Item>
+        Shard.Server.Domain.IServer<ShardServer, ShardSave, ShardState, Entity, Mobile, Item>,
+        Shard.Mobiles.Domain.IServer<ShardServer, Item>,
+        Shard.Save.Domain.IServer<ShardServer, ShardSave, Property>
     {
+        public int Id { get; set; }
+
         public string Identity
         {
-            get => Property.Get<string>(this, nameof(Identity));
-            set => Property.Set(this, nameof(Identity), value, () => nameof(ShardServer));
+            get => Access.Get(s => s.Identity);
+            set => Access.Set(s => s.Identity, value);
         }
 
         public string IpAddress
         {
-            get => Property.Get<string>(this, nameof(IpAddress));
-            set => Property.Set(this, nameof(IpAddress), value, () => "127.0.0.1");
+            get => Access.Get(s => s.IpAddress);
+            set => Access.Set(s => s.IpAddress, value);
         }
 
         public int Port
         {
-            get => Property.Get<int>(this, nameof(Port));
-            set => Property.Set(this, nameof(Port), value, () => 12594);
+            get => Access.Get(s => s.Port);
+            set => Access.Set(s => s.Port, value);
         }
 
-        public bool Locked { get; set; }
+        [NotMapped] public bool Locked { get; set; }
 
-        public bool Running { get; set; }
+        [NotMapped] public bool Running { get; set; }
 
-        public DateTime DateTime { get; set; }
+        [NotMapped] public DateTime DateTime { get; set; }
 
-        public Socket Socket { get; set; }
+        [NotMapped] public Socket Socket { get; set; }
 
-        public EndPoint EndPoint { get; set; }
+        [NotMapped] public EndPoint EndPoint { get; set; }
 
-        public ConcurrentQueue<ShardState> ListenQueue { get; } = new ConcurrentQueue<ShardState>();
+        [NotMapped] public ConcurrentQueue<ShardState> ListenQueue { get; } = new ConcurrentQueue<ShardState>();
 
-        public bool Listening { get; set; }
+        [NotMapped] public bool Listening { get; set; }
 
-        public List<ShardState> States { get; } = new List<ShardState>();
+        public List<ShardState> States
+        {
+            get => Access.Get(s => s.States);
+            set => Access.Set(s => s.States, value);
+        }
 
         public int Percentage
         {
-            get => Property.Get<int>(this, nameof(Percentage));
-            set => Property.Set(this, nameof(Percentage), value);
+            get => Access.Get(s => s.Percentage);
+            set => Access.Set(s => s.Percentage, value);
         }
 
         public int TimeZone
         {
-            get => Property.Get<int>(this, nameof(TimeZone));
-            set => Property.Set(this, nameof(TimeZone), value);
+            get => Access.Get(s => s.TimeZone);
+            set => Access.Set(s => s.TimeZone, value);
         }
 
-        public int AuthorizationId
-        {
-            get => Property.Get<int>(this, nameof(AuthorizationId));
-            set => Property.Set(this, nameof(AuthorizationId), value);
-        }
+        [NotMapped] public int AuthorizationId { get; set; }
 
-        public int CharacterFlags
-        {
-            get => Property.Get<int>(this, nameof(CharacterFlags));
-            set => Property.Set(this, nameof(CharacterFlags), value, () => 1536);
-        }
+        [NotMapped] public int CharacterFlags { get; set; } = 1536;
 
-        public byte LightLevel
-        {
-            get => Property.Get<byte>(this, nameof(LightLevel));
-            set => Property.Set(this, nameof(LightLevel), value, () => 12);
-        }
+        [NotMapped] public byte LightLevel { get; set; } = 12;
 
-        public int FeatureFlags
-        {
-            get => Property.Get<int>(this, nameof(FeatureFlags));
-            set => Property.Set(this, nameof(FeatureFlags), value, () => 0x92DB);
-        }
+        [NotMapped] public int FeatureFlags { get; set; } = 0x92DB;
 
-        public List<City> Cities
+        [NotMapped] 
+        public List<City> Cities { get; set; } = new List<City>
         {
-            get => Property.Get<List<City>>(this, nameof(Cities));
-            set => Property.Set(this, nameof(Cities), value, () => new List<City>
-            {
-                new City {Name = "New Haven", Town = "New Haven Bank"}
-            });
-        }
+            new City {Name = "New Haven", Town = "New Haven Bank"}
+        };
 
         public Action ThreadStart => () => NetworkListenerHandlers.Start(this);
 
@@ -160,23 +148,27 @@ namespace Launcher.Domain
 
         public Action<ShardState> ClientLanguage => state => ShardServerHandlers.ClientLanguage(this, state);
 
-        public Dictionary<int, Entity> Entities { get; } = new Dictionary<int, Entity>();
+        public HashSet<Entity> Entities
+        {
+            get => Access.Get(s => s.Entities);
+            set => Access.Set(s => s.Entities, value);
+        }
 
         public Queue<int> MobileSerialPool
         {
-            get => Property.Get<Queue<int>>(this, nameof(MobileSerialPool));
-            set => Property.Set(this, nameof(MobileSerialPool), value, () => new Queue<int>());
+            get => Access.Get(s => s.MobileSerialPool);
+            set => Access.Set(s => s.MobileSerialPool, value);
         }
 
-        public int MaximumMobileSerial { get; set; }
+        [NotMapped] public int MaximumMobileSerial { get; set; }
 
         public Queue<int> ItemSerialPool
         {
-            get => Property.Get<Queue<int>>(this, nameof(ItemSerialPool));
-            set => Property.Set(this, nameof(ItemSerialPool), value, () => new Queue<int>());
+            get => Access.Get(s => s.ItemSerialPool);
+            set => Access.Set(s => s.ItemSerialPool, value);
         }
 
-        public int MaximumItemSerial { get; set; } = 0x40000000;
+        [NotMapped] public int MaximumItemSerial { get; set; } = 0x40000000;
 
         public Action<ShardState> EncryptionRequest => ShardMessageHandlers.EncryptionRequest;
 
@@ -230,7 +222,7 @@ namespace Launcher.Domain
 
         public Action<string> Output => text => Console.WriteLine($"[{DateTime.Now:O}] {Identity}.{text}");
 
-        public HashSet<Action<ShardServer, Item>> Containers { get; } = ItemType.Containers();
+        //[NotMapped] public HashSet<Action<ShardServer, Item>> Containers { get; } = ItemType.Containers();
 
         public Action<ShardState, Entity> EntityDisplay => ShardMessageHandlers.EntityDisplay;
 
@@ -238,23 +230,7 @@ namespace Launcher.Domain
 
         public Action<ShardServer, Mobile> Human => MobileType.Human;
 
-        public Action<ShardServer, Item>[] GetItemTypes(Item item) => ShardServerHandlers.GetItemTypes(item);
-
-        public ShardServer()
-        {
-            Identity = default;
-            IpAddress = default;
-            Port = default;
-            Percentage = default;
-            TimeZone = default;
-            AuthorizationId = default;
-            CharacterFlags = default;
-            LightLevel = default;
-            FeatureFlags = default;
-            Cities = default;
-            MobileSerialPool = default;
-            ItemSerialPool = default;
-        }
+        //public Action<ShardServer, Item>[] GetItemTypes(Item item) => ShardServerHandlers.GetItemTypes(item);
 
         public Item CreateItem(params Action<ShardServer, Item>[] types) => ShardServerHandlers.CreateItem(this, types);
 
@@ -273,5 +249,24 @@ namespace Launcher.Domain
         public Action<ShardServer, Item> Shoes => ItemType.Shoes;
 
         public Action<ShardServer, Item> FirstFace => ItemType.FirstFace;
+
+        [NotMapped] public ShardSave Save => Access.Save;
+
+        [NotMapped] public Access<ShardServer> Access { get; set; }
+
+        public ShardServer(ShardSave save)
+        {
+            Access = save.BaseEntity(this)
+                .Property(s => s.Identity, nameof(ShardServer))
+                .Property(s => s.IpAddress, "127.0.0.1")
+                .Property(s => s.Port, 12594)
+                .Property(s => s.States, new List<ShardState>())
+                .Property(s => s.Percentage)
+                .Property(s => s.TimeZone)
+                .Property(s => s.Entities, new HashSet<Entity>())
+                .Property(s => s.MobileSerialPool, new Queue<int>())
+                .Property(s => s.ItemSerialPool, new Queue<int>())
+                .Flush();
+        }
     }
 }

@@ -6,7 +6,7 @@ namespace Shard.Server.Domain
         where TMobile : IMobile<TItem>
         where TItem : IItem<TItem>
     {
-        List<TMobile> Characters { get; }
+        List<TMobile> Characters { get; set; }
 
         TMobile Mobile { get; set; }
 

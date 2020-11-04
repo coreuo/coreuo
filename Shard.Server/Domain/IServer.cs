@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Shard.Server.Domain
 {
-    public interface IServer<TServer, in TState, TEntity, in TMobile, TItem>
-        where TServer : IServer<TServer, TState, TEntity, TMobile, TItem>
+    public interface IServer<in TServer, TSave, in TState, TEntity, TMobile, TItem>
+        where TServer : IServer<TServer, TSave, TState, TEntity, TMobile, TItem>
         where TState : IState<TMobile, TItem>
         where TEntity : IEntity
         where TMobile : IMobile<TItem>
         where TItem : IItem<TItem>
     {
-        Dictionary<int, TEntity> Entities { get; }
+        TSave Save { get; }
+
+        HashSet<TEntity> Entities { get; }
 
         Queue<int> MobileSerialPool { get; }
 
@@ -71,9 +72,9 @@ namespace Shard.Server.Domain
 
         Action<TState, TMobile> ProfileResponse { get; }
 
-        HashSet<Action<TServer, TItem>> Containers { get; }
+        //HashSet<Action<TServer, TItem>> Containers { get; }
 
-        internal bool IsContainer(TItem item) => GetItemTypes(item).Any(t => Containers.Contains(t));
+        internal bool IsContainer(TItem item) => item.ItemId == 3701;
 
         Action<TState, TEntity> EntityDisplay { get; }
 
@@ -81,6 +82,6 @@ namespace Shard.Server.Domain
 
         Action<TServer, TMobile> Human { get; }
 
-        Action<TServer, TItem>[] GetItemTypes(TItem item);
+        //Action<TServer, TItem>[] GetItemTypes(TItem item);
     }
 }

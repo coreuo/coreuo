@@ -1,20 +1,22 @@
 ﻿using System.Threading.Tasks;
 using Launcher.Domain;
 
-using ThreadRunnerHandlers = Thread.Runner.Handlers;
+var shardSave = new ShardSave();
 
-var shardServer = new ShardServer();
+var shardServer = shardSave.Load();
 
 var loginServer = new LoginServer(shardServer);
 
 while (true)
 {
-    ThreadRunnerHandlers.Start(shardServer);
+    Thread.Runner.Handlers.Start(shardServer);
 
-    ThreadRunnerHandlers.Start(loginServer);
+    Thread.Runner.Handlers.Start(loginServer);
 
     while (shardServer.Running || loginServer.Running)
     {
         await Task.Delay(1000);
+
+        shardSave.Process();
     }
 }

@@ -8,6 +8,6 @@ namespace Shard.Server.Domain
     {
         public string Name { get; set; }
 
-        public List<TItem> Equipment { get; }
+        public List<TItem> Items { get; }
     }
 }

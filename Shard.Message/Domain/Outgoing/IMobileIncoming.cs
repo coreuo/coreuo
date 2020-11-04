@@ -14,7 +14,7 @@ namespace Shard.Message.Domain.Outgoing
         INotoriety
         where TMobileEquip : IMobileEquip
     {
-        public List<TMobileEquip> Equipment { get; set; }
+        public List<TMobileEquip> Items { get; set; }
 
         internal void WriteMobileIncoming(IData data)
         {
@@ -36,14 +36,14 @@ namespace Shard.Message.Domain.Outgoing
 
             data.Write(18, Notoriety);
 
-            foreach (var (equip, index) in Equipment.Select((e,i) => (e,i))) equip.WriteMobileEquipment(EquipmentSize(index), data);
+            foreach (var (equip, index) in Items.Select((e,i) => (e,i))) equip.WriteMobileEquipment(EquipmentSize(index), data);
 
             data.Write(19 + EquipmentSize() , 0);
         }
 
         internal int EquipmentSize(int? index = null)
         {
-            var filtered = index == null ? Equipment : Equipment.Take(index.Value);
+            var filtered = index == null ? Items : Items.Take(index.Value);
 
             return filtered.Sum(e => e.HasHue() ? 9 : 7);
         }

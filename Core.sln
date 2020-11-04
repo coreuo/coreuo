@@ -27,8 +27,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shard.Message.Extended", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shard.Message.Compression", "Shard.Message.Compression\Shard.Message.Compression.csproj", "{F789B6CA-40BC-459C-828B-82243547FD95}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shard.Validation", "Shard.Validation\Shard.Validation.csproj", "{9B0C6A95-4407-413E-B145-90535A063646}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shard.Items", "Shard.Items\Shard.Items.csproj", "{0B8BF79F-1155-4E00-BE77-AEBD70ABCBE4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shard.Mobiles", "Shard.Mobiles\Shard.Mobiles.csproj", "{B674BE29-35BA-47B7-8D13-4776E833E684}"
@@ -37,6 +35,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shard.Save", "Shard.Save\Shard.Save.csproj", "{9C8D7C63-F39E-4081-A68A-DB7E9ED32F12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,10 +92,6 @@ Global
 		{F789B6CA-40BC-459C-828B-82243547FD95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F789B6CA-40BC-459C-828B-82243547FD95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F789B6CA-40BC-459C-828B-82243547FD95}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9B0C6A95-4407-413E-B145-90535A063646}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9B0C6A95-4407-413E-B145-90535A063646}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9B0C6A95-4407-413E-B145-90535A063646}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9B0C6A95-4407-413E-B145-90535A063646}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0B8BF79F-1155-4E00-BE77-AEBD70ABCBE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0B8BF79F-1155-4E00-BE77-AEBD70ABCBE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B8BF79F-1155-4E00-BE77-AEBD70ABCBE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -104,6 +100,10 @@ Global
 		{B674BE29-35BA-47B7-8D13-4776E833E684}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B674BE29-35BA-47B7-8D13-4776E833E684}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B674BE29-35BA-47B7-8D13-4776E833E684}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C8D7C63-F39E-4081-A68A-DB7E9ED32F12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C8D7C63-F39E-4081-A68A-DB7E9ED32F12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C8D7C63-F39E-4081-A68A-DB7E9ED32F12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C8D7C63-F39E-4081-A68A-DB7E9ED32F12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

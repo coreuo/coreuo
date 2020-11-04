@@ -6,16 +6,27 @@
 		<LangVersion>9.0</LangVersion>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0-rc.2.20475.6">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0-rc.2.20475.6">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	</ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Login.Encryption\Login.Encryption.csproj" />
     <ProjectReference Include="..\Login.Message\Login.Message.csproj" />
     <ProjectReference Include="..\Login.Server\Login.Server.csproj" />
+    <ProjectReference Include="..\Shard.Save\Shard.Save.csproj" />
     <ProjectReference Include="..\Shard.Items\Shard.Items.csproj" />
     <ProjectReference Include="..\Shard.Message.Compression\Shard.Message.Compression.csproj" />
     <ProjectReference Include="..\Shard.Message.Extended\Shard.Message.Extended.csproj" />
     <ProjectReference Include="..\Shard.Message\Shard.Message.csproj" />
     <ProjectReference Include="..\Shard.Mobiles\Shard.Mobiles.csproj" />
-    <ProjectReference Include="..\Shard.Validation\Shard.Validation.csproj" />
     <ProjectReference Include="..\Shard.Server\Shard.Server.csproj" />
     <ProjectReference Include="..\Network.Listener\Network.Listener.csproj" />
     <ProjectReference Include="..\Network.Server\Network.Server.csproj" />

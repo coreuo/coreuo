@@ -80,7 +80,7 @@ namespace Shard.Mobiles.Domain
         short MaximumStaminaIncrease { get; set; }
         short MaximumManaIncrease { get; set; }
         byte Notoriety { get; set; }
-        List<TItem> Equipment { get; set; }
+        List<TItem> Items { get; set; }
         //List<Skill> Skills { get; set; }
         //Map Map { get; set; }
         //string ProfileHeader { get; set; }

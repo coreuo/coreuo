@@ -2,7 +2,7 @@
 {
     public interface ISkillInfo
     {
-        ushort Id { get; set; }
+        ushort SkillId { get; set; }
 
         ushort Value { get; set; }
 
@@ -14,7 +14,7 @@
 
         internal void WriteSkillInfo(int index, IData data)
         {
-            data.Write(6 + index * 9, Id);
+            data.Write(6 + index * 9, SkillId);
 
             data.Write(6 + index * 9 + 2, Value);
 
