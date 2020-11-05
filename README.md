@@ -10,6 +10,9 @@ Currently, there is only experimental version.
 - [x] open/close paperdoll
 - [x] open/close backpack
 - [x] backpack items display
+- [x] move item in backpack
+- [x] wear item with character
+- [x] move item on the ground
 
 ## Instructions
 1) Download [Ultima Online: Kingdom Reborn](https://www.fileplanet.com/archive/p-52187/Ultima-Online-Kingdom-Reborn-Client) and install.
