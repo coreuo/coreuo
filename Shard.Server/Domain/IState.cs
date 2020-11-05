@@ -2,10 +2,11 @@
 
 namespace Shard.Server.Domain
 {
-    public interface IState<TMobile, TItem, TEntity>
+    public interface IState<TMobile, TItem, TEntity, in TTarget>
         where TMobile : IMobile<TItem, TEntity>
         where TItem : IItem<TItem, TEntity>
-        where TEntity : IEntity<TItem, TEntity>
+        where TEntity : class, IEntity<TItem, TEntity>
+        where TTarget : ITarget
     {
         List<TMobile> Characters { get; set; }
 
@@ -13,32 +14,31 @@ namespace Shard.Server.Domain
 
         public byte MobileQueryType { get; set; }
 
-        public int MobileQuerySerial { get; set; }
+        public int Serial { get; set; }
 
-        List<int> EntityQuerySerialList { get; set; }
+        int ParentSerial { get; set; }
 
-        int EntityUseSerial { get; set; }
+        List<int> SerialList { get; set; }
 
         byte ProfileRequestMode { get; set; }
 
-        int ProfileRequestSerial { get; set; }
-
-        int ItemPickSerial { get; set; }
-
         ushort SoundId { get; set; }
 
-        ushort ItemPlaceLocationX { get; set; }
+        ushort LocationX { get; set; }
 
-        ushort ItemPlaceLocationY { get; set; }
+        ushort LocationY { get; set; }
 
-        sbyte ItemPlaceLocationZ { get; set; }
+        sbyte LocationZ { get; set; }
 
-        byte ItemPlaceGridIndex { get; set; }
+        byte GridIndex { get; set; }
 
-        int ItemPlaceContainerSerial { get; set; }
+        internal void TransferLocation(TTarget target)
+        {
+            target.LocationX = LocationX;
 
-        int ItemWearSerial { get; set; }
+            target.LocationY = LocationY;
 
-        int ItemWearParentSerial { get; set; }
+            target.LocationZ = LocationZ;
+        }
     }
 }

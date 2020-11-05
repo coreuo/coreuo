@@ -7,7 +7,7 @@ namespace Shard.Server
 {
     public static class Handlers<TServer, TState, TMobile, TItem, TEntity, TTarget>
         where TServer : IServer<TServer, TState, TMobile, TItem, TEntity, TTarget>
-        where TState : IState<TMobile, TItem, TEntity>
+        where TState : IState<TMobile, TItem, TEntity, TTarget>
         where TEntity : class, TTarget, IEntity<TItem, TEntity>
         where TMobile : class, TEntity, IMobile<TItem, TEntity>, new()
         where TItem : class, TEntity, IItem<TItem, TEntity>, new()
@@ -45,9 +45,11 @@ namespace Shard.Server
             return item;
         }
 
-        public static void AddItem(TServer server, TEntity parent, params TItem[] items)
+        public static void SetItemParent(TServer server, TEntity parent, params TItem[] items)
         {
             var index = 0;
+
+            RemoveItemParent(server, items);
 
             foreach (var item in items)
             {
@@ -61,13 +63,16 @@ namespace Shard.Server
             }
         }
 
-        public static void RemoveItem(TServer server, TEntity parent, TItem item)
+        public static void RemoveItemParent(TServer server, params TItem[] items)
         {
-            item.GridIndex = 0;
+            foreach (var item in items)
+            {
+                item.GridIndex = 0;
 
-            item.Parent = default;
+                item.Parent?.Items.Remove(item);
 
-            parent.Items.Remove(item);
+                item.Parent = null;
+            }
         }
 
         public static void ClientSeed(TServer server, TState state)
@@ -131,7 +136,7 @@ namespace Shard.Server
                 _ => throw new InvalidOperationException($"Unknown mobile query type {state.MobileQueryType:X}.")
             };
 
-            action(state, server.Entities.OfType<TMobile>().Single(e => e.Serial == state.MobileQuerySerial));
+            action(state, server.Entities.OfType<TMobile>().Single(e => e.Serial == state.Serial));
         }
 
         public static void ClientLanguage(TServer server, TState state)
@@ -215,12 +220,12 @@ namespace Shard.Server
 
         public static void EntityQuery(TServer server, TState state)
         {
-            state.EntityQuerySerialList.ForEach(s => server.EntityAttributes(state, server.Entities.Single(e => e.Serial == s)));
+            state.SerialList.ForEach(s => server.EntityAttributes(state, server.Entities.Single(e => e.Serial == s)));
         }
 
         public static void EntityUse(TServer server, TState state)
         {
-            var entity = (state.EntityUseSerial & ~0x7FFFFFFF) == 0 ? server.Entities.Single(e => e.Serial == state.EntityUseSerial) : state.Mobile;
+            var entity = (state.Serial & ~0x7FFFFFFF) == 0 ? server.Entities.Single(e => e.Serial == state.Serial) : state.Mobile;
 
             Action action = entity switch
             {
@@ -251,7 +256,7 @@ namespace Shard.Server
 
         public static void ProfileRequest(TServer server, TState state)
         {
-            var entity = server.Entities.Single(e => e.Serial == state.ProfileRequestSerial);
+            var entity = server.Entities.Single(e => e.Serial == state.Serial);
 
             Action action = entity switch
             {
@@ -265,9 +270,7 @@ namespace Shard.Server
 
         public static void ItemPick(TServer server, TState state)
         {
-            var item = server.Entities.OfType<TItem>().Single(e => e.Serial == state.ItemPickSerial);
-
-            if (item.Parent != null) server.RemoveItem(item.Parent, item);
+            var item = server.Entities.OfType<TItem>().Single(e => e.Serial == state.Serial);
 
             server.EntityRemove(state, item);
 
@@ -282,67 +285,20 @@ namespace Shard.Server
 
         public static void ItemPlace(TServer server, TState state)
         {
-            var item = server.Entities.OfType<TItem>().Single(e => e.Serial == state.ItemPickSerial);
+            var parent = server.Entities.SingleOrDefault(e => e.Serial == state.ParentSerial);
 
-            if (state.ItemPlaceContainerSerial == -1)
-            {
-                item.LocationX = state.ItemPlaceLocationX;
+            var item = server.Entities.OfType<TItem>().Single(e => e.Serial == state.Serial);
 
-                item.LocationY = state.ItemPlaceLocationY;
-
-                item.LocationZ = state.ItemPlaceLocationZ;
-
-                server.ItemWorld(state, item);
-
-                server.EntityInfo(state, item);
-
-                state.SoundId = 0x42;
-
-                server.SoundPlay(state, state.Mobile);
-
-                server.ItemPlaceApproved(state);
-
-                server.MobileStatus(state, state.Mobile);
-            }
-            else
-            {
-                state.SoundId = 0x48;
-
-                server.SoundPlay(state, state.Mobile);
-
-                server.ItemPlaceApproved(state);
-
-                server.MobileStatus(state, state.Mobile);
-
-                var parent = server.Entities.Single(e => e.Serial == state.ItemPlaceContainerSerial);
-
-                item.GridIndex = state.ItemPlaceGridIndex;
-
-                server.AddItem(parent, item);
-
-                server.EntityContentItem(state, item);
-
-                server.EntityInfo(state, item);
-
-                server.EntityInfo(state, parent);
-            }
+            server.MoveItem(state, parent, item);
         }
 
         public static void ItemWear(TServer server, TState state)
         {
-            var item = server.Entities.OfType<TItem>().Single(e => e.Serial == state.ItemWearSerial);
+            var parent = server.Entities.Single(e => e.Serial == state.ParentSerial);
 
-            server.ItemPlaceApproved(state);
+            var item = server.Entities.OfType<TItem>().Single(e => e.Serial == state.Serial);
 
-            var parent = server.Entities.Single(e => e.Serial == state.ItemWearParentSerial);
-
-            server.AddItem(parent, item);
-
-            server.MobileStatus(state, state.Mobile);
-
-            server.ItemWearUpdate(state, item);
-
-            server.EntityInfo(state, item);
+            server.MoveItem(state, parent.Items.Any(i => i.Layer == item.Layer) ? item.Parent : parent, item);
         }
     }
 }

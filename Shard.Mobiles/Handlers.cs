@@ -98,9 +98,9 @@ namespace Shard.Mobiles
 
             mobile.Notoriety = 3;
 
-            server.AddItem(mobile,
+            server.SetItemParent(mobile,
 
-                server.CreateItem(server.Backpack, (_, b) => server.AddItem(b, server.CreateItem(server.Robe), server.CreateItem(server.Shirt))),
+                server.CreateItem(server.Backpack, (_, b) => server.SetItemParent(b, server.CreateItem(server.Robe), server.CreateItem(server.Shirt))),
 
                 server.CreateItem(server.LeatherChest),
 

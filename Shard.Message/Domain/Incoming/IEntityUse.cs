@@ -1,12 +1,13 @@
-﻿namespace Shard.Message.Domain.Incoming
-{
-    public interface IEntityUse
-    {
-        int EntityUseSerial { get; set; }
+﻿using Shard.Message.Domain.Shared;
 
+namespace Shard.Message.Domain.Incoming
+{
+    public interface IEntityUse : 
+        ISerial
+    {
         internal int ReadEntityUse(IData data)
         {
-            EntityUseSerial = data.ReadInt(1);
+            Serial = data.ReadInt(1);
 
             return 5;
         }

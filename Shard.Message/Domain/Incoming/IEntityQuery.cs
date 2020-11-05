@@ -5,13 +5,13 @@ namespace Shard.Message.Domain.Incoming
 {
     public interface IEntityQuery
     {
-        List<int> EntityQuerySerialList { get; set; }
+        List<int> SerialList { get; set; }
 
         internal int ReadEntityQuery(IData data)
         {
             var size = data.ReadShort(1);
 
-            EntityQuerySerialList = Enumerable.Range(0, (size - 3) / 4).Select(i => data.ReadInt(3 + i * 4)).ToList();
+            SerialList = Enumerable.Range(0, (size - 3) / 4).Select(i => data.ReadInt(3 + i * 4)).ToList();
 
             return size;
         }

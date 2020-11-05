@@ -1,12 +1,13 @@
-﻿namespace Shard.Message.Domain.Outgoing
-{
-    public interface IPingResponse
-    {
-        byte PingNumber { get; set; }
+﻿using Shard.Message.Domain.Shared;
 
+namespace Shard.Message.Domain.Outgoing
+{
+    public interface IPingResponse :
+        INumber
+    {
         internal void WritePingResponse(IData data)
         {
-            data.Write(1, PingNumber);
+            data.Write(1, Number);
         }
     }
 }

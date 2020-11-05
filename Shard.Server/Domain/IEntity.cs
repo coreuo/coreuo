@@ -4,7 +4,7 @@ namespace Shard.Server.Domain
 {
     public interface IEntity<TItem, TEntity>
         where TItem : IItem<TItem, TEntity>
-        where TEntity : IEntity<TItem, TEntity>
+        where TEntity : class, IEntity<TItem, TEntity>
     {
         public int Serial { get; set; }
 

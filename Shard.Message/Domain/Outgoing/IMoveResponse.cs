@@ -2,11 +2,11 @@
 
 namespace Shard.Message.Domain.Outgoing
 {
-    public interface IMoveResponse : IMove
+    public interface IMoveResponse : INumber
     {
         internal void WriteMoveResponse(IData data)
         {
-            data.Write(1, MoveNumber);
+            data.Write(1, Number);
         }
     }
 }

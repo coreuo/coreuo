@@ -1,10 +1,11 @@
-﻿namespace Shard.Message.Domain.Incoming
+﻿using Shard.Message.Domain.Shared;
+
+namespace Shard.Message.Domain.Incoming
 {
-    public interface IProfileRequest
+    public interface IProfileRequest :
+        ISerial
     {
         byte ProfileRequestMode { get; set; }
-
-        int ProfileRequestSerial { get; set; }
 
         short ProfileRequestEditType { get; set; }
 
@@ -16,7 +17,7 @@
 
             ProfileRequestMode = data.ReadByte(3);
 
-            ProfileRequestSerial = data.ReadInt(4);
+            Serial = data.ReadInt(4);
 
             if (ProfileRequestMode == 0) return length;
 

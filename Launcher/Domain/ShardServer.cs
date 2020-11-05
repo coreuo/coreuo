@@ -205,7 +205,9 @@ namespace Launcher.Domain
 
         public Item CreateItem(params Action<ShardServer, Item>[] types) => ShardServerHandlers.CreateItem(this, types);
 
-        public void AddItem(Entity parent, params Item[] items) => ShardServerHandlers.AddItem(this, parent, items);
+        public void SetItemParent(Entity parent, params Item[] items) => ShardServerHandlers.SetItemParent(this, parent, items);
+
+        public void RemoveItemParent(params Item[] items) => ShardServerHandlers.RemoveItemParent(this, items);
 
         public Action<ShardState, Item> ItemWorld => ShardMessageHandlers.ItemWorld;
 
@@ -226,8 +228,6 @@ namespace Launcher.Domain
         public Action<ShardServer, Item> FirstFace => ItemType.FirstFace;
 
         public Action<ShardState, Target> SoundPlay => ShardMessageHandlers.SoundPlay;
-
-        public Action<Entity, Item> RemoveItem => (parent, item) => ShardServerHandlers.RemoveItem(this, parent, item);
 
         public Action<ShardState> ItemPlaceApproved => ShardMessageHandlers.ItemPlaceApproved;
 

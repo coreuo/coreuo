@@ -1,20 +1,19 @@
-﻿namespace Shard.Message.Domain.Incoming
+﻿using Shard.Message.Domain.Shared;
+
+namespace Shard.Message.Domain.Incoming
 {
-    public interface IItemWear
+    public interface IItemWear :
+        ISerial,
+        IParentSerial,
+        ILayer
     {
-        int ItemWearSerial { get; set; }
-
-        byte ItemWearLayer { get; set; }
-
-        int ItemWearParentSerial { get; set; }
-
         internal int ReadItemWear(IData data)
         {
-            ItemWearSerial = data.ReadInt(1);
+            Serial = data.ReadInt(1);
 
-            ItemWearLayer = data.ReadByte(5);
+            Layer = data.ReadByte(5);
 
-            ItemWearParentSerial = data.ReadInt(6);
+            ParentSerial = data.ReadInt(6);
 
             return 10;
         }

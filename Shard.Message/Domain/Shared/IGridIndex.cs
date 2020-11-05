@@ -2,6 +2,6 @@
 {
     public interface IGridIndex
     {
-        byte GridIndex { get; }
+        byte GridIndex { get; set; }
     }
 }

@@ -5,10 +5,10 @@ namespace Shard.Server.Domain
 {
     public interface IServer<in TServer, in TState, in TMobile, in TItem, TEntity, in TTarget>
         where TServer : IServer<TServer, TState, TMobile, TItem, TEntity, TTarget>
-        where TState : IState<TMobile, TItem, TEntity>
-        where TEntity : IEntity<TItem, TEntity>
-        where TMobile : IMobile<TItem, TEntity>
-        where TItem : IItem<TItem, TEntity>
+        where TState : IState<TMobile, TItem, TEntity, TTarget>
+        where TEntity : class, TTarget, IEntity<TItem, TEntity>
+        where TMobile : TEntity, IMobile<TItem, TEntity>
+        where TItem : TEntity, IItem<TItem, TEntity>
         where TTarget : ITarget
     {
         HashSet<TEntity> Entities { get; }
@@ -87,16 +87,76 @@ namespace Shard.Server.Domain
 
         Action<TState, TTarget> SoundPlay { get; }
 
-        Action<TEntity, TItem> RemoveItem { get; }
-
         Action<TState> ItemPlaceApproved { get; }
 
         Action<TState, TItem> EntityContentItem { get; }
 
-        void AddItem(TEntity parent, params TItem[] items);
+        void SetItemParent(TEntity parent, params TItem[] items);
+
+        void RemoveItemParent(params TItem[] items);
 
         Action<TState, TItem> ItemWorld { get; }
 
         Action<TState, TItem> ItemWearUpdate { get; }
+
+        internal void MoveItem(TState state, TEntity parent, TItem item)
+        {
+            Action action = parent switch
+            {
+                null => () =>
+                {
+                    RemoveItemParent(item);
+
+                    state.TransferLocation(item);
+
+                    ItemWorld(state, item);
+
+                    EntityInfo(state, item);
+
+                    state.SoundId = 0x42;
+
+                    SoundPlay(state, state.Mobile);
+
+                    ItemPlaceApproved(state);
+
+                    MobileStatus(state, state.Mobile);
+                },
+                TItem => () =>
+                {
+                    state.SoundId = 0x48;
+
+                    SoundPlay(state, state.Mobile);
+
+                    ItemPlaceApproved(state);
+
+                    MobileStatus(state, state.Mobile);
+
+                    item.GridIndex = state.GridIndex;
+
+                    SetItemParent(parent, item);
+
+                    EntityContentItem(state, item);
+
+                    EntityInfo(state, item);
+
+                    EntityInfo(state, parent);
+                },
+                TMobile => () =>
+                {
+                    ItemPlaceApproved(state);
+
+                    SetItemParent(parent, item);
+
+                    MobileStatus(state, state.Mobile);
+
+                    ItemWearUpdate(state, item);
+
+                    EntityInfo(state, item);
+                },
+                _ => throw new InvalidOperationException($"Unknown parent of type {parent.GetType().Name}.")
+            };
+
+            action();
+        }
     }
 }

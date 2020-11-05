@@ -19,7 +19,7 @@ namespace Launcher.Domain
         Shard.Message.Domain.IState<Data, Mobile, Item, Entity, Attribute, Skill>,
         Shard.Message.Extended.Domain.IState<Data>,
         Shard.Message.Compression.Domain.IState<Data>,
-        Shard.Server.Domain.IState<Mobile, Item, Entity>
+        Shard.Server.Domain.IState<Mobile, Item, Entity, Target>
     {
         public int Id { get; set; }
 
@@ -72,11 +72,9 @@ namespace Launcher.Domain
 
         public byte MoveDirection { get; set; }
 
-        public byte MoveNumber { get; set; }
+        public byte Number { get; set; }
 
         public int MoveKey { get; set; }
-
-        public byte PingNumber { get; set; }
 
         public byte Season { get; set; } = 1;
 
@@ -98,9 +96,7 @@ namespace Launcher.Domain
 
         public byte MobileQueryType { get; set; }
 
-        public int MobileQuerySerial { get; set; }
-
-        public byte Number { get; set; }
+        public int Serial { get; set; }
 
         public string ClientLanguage { get; set; }
 
@@ -112,9 +108,7 @@ namespace Launcher.Domain
 
         public Mobile Mobile { get; set; }
 
-        [NotMapped] public List<int> EntityQuerySerialList { get; set; } = new List<int>();
-
-        public int EntityUseSerial { get; set; }
+        [NotMapped] public List<int> SerialList { get; set; } = new List<int>();
 
         [NotMapped] public byte PaperDollFlags { get; set; } = 0x3;
 
@@ -130,15 +124,11 @@ namespace Launcher.Domain
 
         public byte ProfileRequestMode { get; set; }
 
-        public int ProfileRequestSerial { get; set; }
-
         public short ProfileRequestEditType { get; set; }
 
         public string ProfileRequestEditText { get; set; }
 
-        public int ItemPickSerial { get; set; }
-
-        public ushort ItemPickAmount { get; set; }
+        public ushort Amount { get; set; }
 
         public byte SoundMode { get; } = 1;
 
@@ -146,22 +136,16 @@ namespace Launcher.Domain
 
         public ushort SoundVolume { get; set; } = 0;
 
-        public int ItemPlaceSerial { get; set; }
+        public ushort LocationX { get; set; }
 
-        public ushort ItemPlaceLocationX { get; set; }
+        public ushort LocationY { get; set; }
 
-        public ushort ItemPlaceLocationY { get; set; }
+        public sbyte LocationZ { get; set; }
 
-        public sbyte ItemPlaceLocationZ { get; set; }
+        public byte GridIndex { get; set; }
 
-        public byte ItemPlaceGridIndex { get; set; }
+        public int ParentSerial { get; set; }
 
-        public int ItemPlaceContainerSerial { get; set; }
-
-        public int ItemWearSerial { get; set; }
-
-        public byte ItemWearLayer { get; set; }
-
-        public int ItemWearParentSerial { get; set; }
+        public byte Layer { get; set; }
     }
 }

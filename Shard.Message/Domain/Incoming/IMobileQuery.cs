@@ -1,12 +1,13 @@
-﻿namespace Shard.Message.Domain.Incoming
+﻿using Shard.Message.Domain.Shared;
+
+namespace Shard.Message.Domain.Incoming
 {
-    public interface IMobileQuery
+    public interface IMobileQuery :
+        ISerial
     {
         public int UnknownMobileQueryFirst { get; set; }
 
         public byte MobileQueryType { get; set; }
-
-        public int MobileQuerySerial { get; set; }
 
         internal int ReadMobileQuery(IData data)
         {
@@ -14,7 +15,7 @@
 
             MobileQueryType = data.ReadByte(5);
 
-            MobileQuerySerial = data.ReadInt(6);
+            Serial = data.ReadInt(6);
 
             return 10;
         }

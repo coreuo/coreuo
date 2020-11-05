@@ -2,7 +2,7 @@
 
 namespace Shard.Message.Domain.Incoming
 {
-    public interface IMoveRequest : IMove
+    public interface IMoveRequest : INumber
     {
         public byte MoveDirection { get; set; }
 
@@ -12,7 +12,7 @@ namespace Shard.Message.Domain.Incoming
         {
             MoveDirection = data.ReadByte(1);
 
-            MoveNumber = data.ReadByte(2);
+            Number = data.ReadByte(2);
 
             MoveKey = data.ReadInt(3);
 
