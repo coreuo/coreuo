@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using Shard.Mobiles.Domain;
+﻿using Shard.Mobiles.Domain;
 
 namespace Shard.Mobiles
 {
-    public static class Handlers<TServer, TMobile, TItem>
-        where TServer : IServer<TServer, TItem>
-        where TMobile : IMobile<TItem>
-        where TItem : IItem
+    public static class Handlers<TServer, TMobile, TItem, TEntity>
+        where TServer : IServer<TServer, TItem, TEntity>
+        where TMobile : TEntity, IMobile<TItem>
+        where TItem : TEntity, IItem<TItem>
+        where TEntity : IEntity<TItem>
     {
         public static void Human(TServer server, TMobile mobile)
         {
@@ -24,11 +24,11 @@ namespace Shard.Mobiles
 
             mobile.LocationY = 621;
 
-            mobile.LocationZ = 0xD8;
+            mobile.LocationZ = -40;
 
             mobile.Direction = 132;
 
-            mobile.Hue = -31745;
+            mobile.Hue = 0x83FF;
 
             mobile.StatusFlags = 0x50;
 
@@ -98,14 +98,9 @@ namespace Shard.Mobiles
 
             mobile.Notoriety = 3;
 
-            mobile.Items = new List<TItem>
-            {
-                server.CreateItem(server.Backpack, (_,b) =>
-                {
-                    server.AddItem(b, server.CreateItem(server.Robe));
+            server.AddItem(mobile,
 
-                    server.AddItem(b, server.CreateItem(server.Shirt));
-                }),
+                server.CreateItem(server.Backpack, (_, b) => server.AddItem(b, server.CreateItem(server.Robe), server.CreateItem(server.Shirt))),
 
                 server.CreateItem(server.LeatherChest),
 
@@ -118,7 +113,7 @@ namespace Shard.Mobiles
                 server.CreateItem(server.Shoes),
 
                 server.CreateItem(server.FirstFace)
-            };
+            );
         }
     }
 }

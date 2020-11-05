@@ -17,6 +17,11 @@ namespace Shard.Message.Domain
             return Value[Offset + offset];
         }
 
+        internal sbyte ReadSByte(int offset)
+        {
+            return (sbyte)Value[Offset + offset];
+        }
+
         internal byte[] ReadByteArray(int offset, int length)
         {
             var result = new byte[length];
@@ -29,6 +34,11 @@ namespace Shard.Message.Domain
         internal short ReadShort(int offset)
         {
             return (short)((Value[Offset + offset] << 8) | Value[Offset + offset + 1]);
+        }
+
+        internal ushort ReadUShort(int offset)
+        {
+            return (ushort)((Value[Offset + offset] << 8) | Value[Offset + offset + 1]);
         }
 
         internal int ReadInt(int offset)
@@ -52,6 +62,11 @@ namespace Shard.Message.Domain
         internal void Write(int offset, byte value)
         {
             Value[Offset + offset] = value;
+        }
+
+        internal void Write(int offset, sbyte value)
+        {
+            Value[Offset + offset] = (byte)value;
         }
 
         internal void Write(int offset, byte[] value)

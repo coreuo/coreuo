@@ -2,34 +2,35 @@
 
 namespace Shard.Message.Domain.Outgoing
 {
-    public interface IEntityContentItem :
+    public interface IEntityContentItem<out TEntity> :
         ISerial,
         IItemId,
         IAmount,
-        ILocation,
-        IHue
+        ITarget,
+        IHue,
+        IGridIndex,
+        IParent<TEntity>
+        where TEntity : ISerial
     {
-        byte GridIndex { get; }
-
-        internal void WriteEntityContentItem(int entitySerial, int currentSize, IData data)
+        internal void WriteEntityContentItem(int offset, int currentSize, IData data)
         {
-            data.Write(5 + currentSize, Serial);
+            data.Write(offset + currentSize, Serial);
 
-            data.Write(5 + currentSize + 4, ItemId);
+            data.Write(offset + currentSize + 4, ItemId);
 
-            data.Write(5 + currentSize + 6, (byte)0);
+            data.Write(offset + currentSize + 6, (byte)0);
 
-            data.Write(5 + currentSize + 7, Amount);
+            data.Write(offset + currentSize + 7, Amount);
 
-            data.Write(5 + currentSize + 9, LocationX);
+            data.Write(offset + currentSize + 9, LocationX);
 
-            data.Write(5 + currentSize + 11, LocationY);
+            data.Write(offset + currentSize + 11, LocationY);
 
-            data.Write(5 + currentSize + 13, GridIndex);
+            data.Write(offset + currentSize + 13, GridIndex);
 
-            data.Write(5 + currentSize + 14, entitySerial);
+            data.Write(offset + currentSize + 14, Parent.Serial);
 
-            data.Write(5 + currentSize + 18, Hue);
+            data.Write(offset + currentSize + 18, Hue);
         }
     }
 }

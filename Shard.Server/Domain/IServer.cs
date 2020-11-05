@@ -3,15 +3,14 @@ using System.Collections.Generic;
 
 namespace Shard.Server.Domain
 {
-    public interface IServer<in TServer, TSave, in TState, TEntity, TMobile, TItem>
-        where TServer : IServer<TServer, TSave, TState, TEntity, TMobile, TItem>
-        where TState : IState<TMobile, TItem>
-        where TEntity : IEntity
-        where TMobile : IMobile<TItem>
-        where TItem : IItem<TItem>
+    public interface IServer<in TServer, in TState, in TMobile, in TItem, TEntity, in TTarget>
+        where TServer : IServer<TServer, TState, TMobile, TItem, TEntity, TTarget>
+        where TState : IState<TMobile, TItem, TEntity>
+        where TEntity : IEntity<TItem, TEntity>
+        where TMobile : IMobile<TItem, TEntity>
+        where TItem : IItem<TItem, TEntity>
+        where TTarget : ITarget
     {
-        TSave Save { get; }
-
         HashSet<TEntity> Entities { get; }
 
         Queue<int> MobileSerialPool { get; }
@@ -62,13 +61,13 @@ namespace Shard.Server.Domain
 
         //Action<TState, TMobile> ServerChange { get; }
 
-        Action<TState, TEntity> AttributeInfo { get; }
+        Action<TState, TEntity> EntityInfo { get; }
 
-        Action<TState, TEntity> AttributeList { get; }
+        Action<TState, TEntity> EntityAttributes { get; }
 
         //Action<TState, TMobile> MobileAttributes { get; }
 
-        Action<TState, TMobile> OpenPaperDoll { get; }
+        Action<TState, TMobile> PaperDollOpen { get; }
 
         Action<TState, TMobile> ProfileResponse { get; }
 
@@ -83,5 +82,21 @@ namespace Shard.Server.Domain
         Action<TServer, TMobile> Human { get; }
 
         //Action<TServer, TItem>[] GetItemTypes(TItem item);
+
+        Action<TState, TEntity> EntityRemove { get; }
+
+        Action<TState, TTarget> SoundPlay { get; }
+
+        Action<TEntity, TItem> RemoveItem { get; }
+
+        Action<TState> ItemPlaceApproved { get; }
+
+        Action<TState, TItem> EntityContentItem { get; }
+
+        void AddItem(TEntity parent, params TItem[] items);
+
+        Action<TState, TItem> ItemWorld { get; }
+
+        Action<TState, TItem> ItemWearUpdate { get; }
     }
 }

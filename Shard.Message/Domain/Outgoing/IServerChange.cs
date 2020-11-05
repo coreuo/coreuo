@@ -1,9 +1,7 @@
-﻿using Shard.Message.Domain.Shared;
-
-namespace Shard.Message.Domain.Outgoing
+﻿namespace Shard.Message.Domain.Outgoing
 {
     public interface IServerChange :
-        ILocation,
+        ITarget,
         Shared.IMap
     {
         /*public byte FirstUnknownServerChange { get; set; }

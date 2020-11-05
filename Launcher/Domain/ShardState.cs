@@ -9,17 +9,17 @@ namespace Launcher.Domain
 {
     using NetworkStateHandlers = Network.State.Handlers<Data>;
     using CompressionHandlers = Shard.Message.Compression.Handlers<ShardState, Data>;
-    using ShardMessageHandlers = Shard.Message.Handlers<ShardServer, ShardState, Data, Entity, Mobile, City, Item, Skill, Attribute>;
+    using ShardMessageHandlers = Shard.Message.Handlers<ShardServer, ShardState, Data, Entity, Mobile, City, Item, Skill, Attribute, Target>;
 
     public class ShardState :
         Network.Listener.Domain.ISocket,
         Network.State.Domain.IReceiver<Data>,
         Network.State.Domain.ISender<Data>,
         Network.Server.Domain.IState<Data>,
-        Shard.Message.Domain.IState<Data, Mobile, Item, Skill>,
+        Shard.Message.Domain.IState<Data, Mobile, Item, Entity, Attribute, Skill>,
         Shard.Message.Extended.Domain.IState<Data>,
         Shard.Message.Compression.Domain.IState<Data>,
-        Shard.Server.Domain.IState<Mobile, Item>
+        Shard.Server.Domain.IState<Mobile, Item, Entity>
     {
         public int Id { get; set; }
 
@@ -112,9 +112,9 @@ namespace Launcher.Domain
 
         public Mobile Mobile { get; set; }
 
-        [NotMapped] public List<int> AttributesQuerySerialList { get; set; } = new List<int>();
+        [NotMapped] public List<int> EntityQuerySerialList { get; set; } = new List<int>();
 
-        public int DoubleClickSerial { get; set; }
+        public int EntityUseSerial { get; set; }
 
         [NotMapped] public byte PaperDollFlags { get; set; } = 0x3;
 
@@ -128,12 +128,40 @@ namespace Launcher.Domain
 
         public Action<string> Output => text => Console.WriteLine($"[{DateTime.Now:O}] {Identity}.{text}");
 
-        public byte RequestProfileMode { get; set; }
+        public byte ProfileRequestMode { get; set; }
 
-        public int RequestProfileSerial { get; set; }
+        public int ProfileRequestSerial { get; set; }
 
-        public short RequestProfileEditType { get; set; }
+        public short ProfileRequestEditType { get; set; }
 
-        public string RequestProfileEditText { get; set; }
+        public string ProfileRequestEditText { get; set; }
+
+        public int ItemPickSerial { get; set; }
+
+        public ushort ItemPickAmount { get; set; }
+
+        public byte SoundMode { get; } = 1;
+
+        public ushort SoundId { get; set; }
+
+        public ushort SoundVolume { get; set; } = 0;
+
+        public int ItemPlaceSerial { get; set; }
+
+        public ushort ItemPlaceLocationX { get; set; }
+
+        public ushort ItemPlaceLocationY { get; set; }
+
+        public sbyte ItemPlaceLocationZ { get; set; }
+
+        public byte ItemPlaceGridIndex { get; set; }
+
+        public int ItemPlaceContainerSerial { get; set; }
+
+        public int ItemWearSerial { get; set; }
+
+        public byte ItemWearLayer { get; set; }
+
+        public int ItemWearParentSerial { get; set; }
     }
 }

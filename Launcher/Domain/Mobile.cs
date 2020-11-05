@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
@@ -8,14 +7,12 @@ namespace Launcher.Domain
     public class Mobile : Entity,
         Shard.Message.Domain.IMobile<Item, Skill>,
         Shard.Message.Extended.Domain.IMobile<Map, MapPatch>,
-        Shard.Server.Domain.IMobile<Item>,
+        Shard.Server.Domain.IMobile<Item, Entity>,
         Shard.Mobiles.Domain.IMobile<Item>
     {
         [NotMapped] public int Pattern { get; set; }
 
         public int Slot { get; set; }
-
-        public string Name { get; set; }
 
         [NotMapped] public string Password { get; set; }
 
@@ -37,19 +34,11 @@ namespace Launcher.Domain
 
         [NotMapped] public byte UnknownMobileUpdateFirst { get; set; }
 
-        public ushort LocationX { get; set; }
-
-        public ushort LocationY { get; set; }
-
         [NotMapped] public short UnknownMobileUpdateSecond { get; set; }
 
         [NotMapped] public byte LoginUnknownSecond { get; set; } = 0xFF;
 
-        public byte LocationZ { get; set; }
-
-        public byte Direction { get; set; }
-
-        public short Hue { get; set; }
+        public ushort Hue { get; set; }
 
         [NotMapped] public byte StatusFlags { get; set; } = 0x50;
 
@@ -254,12 +243,5 @@ namespace Launcher.Domain
         [NotMapped] public string ProfileBody { get; set; } = string.Empty;
 
         [NotMapped] public string ProfileFooter { get; set; } = "This account is 689 days old.";
-
-        [NotMapped] public new Access<Mobile> Access { get; set; }
-
-        public Mobile(ShardSave save) : base(save)
-        {
-            Access = save.DerivedEntity(this).Flush();
-        }
     }
 }

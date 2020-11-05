@@ -5,7 +5,7 @@ namespace Shard.Message.Domain.Outgoing
     public interface ILoginConfirm :
         ISerial,
         IBody,
-        ILocation,
+        ITarget,
         IDirection
     {
         public int LoginUnknownFirst { get; set; }

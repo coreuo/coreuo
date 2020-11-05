@@ -1,6 +1,6 @@
-﻿namespace Shard.Message.Domain.Shared
+﻿namespace Shard.Server.Domain
 {
-    public interface ILocation
+    public interface ITarget
     {
         public ushort LocationX { get; set; }
 

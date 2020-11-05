@@ -1,7 +1,6 @@
 ﻿namespace Shard.Mobiles.Domain
 {
-    public interface IItem<TItem> :
-        IEntity<TItem>
+    public interface IEntity<TItem>
         where TItem : IItem<TItem>
     {
     }

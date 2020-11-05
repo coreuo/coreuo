@@ -4,7 +4,7 @@ using Shard.Message.Domain.Outgoing;
 
 namespace Shard.Message.Domain
 {
-    public interface IState<TData, TMobile, TItem, TSkillInfo> :
+    public interface IState<TData, TMobile, TItem, TEntity, TAttribute, TSkillInfo> :
         IAccountLogin,
         IChatRequest,
         IClientSeed,
@@ -21,13 +21,19 @@ namespace Shard.Message.Domain
         IWarMode,
         IClientType,
         ILoginComplete,
-        IAttributesQuery,
-        IDoubleClick,
-        IOpenPaperDoll,
-        IRequestProfile
+        IEntityQuery,
+        IEntityUse,
+        IPaperDollOpen,
+        IProfileRequest,
+        IItemPick,
+        ISoundPlay,
+        IItemPlace,
+        IItemWear
         where TData : IData, new()
         where TMobile : IMobile<TItem, TSkillInfo>
-        where TItem : IItem
+        where TAttribute : IAttribute
+        where TItem : IItem<TAttribute, TItem, TEntity>
+        where TEntity : IEntity<TAttribute, TItem, TEntity>
         where TSkillInfo : ISkill
     {
         Func<TData> GetBuffer { get; }

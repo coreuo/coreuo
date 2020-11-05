@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Shard.Message.Domain.Outgoing
 {
-    public interface IAttributeList<TAttribute> : IAttributeInfo<TAttribute>
+    public interface IEntityAttributes<TAttribute> : IEntityInfo<TAttribute>
         where TAttribute : IAttribute
     {
-        internal void WriteAttributeList(IData data)
+        internal void WriteEntityAttributes(IData data)
         {
             data.Write(3, (short)1);
 

@@ -2,9 +2,10 @@
 
 namespace Shard.Server.Domain
 {
-    public interface IState<TMobile, TItem>
-        where TMobile : IMobile<TItem>
-        where TItem : IItem<TItem>
+    public interface IState<TMobile, TItem, TEntity>
+        where TMobile : IMobile<TItem, TEntity>
+        where TItem : IItem<TItem, TEntity>
+        where TEntity : IEntity<TItem, TEntity>
     {
         List<TMobile> Characters { get; set; }
 
@@ -14,12 +15,30 @@ namespace Shard.Server.Domain
 
         public int MobileQuerySerial { get; set; }
 
-        List<int> AttributesQuerySerialList { get; set; }
+        List<int> EntityQuerySerialList { get; set; }
 
-        int DoubleClickSerial { get; set; }
+        int EntityUseSerial { get; set; }
 
-        byte RequestProfileMode { get; set; }
+        byte ProfileRequestMode { get; set; }
 
-        int RequestProfileSerial { get; set; }
+        int ProfileRequestSerial { get; set; }
+
+        int ItemPickSerial { get; set; }
+
+        ushort SoundId { get; set; }
+
+        ushort ItemPlaceLocationX { get; set; }
+
+        ushort ItemPlaceLocationY { get; set; }
+
+        sbyte ItemPlaceLocationZ { get; set; }
+
+        byte ItemPlaceGridIndex { get; set; }
+
+        int ItemPlaceContainerSerial { get; set; }
+
+        int ItemWearSerial { get; set; }
+
+        int ItemWearParentSerial { get; set; }
     }
 }

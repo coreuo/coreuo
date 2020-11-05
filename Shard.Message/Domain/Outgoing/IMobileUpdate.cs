@@ -7,7 +7,7 @@ namespace Shard.Message.Domain.Outgoing
         IBody,
         IHue,
         IStatusFlags,
-        ILocation,
+        ITarget,
         IDirection
     {
         public byte UnknownMobileUpdateFirst { get; set; }

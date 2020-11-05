@@ -12,10 +12,8 @@ namespace Shard.Save
 {
     public static class Extensions
     {
-        public static (Domain.Save<TSave, TServer, TProperty>, TType) AddCustom<TSave, TServer, TType, TValue, TProperty>(this (Domain.Save<TSave, TServer, TProperty> save, TType type) context, Expression<Func<TType, TValue>> property)
-            where TServer : class, Domain.IServer<TServer, TSave, TProperty>
-            where TSave : Domain.Save<TSave, TServer, TProperty>, new()
-            where TProperty : Domain.IProperty, new()
+        public static (Domain.Save<TSave>, TType) AddCustom<TSave, TType, TValue>(this (Domain.Save<TSave> save, TType type) context, Expression<Func<TType, TValue>> property)
+            where TSave : Domain.Save<TSave>, new()
         {
             var expression = (MemberExpression)property.Body;
 

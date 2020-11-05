@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Launcher.Domain;
 
-var shardSave = new ShardSave();
+//var shardSave = new ShardSave();
 
-var shardServer = shardSave.Load();
+var shardServer = new ShardServer(); //shardSave.Load();
 
 var loginServer = new LoginServer(shardServer);
 
@@ -17,6 +17,6 @@ while (true)
     {
         await Task.Delay(1000);
 
-        shardSave.Process();
+        //shardSave.Process();
     }
 }

@@ -10,11 +10,11 @@ namespace Launcher.Domain
     using NetworkListenerHandlers = Network.Listener.Handlers<ShardState>;
     using NetworkStateHandlers = Network.State.Handlers<Data>;
     using NetworkServerHandlers = Network.Server.Handlers<ShardState, Data>;
-    using ShardMessageHandlers = Shard.Message.Handlers<ShardServer, ShardState, Data, Entity, Mobile, City, Item, Skill, Attribute>;
+    using ShardMessageHandlers = Shard.Message.Handlers<ShardServer, ShardState, Data, Entity, Mobile, City, Item, Skill, Attribute, Target>;
     using ShardExtendedMessageHandlers = Shard.Message.Extended.Handlers<ShardServer, ShardState, Data, Mobile, Map, MapPatch>;
-    using ShardServerHandlers = Shard.Server.Handlers<ShardServer,ShardSave,ShardState,Entity,Mobile,Item>;
+    using ShardServerHandlers = Shard.Server.Handlers<ShardServer,ShardState,Mobile,Item, Entity, Target>;
     using ItemType = Shard.Items.Handlers<ShardServer, Item>;
-    using MobileType = Shard.Mobiles.Handlers<ShardServer, Mobile, Item>;
+    using MobileType = Shard.Mobiles.Handlers<ShardServer, Mobile, Item, Entity>;
 
     public class ShardServer :
         Login.Message.Domain.IShard,
@@ -23,31 +23,18 @@ namespace Launcher.Domain
         Thread.Runner.Domain.IThread,
         Network.Listener.Domain.IListener<ShardState>,
         Network.Server.Domain.IServer<ShardState, Data>,
-        Shard.Message.Domain.IServer<ShardState, Data, Mobile, City, Item, Skill>,
+        Shard.Message.Domain.IServer<ShardState, Data, Mobile, City, Item, Entity, Attribute, Skill>,
         Shard.Message.Extended.Domain.IServer<ShardState, Data>,
-        Shard.Server.Domain.IServer<ShardServer, ShardSave, ShardState, Entity, Mobile, Item>,
-        Shard.Mobiles.Domain.IServer<ShardServer, Item>,
-        Shard.Save.Domain.IServer<ShardServer, ShardSave, Property>
+        Shard.Server.Domain.IServer<ShardServer, ShardState, Mobile, Item, Entity, Target>,
+        Shard.Mobiles.Domain.IServer<ShardServer, Item, Entity>
     {
         public int Id { get; set; }
 
-        public string Identity
-        {
-            get => Access.Get(s => s.Identity);
-            set => Access.Set(s => s.Identity, value);
-        }
+        public string Identity { get; set; } = nameof(ShardServer);
 
-        public string IpAddress
-        {
-            get => Access.Get(s => s.IpAddress);
-            set => Access.Set(s => s.IpAddress, value);
-        }
+        public string IpAddress { get; set; } = "127.0.0.1";
 
-        public int Port
-        {
-            get => Access.Get(s => s.Port);
-            set => Access.Set(s => s.Port, value);
-        }
+        public int Port { get; set; } = 12594;
 
         [NotMapped] public bool Locked { get; set; }
 
@@ -63,23 +50,11 @@ namespace Launcher.Domain
 
         [NotMapped] public bool Listening { get; set; }
 
-        public List<ShardState> States
-        {
-            get => Access.Get(s => s.States);
-            set => Access.Set(s => s.States, value);
-        }
+        public List<ShardState> States { get; set; } = new List<ShardState>();
 
-        public int Percentage
-        {
-            get => Access.Get(s => s.Percentage);
-            set => Access.Set(s => s.Percentage, value);
-        }
+        public int Percentage { get; set; }
 
-        public int TimeZone
-        {
-            get => Access.Get(s => s.TimeZone);
-            set => Access.Set(s => s.TimeZone, value);
-        }
+        public int TimeZone { get; set; }
 
         [NotMapped] public int AuthorizationId { get; set; }
 
@@ -140,33 +115,27 @@ namespace Launcher.Domain
 
         public Action<ShardState, Mobile> CharacterLogin => (state, mobile) => ShardServerHandlers.CharacterLogin(this, state, mobile);
 
-        public Action<ShardState> AttributesQuery => state => ShardServerHandlers.AttributesQuery(this, state);
+        public Action<ShardState> EntityQuery => state => ShardServerHandlers.EntityQuery(this, state);
 
-        public Action<ShardState> DoubleClick => state => ShardServerHandlers.DoubleClick(this, state);
+        public Action<ShardState> EntityUse => state => ShardServerHandlers.EntityUse(this, state);
 
-        public Action<ShardState> RequestProfile => state => ShardServerHandlers.RequestProfile(this, state);
+        public Action<ShardState> ProfileRequest => state => ShardServerHandlers.ProfileRequest(this, state);
+
+        public Action<ShardState> ItemPick => state => ShardServerHandlers.ItemPick(this, state);
+
+        public Action<ShardState> ItemPlace => state => ShardServerHandlers.ItemPlace(this, state);
+
+        public Action<ShardState> ItemWear => state => ShardServerHandlers.ItemWear(this, state);
 
         public Action<ShardState> ClientLanguage => state => ShardServerHandlers.ClientLanguage(this, state);
 
-        public HashSet<Entity> Entities
-        {
-            get => Access.Get(s => s.Entities);
-            set => Access.Set(s => s.Entities, value);
-        }
+        public HashSet<Entity> Entities { get; set; } = new HashSet<Entity>();
 
-        public Queue<int> MobileSerialPool
-        {
-            get => Access.Get(s => s.MobileSerialPool);
-            set => Access.Set(s => s.MobileSerialPool, value);
-        }
+        public Queue<int> MobileSerialPool { get; set; } = new Queue<int>();
 
         [NotMapped] public int MaximumMobileSerial { get; set; }
 
-        public Queue<int> ItemSerialPool
-        {
-            get => Access.Get(s => s.ItemSerialPool);
-            set => Access.Set(s => s.ItemSerialPool, value);
-        }
+        public Queue<int> ItemSerialPool { get; set; } = new Queue<int>();
 
         [NotMapped] public int MaximumItemSerial { get; set; } = 0x40000000;
 
@@ -210,13 +179,13 @@ namespace Launcher.Domain
 
         //public Action<ShardState, Mobile> ServerChange => ShardMessageHandlers.ServerChange;
 
-        public Action<ShardState, Entity> AttributeInfo => ShardMessageHandlers.AttributeInfo;
+        public Action<ShardState, Entity> EntityInfo => ShardMessageHandlers.EntityInfo;
 
-        public Action<ShardState, Entity> AttributeList => ShardMessageHandlers.AttributeList;
+        public Action<ShardState, Entity> EntityAttributes => ShardMessageHandlers.EntityAttributes;
 
         //public Action<ShardState, Mobile> MobileAttributes => ShardMessageHandlers.MobileAttributes;
 
-        public Action<ShardState, Mobile> OpenPaperDoll => ShardMessageHandlers.OpenPaperDoll;
+        public Action<ShardState, Mobile> PaperDollOpen => ShardMessageHandlers.PaperDollOpen;
 
         public Action<ShardState, Mobile> ProfileResponse => ShardMessageHandlers.ProfileResponse;
 
@@ -230,11 +199,17 @@ namespace Launcher.Domain
 
         public Action<ShardServer, Mobile> Human => MobileType.Human;
 
+        public Action<ShardState, Entity> EntityRemove => ShardMessageHandlers.EntityRemove;
+
         //public Action<ShardServer, Item>[] GetItemTypes(Item item) => ShardServerHandlers.GetItemTypes(item);
 
         public Item CreateItem(params Action<ShardServer, Item>[] types) => ShardServerHandlers.CreateItem(this, types);
 
-        public void AddItem(Item parent, Item child) => ShardServerHandlers.AddItem(this, parent, child);
+        public void AddItem(Entity parent, params Item[] items) => ShardServerHandlers.AddItem(this, parent, items);
+
+        public Action<ShardState, Item> ItemWorld => ShardMessageHandlers.ItemWorld;
+
+        public Action<ShardState, Item> ItemWearUpdate => ShardMessageHandlers.ItemWearUpdate;
 
         public Action<ShardServer, Item> Backpack => ItemType.Backpack;
 
@@ -250,23 +225,12 @@ namespace Launcher.Domain
 
         public Action<ShardServer, Item> FirstFace => ItemType.FirstFace;
 
-        [NotMapped] public ShardSave Save => Access.Save;
+        public Action<ShardState, Target> SoundPlay => ShardMessageHandlers.SoundPlay;
 
-        [NotMapped] public Access<ShardServer> Access { get; set; }
+        public Action<Entity, Item> RemoveItem => (parent, item) => ShardServerHandlers.RemoveItem(this, parent, item);
 
-        public ShardServer(ShardSave save)
-        {
-            Access = save.BaseEntity(this)
-                .Property(s => s.Identity, nameof(ShardServer))
-                .Property(s => s.IpAddress, "127.0.0.1")
-                .Property(s => s.Port, 12594)
-                .Property(s => s.States, new List<ShardState>())
-                .Property(s => s.Percentage)
-                .Property(s => s.TimeZone)
-                .Property(s => s.Entities, new HashSet<Entity>())
-                .Property(s => s.MobileSerialPool, new Queue<int>())
-                .Property(s => s.ItemSerialPool, new Queue<int>())
-                .Flush();
-        }
+        public Action<ShardState> ItemPlaceApproved => ShardMessageHandlers.ItemPlaceApproved;
+
+        public Action<ShardState, Item> EntityContentItem => ShardMessageHandlers.EntityContentItem;
     }
 }

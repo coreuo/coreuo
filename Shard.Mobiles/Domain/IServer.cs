@@ -2,13 +2,14 @@
 
 namespace Shard.Mobiles.Domain
 {
-    public interface IServer<TServer, TItem>
-        where TServer : IServer<TServer, TItem>
-        where TItem : IItem
+    public interface IServer<TServer, TItem, in TEntity>
+        where TServer : IServer<TServer, TItem, TEntity>
+        where TItem : IItem<TItem>
+        where TEntity : IEntity<TItem>
     {
         TItem CreateItem(params Action<TServer, TItem>[] types);
 
-        void AddItem(TItem parent, TItem child);
+        void AddItem(TEntity parent, params TItem[] items);
 
         Action<TServer, TItem> Backpack { get; }
 

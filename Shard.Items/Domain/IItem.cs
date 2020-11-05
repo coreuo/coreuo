@@ -8,6 +8,6 @@
 
         short EntityDisplayId { get; set; }
 
-        short Hue { get; set; }
+        ushort Hue { get; set; }
     }
 }

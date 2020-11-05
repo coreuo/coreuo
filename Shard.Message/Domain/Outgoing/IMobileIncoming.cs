@@ -7,12 +7,12 @@ namespace Shard.Message.Domain.Outgoing
     public interface IMobileIncoming<TMobileEquip> :
         ISerial,
         IBody,
-        ILocation,
+        ITarget,
         IDirection,
         IHue,
         IStatusFlags,
         INotoriety
-        where TMobileEquip : IMobileEquip
+        where TMobileEquip : IMobileItem
     {
         public List<TMobileEquip> Items { get; set; }
 
@@ -36,7 +36,7 @@ namespace Shard.Message.Domain.Outgoing
 
             data.Write(18, Notoriety);
 
-            foreach (var (equip, index) in Items.Select((e,i) => (e,i))) equip.WriteMobileEquipment(EquipmentSize(index), data);
+            foreach (var (equip, index) in Items.Select((e,i) => (e,i))) equip.WriteMobileItem(EquipmentSize(index), data);
 
             data.Write(19 + EquipmentSize() , 0);
         }
@@ -45,7 +45,7 @@ namespace Shard.Message.Domain.Outgoing
         {
             var filtered = index == null ? Items : Items.Take(index.Value);
 
-            return filtered.Sum(e => e.HasHue() ? 9 : 7);
+            return filtered.Sum(e => e.Hue > 0 ? 9 : 7);
         }
     }
 }

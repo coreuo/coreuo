@@ -4,17 +4,19 @@ using Shard.Message.Domain.Outgoing;
 
 namespace Shard.Message.Domain
 {
-    public interface IServer<in TState, in TData, TMobile, TCity, TItem, TSkillInfo> :
+    public interface IServer<in TState, in TData, TMobile, TCity, TItem, TEntity, TAttribute, TSkillInfo> :
         ICityList<TCity>,
         ICharacterFeatures,
         ICurrentServerTime,
         IGlobalLight,
         ISupportedFeatures
-        where TState : IState<TData, TMobile, TItem, TSkillInfo>
+        where TState : IState<TData, TMobile, TItem, TEntity, TAttribute, TSkillInfo>
         where TData : IData, new()
         where TMobile : IMobile<TItem, TSkillInfo>
         where TCity : ICityInfo
-        where TItem : IItem
+        where TItem : IItem<TAttribute, TItem, TEntity>
+        where TEntity : IEntity<TAttribute, TItem, TEntity>
+        where TAttribute : IAttribute
         where TSkillInfo : ISkill
     {
         public Action<TState> ClientSeed { get; }
@@ -43,11 +45,17 @@ namespace Shard.Message.Domain
 
         public Action<TState, TMobile> CharacterLogin { get; }
 
-        public Action<TState> AttributesQuery { get; }
+        public Action<TState> EntityQuery { get; }
 
-        public Action<TState> DoubleClick { get; }
+        public Action<TState> EntityUse { get; }
 
-        public Action<TState> RequestProfile { get; }
+        public Action<TState> ProfileRequest { get; }
+
+        public Action<TState> ItemPick { get; }
+
+        public Action<TState> ItemPlace { get; }
+
+        public Action<TState> ItemWear { get; }
 
         Action<string> Output { get; }
 
@@ -68,9 +76,12 @@ namespace Shard.Message.Domain
                 0x02 => Process(state.ReadMoveRequest, MoveRequest),
                 0xE1 => Process(state.ReadClientType, ClientType),
                 0x5D => ProcessWith(BeforeCharacterLogin(state, data.ReadInt(65)), (m, d) => m.ReadLoginCharacter(d), CharacterLogin),
-                0xD6 => Process(state.ReadAttributesQuery, AttributesQuery),
-                0x06 => Process(state.ReadDoubleClick, DoubleClick),
-                0xB8 => Process(state.ReadRequestProfile, RequestProfile),
+                0xD6 => Process(state.ReadEntityQuery, EntityQuery),
+                0x06 => Process(state.ReadEntityUse, EntityUse),
+                0xB8 => Process(state.ReadProfileRequest, ProfileRequest),
+                0x07 => Process(state.ReadItemPick, ItemPick),
+                0x08 => Process(state.ReadItemPlace, ItemPlace),
+                0x13 => Process(state.ReadItemWear, ItemWear),
                 _ => throw new InvalidOperationException($"Invalid message 0x{id:X2}.")
             };
 

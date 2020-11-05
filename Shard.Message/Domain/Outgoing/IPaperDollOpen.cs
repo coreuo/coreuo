@@ -1,10 +1,10 @@
 ﻿namespace Shard.Message.Domain.Outgoing
 {
-    public interface IOpenPaperDoll
+    public interface IPaperDollOpen
     {
         byte PaperDollFlags { get; set; }
 
-        internal void WriteOpenPaperDoll(IData data)
+        internal void WritePaperDollOpen(IData data)
         {
             data.Write(65, PaperDollFlags);
         }

@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-
-namespace Shard.Mobiles.Domain
+﻿namespace Shard.Mobiles.Domain
 {
-    public interface IMobile<TItem>
-        where TItem : IItem
+    public interface IMobile<TItem> :
+        IEntity<TItem>
+        where TItem : IItem<TItem>
     {
         string Name { get; set; }
         short CurrentHitPoints { get; set; }
@@ -13,9 +12,9 @@ namespace Shard.Mobiles.Domain
         short Body { get; set; }
         ushort LocationX { get; set; }
         ushort LocationY { get; set; }
-        byte LocationZ { get; set; }
+        sbyte LocationZ { get; set; }
         byte Direction { get; set; }
-        short Hue { get; set; }
+        ushort Hue { get; set; }
         byte StatusFlags { get; set; }
         //byte Gender { get; set; }
         byte Sex { get; set; }
@@ -80,7 +79,6 @@ namespace Shard.Mobiles.Domain
         short MaximumStaminaIncrease { get; set; }
         short MaximumManaIncrease { get; set; }
         byte Notoriety { get; set; }
-        List<TItem> Items { get; set; }
         //List<Skill> Skills { get; set; }
         //Map Map { get; set; }
         //string ProfileHeader { get; set; }

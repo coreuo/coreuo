@@ -5,16 +5,17 @@ using Shard.Message.Domain.Outgoing;
 
 namespace Shard.Message
 {
-    public static class Handlers<TServer, TState, TData, TEntity, TMobile, TCity, TItem, TSkillInfo, TAttribute>
-        where TServer : IServer<TState, TData, TMobile, TCity, TItem, TSkillInfo>
-        where TState : IState<TData, TMobile, TItem, TSkillInfo>
-        where TEntity : IEntity<TAttribute, TItem>
+    public static class Handlers<TServer, TState, TData, TEntity, TMobile, TCity, TItem, TSkillInfo, TAttribute, TTarget>
+        where TServer : IServer<TState, TData, TMobile, TCity, TItem, TEntity, TAttribute, TSkillInfo>
+        where TState : IState<TData, TMobile, TItem, TEntity, TAttribute, TSkillInfo>
+        where TEntity : IEntity<TAttribute, TItem, TEntity>
         where TData : IData, new()
         where TMobile : IMobile<TItem, TSkillInfo>
         where TCity : ICityInfo
-        where TItem : IItem
+        where TItem : IItem<TAttribute, TItem, TEntity>
         where TSkillInfo : ISkill
         where TAttribute : IAttribute
+        where TTarget : ITarget
     {
         public static void Received(TServer server, TState state, TData data)
         {
@@ -139,14 +140,14 @@ namespace Shard.Message
             state.Write(0x76, 16, mobile.WriteServerChange);
         }*/
 
-        public static void AttributeList(TState state, TEntity entity)
+        public static void EntityAttributes(TState state, TEntity entity)
         {
-            state.Write(0xD6, 15 + entity.GetAttributesSizeList().Sum(e => e.size) + 4, entity.WriteAttributeList);
+            state.Write(0xD6, 15 + entity.GetAttributesSizeList().Sum(e => e.size) + 4, entity.WriteEntityAttributes);
         }
 
-        public static void AttributeInfo(TState state, TEntity entity)
+        public static void EntityInfo(TState state, TEntity entity)
         {
-            state.Write(0xDC, 9, entity.WriteAttributeInfo);
+            state.Write(0xDC, 9, entity.WriteEntityInfo);
         }
 
         /*public static void MobileAttributes(TState state, TMobile mobile)
@@ -154,15 +155,15 @@ namespace Shard.Message
             state.Write(0x2D, 17, mobile.WriteMobileAttributes);
         }*/
 
-        public static void OpenPaperDoll(TState state, TMobile mobile)
+        public static void PaperDollOpen(TState state, TMobile mobile)
         {
             state.Write(0x88, 66, data =>
             {
                 mobile.WriteMobilePaperDoll(data);
 
-                state.WriteOpenPaperDoll(data);
+                state.WritePaperDollOpen(data);
 
-            }, writerName: nameof(state.WriteOpenPaperDoll));
+            }, writerName: nameof(state.WritePaperDollOpen));
         }
 
         public static void ProfileResponse(TState state, TMobile mobile)
@@ -178,6 +179,42 @@ namespace Shard.Message
         public static void EntityContent(TState state, TEntity entity)
         {
             state.Write(0x3C, 5 + entity.Items.Count * 20, entity.WriteEntityContent);
+        }
+
+        public static void EntityRemove(TState state, TEntity entity)
+        {
+            state.Write(0x1D, 5, entity.WriteEntityRemove);
+        }
+
+        public static void SoundPlay(TState state, TTarget target)
+        {
+            state.Write(0x54, 12, data =>
+            {
+                state.WriteSoundPlay(data);
+
+                target.WriteSoundTarget(data);
+
+            }, writerName: nameof(state.WriteSoundPlay));
+        }
+
+        public static void ItemPlaceApproved(TState state)
+        {
+            state.Write(0x29, 1, writerName: "WriteItemPlaceApproved");
+        }
+
+        public static void EntityContentItem(TState state, TItem item)
+        {
+            state.Write(0x25, 21, data => item.WriteEntityContentItem(1, 0, data), writerName: nameof(item.WriteEntityContentItem));
+        }
+
+        public static void ItemWorld(TState state, TItem item)
+        {
+            state.Write(0x1A, 14 + (item.Amount > 0 ? 2 : 0) + (item.Direction > 0 ? 1 : 0) + (item.Hue > 0 ? 2 : 0), item.WriteItemWorld);
+        }
+
+        public static void ItemWearUpdate(TState state, TItem item)
+        {
+            state.Write(0x2E, 15, item.WriteItemWearUpdate);
         }
     }
 }

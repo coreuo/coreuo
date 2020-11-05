@@ -3,12 +3,12 @@ using Shard.Message.Domain.Shared;
 
 namespace Shard.Message.Domain.Outgoing
 {
-    public interface IAttributeInfo<TAttribute> :
+    public interface IEntityInfo<TAttribute> :
         ISerial,
         IAttributes<TAttribute>
         where TAttribute : IAttribute
     {
-        internal void WriteAttributeInfo(IData data)
+        internal void WriteEntityInfo(IData data)
         {
             data.Write(1, Serial);
 
