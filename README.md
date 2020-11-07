@@ -13,6 +13,7 @@ Currently, there is only experimental version.
 - [x] move item in backpack
 - [x] wear item with character
 - [x] move item on the ground
+- [x] turn warmode on/off
 
 ## Instructions
 1) Download [Ultima Online: Kingdom Reborn](https://www.fileplanet.com/archive/p-52187/Ultima-Online-Kingdom-Reborn-Client) and install.
