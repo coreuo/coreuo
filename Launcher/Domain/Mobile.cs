@@ -40,7 +40,7 @@ namespace Launcher.Domain
 
         public ushort Hue { get; set; }
 
-        [NotMapped] public byte StatusFlags { get; set; } = 0x50;
+        [NotMapped] public byte StatusFlags { get; set; } = 0x10;
 
         public byte Gender { get; set; }
 
@@ -243,5 +243,7 @@ namespace Launcher.Domain
         [NotMapped] public string ProfileBody { get; set; } = string.Empty;
 
         [NotMapped] public string ProfileFooter { get; set; } = "This account is 689 days old.";
+
+        public byte WarMode { get; set; }
     }
 }

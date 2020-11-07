@@ -17,7 +17,9 @@ namespace Shard.Message.Domain
         IServerChange,
         IMobileAttributes,
         IMobilePaperDoll,
-        IProfileResponse
+        IProfileResponse,
+        IWarModeResponse,
+        IMobileMoving
         where TMobileEquip : IMobileItem
         where TSkillInfo : ISkill
     {

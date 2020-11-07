@@ -118,7 +118,7 @@ namespace Shard.Server
 
             server.MobileStatus(state, mobile);
 
-            server.WarMode(state);
+            server.WarModeResponse(state, mobile);
 
             server.LoginComplete(state);
 
@@ -155,6 +155,8 @@ namespace Shard.Server
 
         public static void MoveRequest(TServer server, TState state)
         {
+            state.TransferMove(state.Mobile);
+
             server.MoveResponse(state, state.Mobile);
         }
 
@@ -193,7 +195,7 @@ namespace Shard.Server
 
             server.MobileStatus(state, mobile);
 
-            server.WarMode(state);
+            server.WarModeResponse(state, mobile);
 
             server.MobileIncoming(state, mobile);
 
@@ -205,7 +207,7 @@ namespace Shard.Server
 
             server.MobileStatus(state, mobile);
 
-            server.WarMode(state);
+            server.WarModeResponse(state, mobile);
 
             server.MobileIncoming(state, mobile);
 
@@ -225,7 +227,7 @@ namespace Shard.Server
 
         public static void EntityUse(TServer server, TState state)
         {
-            var entity = (state.Serial & ~0x7FFFFFFF) == 0 ? server.Entities.Single(e => e.Serial == state.Serial) : state.Mobile;
+            var entity = (state.Serial & (1 << 31)) == 0 ? server.Entities.Single(e => e.Serial == state.Serial) : state.Mobile;
 
             Action action = entity switch
             {
@@ -299,6 +301,15 @@ namespace Shard.Server
             var item = server.Entities.OfType<TItem>().Single(e => e.Serial == state.Serial);
 
             server.MoveItem(state, parent.Items.Any(i => i.Layer == item.Layer) ? item.Parent : parent, item);
+        }
+
+        public static void WarModeRequest(TServer server, TState state)
+        {
+            state.TransferWarMode(state.Mobile);
+
+            server.WarModeResponse(state, state.Mobile);
+
+            server.MobileMoving(state, state.Mobile);
         }
     }
 }

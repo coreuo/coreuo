@@ -125,9 +125,9 @@ namespace Shard.Message
             state.Write(0xB9, 3, server.WriteSupportedFeatures);
         }
 
-        public static void WarMode(TState state)
+        public static void WarModeResponse(TState state, TMobile mobile)
         {
-            state.Write(0x72, 5, state.WriteWarMode);
+            state.Write(0x72, 5, mobile.WriteWarModeResponse);
         }
 
         public static void ExtendedData(TState state, int size, Action<TData> writer, string writerName)
@@ -215,6 +215,11 @@ namespace Shard.Message
         public static void ItemWearUpdate(TState state, TItem item)
         {
             state.Write(0x2E, 15, item.WriteItemWearUpdate);
+        }
+
+        public static void MobileMoving(TState state, TMobile mobile)
+        {
+            state.Write(0x77, 17, mobile.WriteMobileMoving);
         }
     }
 }

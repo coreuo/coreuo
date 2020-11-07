@@ -45,7 +45,7 @@ namespace Shard.Server.Domain
 
         Action<TState, TMobile> MobileStatus { get; }
 
-        Action<TState> WarMode { get; }
+        Action<TState, TMobile> WarModeResponse { get; }
 
         Action<TState> LoginComplete { get; }
 
@@ -98,6 +98,8 @@ namespace Shard.Server.Domain
         Action<TState, TItem> ItemWorld { get; }
 
         Action<TState, TItem> ItemWearUpdate { get; }
+
+        Action<TState, TMobile> MobileMoving { get; }
 
         internal void MoveItem(TState state, TEntity parent, TItem item)
         {

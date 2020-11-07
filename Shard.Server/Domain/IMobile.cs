@@ -5,6 +5,27 @@
         where TItem : IItem<TItem, TEntity>
         where TEntity : class, IEntity<TItem, TEntity>
     {
-        public string Name { get; set; }
+        string Name { get; set; }
+
+        byte WarMode { get; set; }
+
+        byte StatusFlags { get; set; }
+
+        ushort LocationX { get; set; }
+
+        ushort LocationY { get; set; }
+
+        sbyte LocationZ { get; set; }
+
+        byte Direction { get; set; }
+
+        internal void Move(int offsetX, int offsetY, int offsetZ)
+        {
+            LocationX += (ushort)offsetX;
+
+            LocationY += (ushort)offsetY;
+
+            LocationZ += (sbyte)offsetZ;
+        }
     }
 }

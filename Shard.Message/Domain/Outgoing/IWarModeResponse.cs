@@ -1,10 +1,10 @@
 ﻿namespace Shard.Message.Domain.Outgoing
 {
-    public interface IWarMode
+    public interface IWarModeResponse
     {
         byte WarMode { get; set; }
 
-        internal void WriteWarMode(IData data)
+        internal void WriteWarModeResponse(IData data)
         {
             data.Write(1, WarMode);
 

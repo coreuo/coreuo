@@ -18,7 +18,6 @@ namespace Shard.Message.Domain
         IMoveResponse,
         IPingResponse,
         ISeasonChange,
-        IWarMode,
         IClientType,
         ILoginComplete,
         IEntityQuery,
@@ -28,7 +27,8 @@ namespace Shard.Message.Domain
         IItemPick,
         ISoundPlay,
         IItemPlace,
-        IItemWear
+        IItemWear,
+        IWarModeRequest
         where TData : IData, new()
         where TMobile : IMobile<TItem, TSkillInfo>
         where TAttribute : IAttribute
