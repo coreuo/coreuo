@@ -37,6 +37,8 @@ namespace Shard.Server.Domain
 
         byte Direction { get; set; }
 
+        string SpeechText { get; set; }
+
         internal void TransferMove(TMobile mobile)
         {
             Action action = (Direction & 0xF) switch

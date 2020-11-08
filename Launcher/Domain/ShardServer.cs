@@ -131,6 +131,8 @@ namespace Launcher.Domain
 
         public Action<ShardState> SpeechRequest => state => ShardServerHandlers.SpeechRequest(this, state);
 
+        public Action<ShardState> TargetResponse => state => ShardServerHandlers.TargetResponse(this, state);
+
         public Action<ShardState> ClientLanguage => state => ShardServerHandlers.ClientLanguage(this, state);
 
         public HashSet<Entity> Entities { get; set; } = new HashSet<Entity>();
@@ -203,6 +205,8 @@ namespace Launcher.Domain
 
         public Action<ShardServer, Mobile> Human => MobileType.Human;
 
+        public Action<ShardServer, Mobile> Rat => MobileType.Rat;
+
         public Action<ShardState, Entity> EntityRemove => ShardMessageHandlers.EntityRemove;
 
         //public Action<ShardServer, Item>[] GetItemTypes(Item item) => ShardServerHandlers.GetItemTypes(item);
@@ -220,6 +224,8 @@ namespace Launcher.Domain
         public Action<ShardState, Mobile> MobileMoving => ShardMessageHandlers.MobileMoving;
 
         public Action<ShardState, Mobile> SpeechResponse => ShardMessageHandlers.SpeechResponse;
+
+        public Action<ShardState> TargetRequest => ShardMessageHandlers.TargetRequest;
 
         public Action<ShardServer, Item> Backpack => ItemType.Backpack;
 

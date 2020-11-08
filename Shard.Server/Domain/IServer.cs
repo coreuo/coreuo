@@ -81,6 +81,8 @@ namespace Shard.Server.Domain
 
         Action<TServer, TMobile> Human { get; }
 
+        Action<TServer, TMobile> Rat { get; }
+
         //Action<TServer, TItem>[] GetItemTypes(TItem item);
 
         Action<TState, TEntity> EntityRemove { get; }
@@ -102,6 +104,8 @@ namespace Shard.Server.Domain
         Action<TState, TMobile> MobileMoving { get; }
 
         Action<TState, TMobile> SpeechResponse { get; }
+
+        Action<TState> TargetRequest { get; }
 
         internal void MoveItem(TState state, TEntity parent, TItem item)
         {

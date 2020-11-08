@@ -1,133 +1,51 @@
-﻿using System;
-using System.Text;
-using Shard.Message.Domain.Incoming;
+﻿using Shard.Message.Domain.Incoming;
 
 namespace Shard.Message.Domain
 {
     public interface IData : IExtendedData
     {
-        public byte[] Value { get; }
-
         public int Offset { get; set; }
 
         public int Length { get; set; }
 
-        internal byte ReadByte(int offset)
-        {
-            return Value[Offset + offset];
-        }
+        byte ReadByte(int offset);
 
-        internal sbyte ReadSByte(int offset)
-        {
-            return (sbyte)Value[Offset + offset];
-        }
+        sbyte ReadSByte(int offset);
 
-        internal byte[] ReadByteArray(int offset, int length)
-        {
-            var result = new byte[length];
+        byte[] ReadByteArray(int offset, int length);
 
-            Array.Copy(Value, Offset + offset, result, 0, length);
+        short ReadShort(int offset);
 
-            return result;
-        }
+        ushort ReadUShort(int offset);
 
-        internal short ReadShort(int offset)
-        {
-            return (short)((Value[Offset + offset] << 8) | Value[Offset + offset + 1]);
-        }
+        int ReadInt(int offset);
 
-        internal ushort ReadUShort(int offset)
-        {
-            return (ushort)((Value[Offset + offset] << 8) | Value[Offset + offset + 1]);
-        }
+        string ReadAscii(int offset, int length);
 
-        internal int ReadInt(int offset)
-        {
-            return (Value[Offset + offset] << 24) |
-                   (Value[Offset + offset + 1] << 16) |
-                   (Value[Offset + offset + 2] << 8) |
-                   Value[Offset + offset + 3];
-        }
+        string ReadUnicode(int offset, int length);
 
-        internal string ReadAscii(int offset, int length)
-        {
-            return Encoding.ASCII.GetString(Value, Offset + offset, length).Replace("\0", "");
-        }
+        string ReadUtf8Terminated(int offset, int length);
 
-        internal string ReadUnicode(int offset, int length)
-        {
-            return Encoding.BigEndianUnicode.GetString(Value, Offset + offset, length).Replace("\0", "");
-        }
+        void Clear(int offset, int length);
 
-        internal string ReadUtf8Terminated(int offset, int length)
-        {
-            return Encoding.UTF8.GetString(Value, Offset + offset, Array.IndexOf(Value, (byte)0, Offset + offset, length) - Offset - offset);
-        }
+        void Write(int offset, byte value);
 
-        internal void Write(int offset, byte value)
-        {
-            Value[Offset + offset] = value;
-        }
+        void Write(int offset, sbyte value);
 
-        internal void Write(int offset, sbyte value)
-        {
-            Value[Offset + offset] = (byte)value;
-        }
+        void Write(int offset, byte[] value);
 
-        internal void Write(int offset, byte[] value)
-        {
-            value.CopyTo(Value, Offset + offset);
-        }
+        void Write(int offset, short value);
 
-        internal void Write(int offset, short value)
-        {
-            Value[Offset + offset] = (byte)(value >> 8);
-            Value[Offset + offset + 1] = (byte)value;
-        }
+        void Write(int offset, ushort value);
 
-        internal void Write(int offset, ushort value)
-        {
-            Value[Offset + offset] = (byte)(value >> 8);
-            Value[Offset + offset + 1] = (byte)value;
-        }
+        void Write(int offset, int value);
 
-        internal void Write(int offset, int value)
-        {
-            Value[Offset + offset] = (byte)(value >> 24);
-            Value[Offset + offset + 1] = (byte)(value >> 16);
-            Value[Offset + offset + 2] = (byte)(value >> 8);
-            Value[Offset + offset + 3] = (byte)value;
-        }
+        int WriteAscii(int offset, string text, int? size = null);
 
-        internal int WriteAscii(int offset, string text, int? size = null)
-        {
-            return WriteText(Encoding.ASCII, offset, text, size);
-        }
+        int WriteAsciiTerminated(int offset, string text);
 
-        internal int WriteAsciiTerminated(int offset, string text)
-        {
-            return WriteText(Encoding.ASCII, offset, text, terminated: 1);
-        }
+        int WriteUnicode(int offset, string text, int? size = null);
 
-        internal int WriteUnicode(int offset, string text, int? size = null)
-        {
-            return WriteText(Encoding.Unicode, offset, text, size);
-        }
-
-        internal int WriteBigUnicodeTerminated(int offset, string text)
-        {
-            return WriteText(Encoding.BigEndianUnicode, offset, text, terminated: 2);
-        }
-
-        internal int WriteText(Encoding encoding, int offset, string text, int? size = null, int terminated = 0)
-        {
-            var length = encoding.GetBytes(text, 0, text.Length, Value, Offset + offset);
-
-            var next = size ?? length + terminated;
-
-            for (var i = length; i < next; i++) Value[Offset + offset + i] = 0;
-
-            return next;
-        }
+        int WriteBigUnicodeTerminated(int offset, string text);
     }
 }

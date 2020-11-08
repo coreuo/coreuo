@@ -314,7 +314,26 @@ namespace Shard.Server
 
         public static void SpeechRequest(TServer server, TState state)
         {
-            server.SpeechResponse(state, state.Mobile);
+            if (state.SpeechText.StartsWith(".add")) server.TargetRequest(state);
+            else server.SpeechResponse(state, state.Mobile);
+        }
+
+        public static void TargetResponse(TServer server, TState state)
+        {
+            var rat = CreateMobile(server, server.Rat);
+
+            state.TransferLocation(rat);
+
+            server.MobileMoving(state, rat);
+
+            server.EntityInfo(state, rat);
+
+            rat.Items.ForEach(i =>
+            {
+                server.ItemWearUpdate(state, i);
+
+                server.EntityInfo(state, i);
+            });
         }
     }
 }

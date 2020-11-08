@@ -30,7 +30,9 @@ namespace Shard.Message.Domain
         IItemWear,
         IWarModeRequest,
         ISpeechRequest,
-        ISpeechResponse
+        ISpeechResponse,
+        ITargetRequest,
+        ITargetResponse
         where TData : IData, new()
         where TMobile : IMobile<TItem, TSkillInfo>
         where TAttribute : IAttribute

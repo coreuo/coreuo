@@ -86,7 +86,7 @@
 
             DirectXMinor = data.ReadShort(50);
 
-            VideoCardDescription = data.ReadString(52, 128);
+            VideoCardDescription = data.ReadAscii(52, 128);
 
             VideoCardVendorId = data.ReadInt(180);
 
@@ -102,7 +102,7 @@
 
             PartialInstalled = data.ReadByte(195);
 
-            Language = data.ReadString(196, 6);
+            Language = data.ReadAscii(196, 6);
 
             return 268;
         }

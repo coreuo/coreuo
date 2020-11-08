@@ -20,7 +20,7 @@ namespace Login.Message.Domain.Outgoing
 
                 data.Write(6 + 40 * i, (short)i);
 
-                data.WriteString(6 + 40 * i + 2, shard.Identity);
+                data.WriteAscii(6 + 40 * i + 2, shard.Identity);
 
                 data.Write(6 + 40 * i + 34, (byte)shard.Percentage);
 

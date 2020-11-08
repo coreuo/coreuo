@@ -6,7 +6,7 @@
 
         internal int ReadClientLanguage(IData data)
         {
-            ClientLanguage = data.ReadString(2, 3);
+            ClientLanguage = data.ReadAscii(2, 3);
 
             return 3;
         }

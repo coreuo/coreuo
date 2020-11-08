@@ -8,6 +8,18 @@ namespace Shard.Mobiles
         where TItem : TEntity, IItem<TItem>
         where TEntity : IEntity<TItem>
     {
+        public static void Rat(TServer server, TMobile mobile)
+        {
+            mobile.Body = 238;
+
+            mobile.Notoriety = 3;
+
+            server.SetItemParent(mobile,
+
+                server.CreateItem(server.Backpack)
+            );
+        }
+
         public static void Human(TServer server, TMobile mobile)
         {
             mobile.CurrentHitPoints = 67;

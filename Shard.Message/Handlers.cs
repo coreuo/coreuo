@@ -232,5 +232,10 @@ namespace Shard.Message
 
             }, writerName: nameof(state.WriteSpeechResponse));
         }
+
+        public static void TargetRequest(TState state)
+        {
+            state.Write(0x6C, 19, state.WriteTargetRequest);
+        }
     }
 }

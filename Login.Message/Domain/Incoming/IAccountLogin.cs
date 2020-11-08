@@ -8,9 +8,9 @@
 
         int ReadAccountLogin(IData data)
         {
-            Name = data.ReadString(1, 30);
+            Name = data.ReadAscii(1, 30);
 
-            Password = data.ReadString(31, 30);
+            Password = data.ReadAscii(31, 30);
 
             return 62;
         }

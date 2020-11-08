@@ -161,5 +161,13 @@ namespace Launcher.Domain
         public ushort SpeechGraphic { get; set; }
 
         public List<int> KeyWords { get; set; }
+
+        public int TargetId { get; set; }
+
+        public byte TargetMode { get; set; }
+
+        public byte TargetType { get; set; }
+
+        public ushort ItemId { get; set; }
     }
 }
