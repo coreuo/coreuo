@@ -101,6 +101,8 @@ namespace Shard.Server.Domain
 
         Action<TState, TMobile> MobileMoving { get; }
 
+        Action<TState, TMobile> SpeechResponse { get; }
+
         internal void MoveItem(TState state, TEntity parent, TItem item)
         {
             Action action = parent switch

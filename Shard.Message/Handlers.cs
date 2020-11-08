@@ -221,5 +221,16 @@ namespace Shard.Message
         {
             state.Write(0x77, 17, mobile.WriteMobileMoving);
         }
+
+        public static void SpeechResponse(TState state, TMobile mobile)
+        {
+            state.Write(0xAE, 48 + 2 * state.SpeechText.Length + 2, data =>
+            {
+                mobile.WriteMobileSpeech(data);
+
+                state.WriteSpeechResponse(data);
+
+            }, writerName: nameof(state.WriteSpeechResponse));
+        }
     }
 }

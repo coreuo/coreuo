@@ -147,5 +147,19 @@ namespace Launcher.Domain
         public int ParentSerial { get; set; }
 
         public byte Layer { get; set; }
+
+        public ushort Hue { get; set; }
+
+        public byte SpeechType { get; set; }
+
+        public ushort SpeechFont { get; set; }
+
+        public string SpeechLanguage { get; set; }
+
+        public string SpeechText { get; set; }
+
+        public ushort SpeechGraphic { get; set; }
+
+        public List<int> KeyWords { get; set; }
     }
 }

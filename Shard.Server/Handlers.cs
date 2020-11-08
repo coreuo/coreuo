@@ -311,5 +311,10 @@ namespace Shard.Server
 
             server.MobileMoving(state, state.Mobile);
         }
+
+        public static void SpeechRequest(TServer server, TState state)
+        {
+            server.SpeechResponse(state, state.Mobile);
+        }
     }
 }

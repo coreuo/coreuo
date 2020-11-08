@@ -129,6 +129,8 @@ namespace Launcher.Domain
 
         public Action<ShardState> WarModeRequest => state => ShardServerHandlers.WarModeRequest(this, state);
 
+        public Action<ShardState> SpeechRequest => state => ShardServerHandlers.SpeechRequest(this, state);
+
         public Action<ShardState> ClientLanguage => state => ShardServerHandlers.ClientLanguage(this, state);
 
         public HashSet<Entity> Entities { get; set; } = new HashSet<Entity>();
@@ -216,6 +218,8 @@ namespace Launcher.Domain
         public Action<ShardState, Item> ItemWearUpdate => ShardMessageHandlers.ItemWearUpdate;
 
         public Action<ShardState, Mobile> MobileMoving => ShardMessageHandlers.MobileMoving;
+
+        public Action<ShardState, Mobile> SpeechResponse => ShardMessageHandlers.SpeechResponse;
 
         public Action<ShardServer, Item> Backpack => ItemType.Backpack;
 

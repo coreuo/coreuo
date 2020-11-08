@@ -28,7 +28,9 @@ namespace Shard.Message.Domain
         ISoundPlay,
         IItemPlace,
         IItemWear,
-        IWarModeRequest
+        IWarModeRequest,
+        ISpeechRequest,
+        ISpeechResponse
         where TData : IData, new()
         where TMobile : IMobile<TItem, TSkillInfo>
         where TAttribute : IAttribute

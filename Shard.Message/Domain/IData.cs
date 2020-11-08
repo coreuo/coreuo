@@ -56,7 +56,12 @@ namespace Shard.Message.Domain
 
         internal string ReadUnicode(int offset, int length)
         {
-            return Encoding.Unicode.GetString(Value, Offset + offset, length).Replace("\0", "");
+            return Encoding.BigEndianUnicode.GetString(Value, Offset + offset, length).Replace("\0", "");
+        }
+
+        internal string ReadUtf8Terminated(int offset, int length)
+        {
+            return Encoding.UTF8.GetString(Value, Offset + offset, Array.IndexOf(Value, (byte)0, Offset + offset, length) - Offset - offset);
         }
 
         internal void Write(int offset, byte value)

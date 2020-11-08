@@ -59,6 +59,8 @@ namespace Shard.Message.Domain
 
         public Action<TState> WarModeRequest { get; }
 
+        public Action<TState> SpeechRequest { get; }
+
         Action<string> Output { get; }
 
         internal int Read(TState state, TData data)
@@ -85,6 +87,7 @@ namespace Shard.Message.Domain
                 0x08 => Process(state.ReadItemPlace, ItemPlace),
                 0x13 => Process(state.ReadItemWear, ItemWear),
                 0x72 => Process(state.ReadWarModeRequest, WarModeRequest),
+                0xAD => Process(state.ReadSpeechRequest, SpeechRequest),
                 _ => throw new InvalidOperationException($"Invalid message 0x{id:X2}.")
             };
 
