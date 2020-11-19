@@ -2,16 +2,17 @@
 {
     public class Skill : Shard.Message.Domain.ISkill
     {
+        // ReSharper disable once UnusedMember.Global
         public int Id { get; set; }
 
-        public ushort SkillId { get; set; }
+        public ushort SkillId { get; init; }
 
-        public ushort Value { get; set; }
+        public ushort Value { get; init; }
 
-        public ushort Base { get; set; }
+        public ushort Base { get; init; }
 
-        public byte Lock { get; set; }
+        public byte Lock { get; init; }
 
-        public ushort Cap { get; set; }
+        public ushort Cap { get; init; }
     }
 }

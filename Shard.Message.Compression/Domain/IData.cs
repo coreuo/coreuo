@@ -4,7 +4,7 @@
     {
         byte[] Value { get; }
 
-        int Offset { get; set; }
+        int Offset { get; }
 
         int Length { get; set; }
     }

@@ -2,6 +2,6 @@
 {
     public interface IState
     {
-        public int ShardIndex { get; set; }
+        public int ShardIndex { get; }
     }
 }

@@ -14,9 +14,9 @@ namespace Network.Server.Domain
 
         bool Locked { get; set; }
 
-        bool Listening { get; set; }
+        bool Listening { get; }
 
-        bool Running { get; set; }
+        bool Running { set; }
 
         Action<TState> StateStart { get; }
 

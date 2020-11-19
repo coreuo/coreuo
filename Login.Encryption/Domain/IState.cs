@@ -2,13 +2,13 @@
 {
     public interface IState
     {
-        int Seed { get; set; }
+        int Seed { get; }
 
-        int MajorVersion { get; set; }
+        int MajorVersion { get; }
 
-        int MinorVersion { get; set; }
+        int MinorVersion { get; }
 
-        int Patch { get; set; }
+        int Patch { get; }
 
         uint FirstClientKey { get; set; }
 

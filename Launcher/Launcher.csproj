@@ -7,15 +7,18 @@
 	</PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Game.Data\Game.Data.csproj" />
     <ProjectReference Include="..\Login.Encryption\Login.Encryption.csproj" />
     <ProjectReference Include="..\Login.Message\Login.Message.csproj" />
     <ProjectReference Include="..\Login.Server\Login.Server.csproj" />
+    <ProjectReference Include="..\Shard.Entity.Graphic\Shard.Entity.Graphic.csproj" />
+    <ProjectReference Include="..\Shard.Entity.Identity\Shard.Entity.Identity.csproj" />
+    <ProjectReference Include="..\Shard.Entity.Items\Shard.Entity.Items.csproj" />
+    <ProjectReference Include="..\Shard.Mobile.Race\Shard.Mobile.Race.csproj" />
     <ProjectReference Include="..\Shard.Save\Shard.Save.csproj" />
-    <ProjectReference Include="..\Shard.Items\Shard.Items.csproj" />
     <ProjectReference Include="..\Shard.Message.Compression\Shard.Message.Compression.csproj" />
     <ProjectReference Include="..\Shard.Message.Extended\Shard.Message.Extended.csproj" />
     <ProjectReference Include="..\Shard.Message\Shard.Message.csproj" />
-    <ProjectReference Include="..\Shard.Mobiles\Shard.Mobiles.csproj" />
     <ProjectReference Include="..\Shard.Server\Shard.Server.csproj" />
     <ProjectReference Include="..\Network.Listener\Network.Listener.csproj" />
     <ProjectReference Include="..\Network.Server\Network.Server.csproj" />

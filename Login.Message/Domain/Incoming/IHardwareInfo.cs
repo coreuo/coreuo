@@ -2,55 +2,55 @@
 {
     public interface IHardwareInfo
     {
-        bool OldClient { get; set; }
+        bool OldClient { set; }
 
-        int InstanceId { get; set; }
+        int InstanceId { set; }
 
-        int OsMajor { get; set; }
+        int OsMajor { set; }
 
-        int OsMinor { get; set; }
+        int OsMinor { set; }
 
-        int OsRevision { get; set; }
+        int OsRevision { set; }
 
-        int CpuManufacturer { get; set; }
+        int CpuManufacturer { set; }
 
-        int CpuFamily { get; set; }
+        int CpuFamily { set; }
 
-        int CpuModel { get; set; }
+        int CpuModel { set; }
 
-        int CpuClockSpeed { get; set; }
+        int CpuClockSpeed { set; }
 
-        int CpuQuantity { get; set; }
+        int CpuQuantity { set; }
 
-        int PhysicalMemory { get; set; }
+        int PhysicalMemory { set; }
 
-        int ScreenWidth { get; set; }
+        int ScreenWidth { set; }
 
-        int ScreenHeight { get; set; }
+        int ScreenHeight { set; }
 
-        int ScreenDepth { get; set; }
+        int ScreenDepth { set; }
 
-        int DirectXMajor { get; set; }
+        int DirectXMajor { set; }
 
-        int DirectXMinor { get; set; }
+        int DirectXMinor { set; }
 
-        string VideoCardDescription { get; set; }
+        string VideoCardDescription { set; }
 
-        int VideoCardVendorId { get; set; }
+        int VideoCardVendorId { set; }
 
-        int VideoCardDeviceId { get; set; }
+        int VideoCardDeviceId { set; }
 
-        int VideoCardMemory { get; set; }
+        int VideoCardMemory { set; }
 
-        int Distribution { get; set; }
+        int Distribution { set; }
 
-        int ClientsRunning { get; set; }
+        int ClientsRunning { set; }
 
-        int ClientsInstalled { get; set; }
+        int ClientsInstalled { set; }
 
-        int PartialInstalled { get; set; }
+        int PartialInstalled { set; }
 
-        string Language { get; set; }
+        string Language { set; }
 
         public int ReadHardwareInfo(IData data)
         {

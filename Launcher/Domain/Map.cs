@@ -7,9 +7,10 @@ namespace Launcher.Domain
         Shard.Message.Extended.Domain.IMap<MapPatch>,
         Shard.Message.Domain.IMap
     {
+        // ReSharper disable once UnusedMember.Global
         public int Id { get; set; }
 
-        public byte MapId { get; set; } = 2;
+        public byte MapId { get; } = 1;
 
         /*public short MinimumX { get; set; } = 0;
 
@@ -20,7 +21,7 @@ namespace Launcher.Domain
         public short MaximumY { get; set; } = 4096;*/
 
         [NotMapped]
-        public List<MapPatch> Patches { get; } = new List<MapPatch>
+        public List<MapPatch> Patches { get; } = new()
         {
             new MapPatch(),
             new MapPatch(),

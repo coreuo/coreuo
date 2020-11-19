@@ -8,15 +8,15 @@ namespace Shard.Message.Domain.Incoming
         IClientFlags,
         ISlot
     {
-        public short FirstLoginCharacterUnknown { get; set; }
+        public short FirstLoginCharacterUnknown { set; }
 
-        public int SecondLoginCharacterUnknown { get; set; }
+        public int SecondLoginCharacterUnknown { set; }
 
-        public int LoginCount { get; set; }
+        public int LoginCount { set; }
 
-        public byte[] ThirdLoginCharacterUnknown { get; set; }
+        public byte[] ThirdLoginCharacterUnknown { set; }
 
-        public int ClientIpAddress { get; set; }
+        public int ClientIpAddress { set; }
 
         internal int ReadLoginCharacter(IData data)
         {

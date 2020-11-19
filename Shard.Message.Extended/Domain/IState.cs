@@ -3,7 +3,9 @@ using Shard.Message.Extended.Domain.Incoming;
 
 namespace Shard.Message.Extended.Domain
 {
-    public interface IState<out TData> : IClientLanguage
+    public interface IState<out TData> : 
+        IClientLanguage,
+        IStatusClose
         where TData : IData
     {
         Action<int, Action<TData>, string> ExtendedData { get; }
@@ -16,7 +18,7 @@ namespace Shard.Message.Extended.Domain
 
                 data.ExtendedLength = size;
 
-                data.Write(0, id);
+                data.WriteExtended(0, id);
 
                 writer?.Invoke(data);
 

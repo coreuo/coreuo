@@ -3,18 +3,18 @@
 namespace Shard.Message.Domain.Outgoing
 {
     public interface IItemWearUpdate<out TEntity> :
-        ISerial,
-        IItemId,
+        ISerialGet,
+        IGraphics,
         ILayer,
         IHue,
         IParent<TEntity>
-        where TEntity : ISerial
+        where TEntity : ISerialGet
     {
         internal void WriteItemWearUpdate(IData data)
         {
             data.Write(1, Serial);
 
-            data.Write(5, ItemId);
+            data.Write(5, Graphic);
 
             data.Write(7, (byte)0);
 

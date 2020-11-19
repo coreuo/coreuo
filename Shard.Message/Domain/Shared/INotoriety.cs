@@ -2,6 +2,6 @@
 {
     public interface INotoriety
     {
-        public byte Notoriety { get; set; }
+        public byte Notoriety { get; }
     }
 }

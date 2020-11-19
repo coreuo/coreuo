@@ -2,12 +2,12 @@
 {
     public interface IShard
     {
-        string Identity { get; set; }
+        string Identity { get; }
 
-        int Percentage { get; set; }
+        int Percentage { get; }
 
-        int TimeZone { get; set; }
+        int TimeZone { get; }
 
-        string IpAddress { get; set; }
+        string IpAddress { get; }
     }
 }

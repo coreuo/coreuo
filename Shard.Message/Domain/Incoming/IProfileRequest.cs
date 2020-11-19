@@ -3,13 +3,13 @@
 namespace Shard.Message.Domain.Incoming
 {
     public interface IProfileRequest :
-        ISerial
+        ISerialSet
     {
         byte ProfileRequestMode { get; set; }
 
-        short ProfileRequestEditType { get; set; }
+        short ProfileRequestEditType { set; }
 
-        string ProfileRequestEditText { get; set; }
+        string ProfileRequestEditText { set; }
 
         internal int ReadProfileRequest(IData data)
         {

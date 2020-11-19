@@ -4,14 +4,15 @@
         Shard.Message.Domain.ITarget,
         Shard.Server.Domain.ITarget
     {
+        // ReSharper disable once UnusedMember.Global
         public int Id { get; set; }
 
-        public Map Map { get; set; } = new Map();
+        public Map Map { get; } = new();
 
-        public ushort LocationX { get; set; }
+        public ushort LocationX { get; set; } = 3500;
 
-        public ushort LocationY { get; set; }
+        public ushort LocationY { get; set; } = 2575;
 
-        public sbyte LocationZ { get; set; }
+        public sbyte LocationZ { get; set; } = 14;
     }
 }

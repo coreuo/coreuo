@@ -3,8 +3,8 @@
 namespace Shard.Message.Domain.Outgoing
 {
     public interface IMobileMoving :
-        ISerial,
-        IBody,
+        ISerialGet,
+        IGraphics,
         ILocation,
         IDirection,
         IHue,
@@ -15,7 +15,7 @@ namespace Shard.Message.Domain.Outgoing
         {
             data.Write(1, Serial);
 
-            data.Write(5, Body);
+            data.Write(5, Graphic);
 
             data.Write(7, LocationX);
 

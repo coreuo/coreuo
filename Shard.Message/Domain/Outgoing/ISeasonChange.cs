@@ -2,9 +2,9 @@
 {
     public interface ISeasonChange
     {
-        byte Season { get; set; }
+        byte Season { get; }
 
-        byte Sound { get; set; }
+        byte Sound { get; }
 
         internal void WriteSeasonChange(IData data)
         {

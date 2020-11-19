@@ -2,22 +2,25 @@
 {
     public class Item : Entity,
         Shard.Message.Domain.IItem<Attribute, Item, Entity>,
-        Shard.Items.Domain.IItem,
-        Shard.Server.Domain.IItem<Item, Entity>,
-        Shard.Mobiles.Domain.IItem<Item>
+        Shard.Server.Domain.IItem<Item, Entity, Identity>,
+        Shard.Entity.Items.Domain.IItem,
+        Shard.Mobile.Race.Domain.IItem,
+        Game.Data.Domain.IItem
     {
         public Entity Parent { get; set; }
 
-        public ushort ItemId { get; set; }
+        public ulong TileArtFlags { get; set; }
+
+        public int Weight { get; set; }
+
+        public int Height { get; set; }
 
         public byte Layer { get; set; }
-
-        public ushort Hue { get; set; }
 
         public ushort Amount { get; set; }
 
         public byte GridIndex { get; set; }
 
-        public byte ItemFlags { get; set; }
+        public byte ItemFlags { get; } = 0;
     }
 }

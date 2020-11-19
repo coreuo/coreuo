@@ -2,7 +2,7 @@
 {
     public interface IClientSeed
     {
-        public int Seed { get; set; }
+        public int Seed { set; }
 
         internal int ReadClientSeed(IData data)
         {

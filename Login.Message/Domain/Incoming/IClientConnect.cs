@@ -2,15 +2,15 @@
 {
     public interface IClientConnect
     {
-        public int Seed { get; set; }
+        public int Seed { set; }
 
-        public int MajorVersion { get; set; }
+        public int MajorVersion { set; }
 
-        public int MinorVersion { get; set; }
+        public int MinorVersion { set; }
 
-        public int Patch { get; set; }
+        public int Patch { set; }
 
-        public int Revision { get; set; }
+        public int Revision { set; }
 
         public int ReadClientConnect(IData data)
         {

@@ -3,7 +3,7 @@
 namespace Shard.Message.Domain.Incoming
 {
     public interface IItemWear :
-        ISerial,
+        ISerialSet,
         IParentSerial,
         ILayer
     {

@@ -5,7 +5,7 @@ namespace Network.State.Domain
 {
     public interface ISocket : ISettings
     {
-        Socket Socket { get; set; }
+        Socket Socket { get; }
 
         internal void BeginReceive(byte[] buffer, int offset, int length, Action<Func<int>> onReceive)
         {

@@ -3,7 +3,7 @@
 namespace Shard.Message.Domain.Outgoing
 {
     public interface IMobileSpeech :
-        ISerial,
+        ISerialGet,
         IName
     {
         internal void WriteMobileSpeech(IData data)

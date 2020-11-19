@@ -4,9 +4,9 @@ namespace Shard.Message.Domain.Incoming
 {
     public interface IMoveRequest : INumber
     {
-        public byte Direction { get; set; }
+        public byte Direction { set; }
 
-        public int MoveKey { get; set; }
+        public int MoveKey { set; }
 
         internal int ReadMoveRequest(IData data)
         {

@@ -14,7 +14,7 @@ namespace Network.State.Domain
 
         int Sending { get; set; }
 
-        DateTime Last { get; set; }
+        DateTime Last { set; }
 
         ConcurrentQueue<TData> BufferQueue { get; }
     }

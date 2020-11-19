@@ -8,11 +8,11 @@ namespace Shard.Save.Domain
     public abstract class Save<TSave> : DbContext
         where TSave : Save<TSave>
     {
-        private Dictionary<Type, string> Mapping { get; } = new Dictionary<Type, string>();
+        private Dictionary<Type, string> Mapping { get; } = new();
 
-        public List<(Type, string type, ValueConverter converter)> CustomMapping { get; } = new List<(Type, string, ValueConverter)>();
+        public List<(Type, string type, ValueConverter converter)> CustomMapping { get; } = new();
 
-        public virtual string Path { get; set; }
+        protected abstract string Path { get; }
 
         protected (Save<TSave>, TType) AddType<TType>()
         {

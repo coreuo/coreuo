@@ -18,16 +18,10 @@
 
         void Write(int offset, byte value);
 
-        void Write(int offset, sbyte value);
-
-        void Write(int offset, byte[] value);
-
         void Write(int offset, short value);
-
-        void Write(int offset, ushort value);
 
         void Write(int offset, int value);
 
-        int WriteAscii(int offset, string text, int? size = null);
+        void WriteAscii(int offset, string text, int size);
     }
 }

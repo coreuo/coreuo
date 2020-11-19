@@ -34,9 +34,9 @@ namespace Launcher.Domain
 
         public EndPoint EndPoint { get; set; }
 
-        public ConcurrentQueue<Data> BufferQueue { get; } = new ConcurrentQueue<Data>();
+        public ConcurrentQueue<Data> BufferQueue { get; } = new();
 
-        public ConcurrentQueue<Data> ReceiveQueue { get; } = new ConcurrentQueue<Data>();
+        public ConcurrentQueue<Data> ReceiveQueue { get; } = new();
 
         public int Seed { get; set; }
 

@@ -2,7 +2,7 @@
 {
     public interface IWarModeResponse
     {
-        byte WarMode { get; set; }
+        byte WarMode { get; }
 
         internal void WriteWarModeResponse(IData data)
         {

@@ -10,7 +10,7 @@ namespace Shard.Message.Extended.Domain.Outgoing
 
         internal void WriteMapPatchList(IData data)
         {
-            data.Write(2, Patches.Count);
+            data.WriteExtended(2, Patches.Count);
 
             foreach (var (mapPatch, index) in Patches.Select((p, i) => (p, i))) mapPatch.WriteMapPatch(index, data);
         }

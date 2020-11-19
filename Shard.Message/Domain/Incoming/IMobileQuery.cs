@@ -3,11 +3,11 @@
 namespace Shard.Message.Domain.Incoming
 {
     public interface IMobileQuery :
-        ISerial
+        ISerialSet
     {
-        public int UnknownMobileQueryFirst { get; set; }
+        public int UnknownMobileQueryFirst { set; }
 
-        public byte MobileQueryType { get; set; }
+        public byte MobileQueryType { set; }
 
         internal int ReadMobileQuery(IData data)
         {

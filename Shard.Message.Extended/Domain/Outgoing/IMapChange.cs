@@ -2,11 +2,11 @@
 {
     public interface IMapChange
     {
-        byte MapId { get; set; }
+        byte MapId { get; }
 
         internal void WriteMapChange(IData data)
         {
-            data.Write(2, MapId);
+            data.WriteExtended(2, MapId);
         }
     }
 }

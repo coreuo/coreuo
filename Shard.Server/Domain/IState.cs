@@ -3,41 +3,59 @@ using System.Collections.Generic;
 
 namespace Shard.Server.Domain
 {
-    public interface IState<TMobile, TItem, TEntity, in TTarget>
-        where TMobile : IMobile<TItem, TEntity>
-        where TItem : IItem<TItem, TEntity>
-        where TEntity : class, IEntity<TItem, TEntity>
+    public interface IState<TMobile, TItem, TEntity, TIdentity, in TTarget>
+        where TMobile : IMobile<TItem, TEntity, TIdentity>
+        where TItem : IItem<TItem, TEntity, TIdentity>
+        where TEntity : class, IEntity<TItem, TEntity, TIdentity>
         where TTarget : ITarget
     {
         List<TMobile> Characters { get; set; }
 
         TMobile Mobile { get; set; }
 
-        public byte MobileQueryType { get; set; }
+        public byte MobileQueryType { get; }
 
-        public int Serial { get; set; }
+        public int Serial { get; }
 
-        int ParentSerial { get; set; }
+        int ParentSerial { get; }
 
-        List<int> SerialList { get; set; }
+        List<int> SerialList { get; }
 
-        byte ProfileRequestMode { get; set; }
+        byte ProfileRequestMode { get; }
 
-        ushort SoundId { get; set; }
+        ushort SoundId { set; }
 
-        ushort LocationX { get; set; }
+        ushort LocationX { get; }
 
-        ushort LocationY { get; set; }
+        ushort LocationY { get; }
 
-        sbyte LocationZ { get; set; }
+        sbyte LocationZ { get; }
 
-        byte GridIndex { get; set; }
+        byte GridIndex { get; }
 
-        byte WarMode { get; set; }
+        byte WarMode { get; }
 
-        byte Direction { get; set; }
+        byte Direction { get; }
 
-        string SpeechText { get; set; }
+        string SpeechText { get; }
+
+        int Slot { get; }
+
+        ushort Hue { get; }
+
+        string Name { get; }
+
+        ushort FaceHue { get; }
+
+        ushort FaceGraphic { get; }
+
+        ushort HairHue { get; }
+
+        ushort HairGraphic { get; }
+
+        ushort BeardGraphic { get; }
+
+        ushort BeardHue { get; }
 
         internal void TransferMove(TMobile mobile)
         {

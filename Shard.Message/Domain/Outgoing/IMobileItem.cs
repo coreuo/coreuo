@@ -3,8 +3,8 @@
 namespace Shard.Message.Domain.Outgoing
 {
     public interface IMobileItem :
-        ISerial,
-        IItemId,
+        ISerialGet,
+        IGraphics,
         ILayer,
         IHue
     {
@@ -14,9 +14,9 @@ namespace Shard.Message.Domain.Outgoing
 
             data.Write(19 + currentSize, Serial);
 
-            var huedItemId = (ushort)(hue ? ItemId | 0x8000 : ItemId);
+            var huedGraphics = (ushort)(hue ? Graphic | 0x8000 : Graphic);
 
-            data.Write(19 + currentSize + 4, huedItemId);
+            data.Write(19 + currentSize + 4, huedGraphics);
 
             data.Write(19 + currentSize + 4 + 2, Layer);
 

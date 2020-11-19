@@ -9,8 +9,8 @@ namespace Network.Server.Domain
 
         ConcurrentQueue<TData> ReceiveQueue { get; }
 
-        bool Receiving { get; set; }
+        bool Receiving { get; }
 
-        int Sending { get; set; }
+        int Sending { get; }
     }
 }

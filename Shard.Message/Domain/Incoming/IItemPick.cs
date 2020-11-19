@@ -3,7 +3,7 @@
 namespace Shard.Message.Domain.Incoming
 {
     public interface IItemPick :
-        ISerial,
+        ISerialSet,
         IAmount
     {
         internal int ReadItemPick(IData data)

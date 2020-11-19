@@ -3,7 +3,7 @@
 namespace Shard.Message.Domain.Incoming
 {
     public interface IItemPlace : 
-        ISerial,
+        ISerialSet,
         ILocation,
         IGridIndex,
         IParentSerial

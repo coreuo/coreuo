@@ -6,7 +6,7 @@ namespace Login.Message.Domain.Outgoing
     public interface IShardList<TShard>
         where TShard : IShard
     {
-        public List<TShard> Shards { get; set; }
+        public List<TShard> Shards { get; }
 
         internal void WriteShardList(IData data)
         {
@@ -20,7 +20,7 @@ namespace Login.Message.Domain.Outgoing
 
                 data.Write(6 + 40 * i, (short)i);
 
-                data.WriteAscii(6 + 40 * i + 2, shard.Identity);
+                data.WriteAscii(6 + 40 * i + 2, shard.Identity, 32);
 
                 data.Write(6 + 40 * i + 34, (byte)shard.Percentage);
 

@@ -3,7 +3,7 @@
 namespace Shard.Message.Domain.Incoming
 {
     public interface IEntityUse : 
-        ISerial
+        ISerialSet
     {
         internal int ReadEntityUse(IData data)
         {

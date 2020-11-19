@@ -2,11 +2,11 @@
 {
     public interface IClientLanguage
     {
-        public string ClientLanguage { get; set; }
+        public string ClientLanguage { set; }
 
         internal int ReadClientLanguage(IData data)
         {
-            ClientLanguage = data.ReadAscii(2, 3);
+            ClientLanguage = data.ReadExtendedString(2, 3);
 
             return 3;
         }

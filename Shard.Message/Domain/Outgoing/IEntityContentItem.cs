@@ -3,20 +3,20 @@
 namespace Shard.Message.Domain.Outgoing
 {
     public interface IEntityContentItem<out TEntity> :
-        ISerial,
-        IItemId,
+        ISerialGet,
+        IGraphics,
         IAmount,
         ITarget,
         IHue,
         IGridIndex,
         IParent<TEntity>
-        where TEntity : ISerial
+        where TEntity : ISerialGet
     {
         internal void WriteEntityContentItem(int offset, int currentSize, IData data)
         {
             data.Write(offset + currentSize, Serial);
 
-            data.Write(offset + currentSize + 4, ItemId);
+            data.Write(offset + currentSize + 4, Graphic);
 
             data.Write(offset + currentSize + 6, (byte)0);
 

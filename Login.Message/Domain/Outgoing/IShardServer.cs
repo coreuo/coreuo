@@ -4,11 +4,11 @@ namespace Login.Message.Domain.Outgoing
 {
     public interface IShardServer
     {
-        string IpAddress { get; set; }
+        string IpAddress { get; }
 
-        int Port { get; set; }
+        int Port { get; }
 
-        int AuthorizationId { get; set; }
+        int AuthorizationId { get; }
 
         internal void WriteShardServer(IData data)
         {

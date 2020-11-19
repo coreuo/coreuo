@@ -2,12 +2,21 @@
 
 namespace Shard.Server.Domain
 {
-    public interface IEntity<TItem, TEntity>
-        where TItem : IItem<TItem, TEntity>
-        where TEntity : class, IEntity<TItem, TEntity>
+    public interface IEntity<TItem, TEntity, in TIdentity> :
+        ITarget
+        where TItem : IItem<TItem, TEntity, TIdentity>
+        where TEntity : class, IEntity<TItem, TEntity, TIdentity>
     {
-        public int Serial { get; set; }
+        int Serial { get; init; }
 
-        List<TItem> Items { get; set; }
+        ushort Hue { get; }
+
+        List<TItem> Items { get; }
+
+        bool Is(params TIdentity[] identities);
+
+        void Set(params TIdentity[] identities);
+
+        void Set(IEnumerable<TIdentity> identities);
     }
 }

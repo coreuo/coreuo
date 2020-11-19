@@ -1,16 +1,14 @@
 ﻿namespace Shard.Server.Domain
 {
-    public interface IItem<TItem, TEntity> : 
-        IEntity<TItem, TEntity>
-        where TItem : IItem<TItem, TEntity>
-        where TEntity : class, IEntity<TItem, TEntity>
+    public interface IItem<TItem, TEntity, TIdentity> : 
+        IEntity<TItem, TEntity, TIdentity>
+        where TItem : IItem<TItem, TEntity, TIdentity>
+        where TEntity : class, IEntity<TItem, TEntity, TIdentity>
     {
-        ushort ItemId { get; }
-
         byte GridIndex { get; set; }
 
         TEntity Parent { get; set; }
 
-        byte Layer { get; set; }
+        byte Layer { get; }
     }
 }

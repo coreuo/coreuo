@@ -3,9 +3,9 @@
 namespace Shard.Message.Domain.Outgoing
 {
     public interface IMobileLight :
-        ISerial
+        ISerialGet
     {
-        public byte LightLevel { get; set; }
+        public byte LightLevel { get; }
 
         internal void WriteMobileLight(IData data)
         {

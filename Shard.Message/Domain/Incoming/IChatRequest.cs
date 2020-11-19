@@ -2,7 +2,7 @@
 {
     public interface IChatRequest
     {
-        public string ChatName { get; set; }
+        public string ChatName { set; }
 
         internal int ReadChatRequest(IData data)
         {

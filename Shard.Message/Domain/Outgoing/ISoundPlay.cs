@@ -4,9 +4,9 @@
     {
         byte SoundMode { get; }
 
-        ushort SoundId { get; set; }
+        ushort SoundId { get; }
 
-        ushort SoundVolume { get; set; }
+        ushort SoundVolume { get; }
 
         internal void WriteSoundPlay(IData data)
         {

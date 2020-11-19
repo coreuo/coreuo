@@ -29,7 +29,7 @@ namespace Shard.Message
 
         public static void ClientVersionRequest(TState state)
         {
-            state.Write(0xBD, 3, state.WriteClientVersionRequest);
+            state.Write(0xBD, 3, writerName: "WriteClientVersionRequest");
         }
 
         public static void ServerTime(TServer server, TState state)
@@ -66,7 +66,7 @@ namespace Shard.Message
 
         public static void LoginComplete(TState state)
         {
-            state.Write(0x55, 1, state.WriteLoginComplete);
+            state.Write(0x55, 1, writerName: "WriteLoginComplete");
         }
 
         public static void LoginConfirm(TState state, TMobile mobile)
@@ -168,7 +168,7 @@ namespace Shard.Message
 
         public static void ProfileResponse(TState state, TMobile mobile)
         {
-            state.Write(0xB8, 7 + mobile.ProfileHeader.Length + 1 + 2 * mobile.ProfileFooter.Length + 2 + 2 * mobile.ProfileBody.Length + 2, mobile.WriteProfileResponse);
+            state.Write(0xB8, 7 + mobile.ProfileHeader.Length + 1 + 2 * mobile.ProfileFooter.Length + 2 + 2 * mobile.ProfileGraphics.Length + 2, mobile.WriteProfileResponse);
         }
 
         public static void EntityDisplay(TState state, TEntity entity)

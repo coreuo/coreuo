@@ -1,12 +1,12 @@
-﻿namespace Shard.Message.Domain.Incoming
+﻿using Shard.Message.Domain.Shared;
+
+namespace Shard.Message.Domain.Incoming
 {
-    public interface IAccountLogin
+    public interface IAccountLogin :
+        IName,
+        IPassword
     {
-        int AuthorizationId { get; set; }
-
-        string Name { get; set; }
-
-        string Password { get; set; }
+        int AuthorizationId { set; }
 
         internal int ReadAccountLogin(IData data)
         {

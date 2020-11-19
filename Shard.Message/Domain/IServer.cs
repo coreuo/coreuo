@@ -25,9 +25,7 @@ namespace Shard.Message.Domain
 
         public Action<TState> AccountLogin { get; }
 
-        public Func<TState, TMobile> BeforeCharacterCreate { get; }
-
-        public Action<TState, TMobile> CharacterCreate { get; }
+        public Action<TState> CharacterCreate { get; }
 
         public Action<TState> MobileQuery { get; }
 
@@ -41,9 +39,7 @@ namespace Shard.Message.Domain
 
         public Action<TState> ClientType { get; }
 
-        public Func<TState, int, TMobile> BeforeCharacterLogin { get; }
-
-        public Action<TState, TMobile> CharacterLogin { get; }
+        public Action<TState> CharacterLogin { get; }
 
         public Action<TState> EntityQuery { get; }
 
@@ -74,14 +70,14 @@ namespace Shard.Message.Domain
                 0xFF => Process(state.ReadClientSeed, ClientSeed),
                 0xE4 => Process(state.ReadEncryptionResponse, EncryptionResponse),
                 0x91 => Process(state.ReadAccountLogin, AccountLogin),
-                0x8D => ProcessWith(BeforeCharacterCreate(state), (m, d) => m.ReadCharacterCreation(d), CharacterCreate),
+                0x8D => Process(state.ReadCharacterCreation, CharacterCreate),
                 0x34 => Process(state.ReadMobileQuery, MobileQuery),
                 0xBF => ProcessWith(data, (e, d) => e.ReadExtendedData(d), ExtendedData),
                 0xB5 => Process(state.ReadChatRequest, ChatRequest),
                 0x73 => Process(state.ReadPingRequest, PingRequest),
                 0x02 => Process(state.ReadMoveRequest, MoveRequest),
                 0xE1 => Process(state.ReadClientType, ClientType),
-                0x5D => ProcessWith(BeforeCharacterLogin(state, data.ReadInt(65)), (m, d) => m.ReadLoginCharacter(d), CharacterLogin),
+                0x5D => Process(state.ReadLoginCharacter, CharacterLogin),
                 0xD6 => Process(state.ReadEntityQuery, EntityQuery),
                 0x06 => Process(state.ReadEntityUse, EntityUse),
                 0xB8 => Process(state.ReadProfileRequest, ProfileRequest),

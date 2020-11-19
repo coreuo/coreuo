@@ -4,7 +4,7 @@
     {
         public int PublicKeyLength { get; set; }
 
-        public byte[] PublicKey { get; set; }
+        public byte[] PublicKey { set; }
 
         internal int ReadEncryptionResponse(IData data)
         {

@@ -1,25 +1,50 @@
-﻿namespace Shard.Message.Extended.Domain
+﻿using System.Text;
+
+namespace Shard.Message.Extended.Domain
 {
     public interface IData
     {
+        public byte[] Value { get; }
+
         public int ExtendedOffset { get; set; }
 
         public int ExtendedLength { get; set; }
 
-        short ReadShort(int offset);
+        internal short ReadExtendedShort(int offset)
+        {
+            return (short)((Value[ExtendedOffset + offset] << 8) | Value[ExtendedOffset + offset + 1]);
+        }
 
-        string ReadAscii(int offset, int length);
+        internal int ReadExtendedInt(int offset)
+        {
+            return (Value[ExtendedOffset + offset] << 24) |
+                   (Value[ExtendedOffset + offset + 1] << 16) |
+                   (Value[ExtendedOffset + offset + 2] << 8) |
+                   Value[ExtendedOffset + offset + 3];
+        }
 
-        void Write(int offset, byte value);
+        internal string ReadExtendedString(int offset, int length)
+        {
+            return Encoding.ASCII.GetString(Value, ExtendedOffset + offset, length).Replace("\0", "");
+        }
 
-        void Write(int offset, sbyte value);
+        internal void WriteExtended(int offset, byte value)
+        {
+            Value[ExtendedOffset + offset] = value;
+        }
 
-        void Write(int offset, byte[] value);
+        internal void WriteExtended(int offset, short value)
+        {
+            Value[ExtendedOffset + offset] = (byte)(value >> 8);
+            Value[ExtendedOffset + offset + 1] = (byte)value;
+        }
 
-        void Write(int offset, short value);
-
-        void Write(int offset, ushort value);
-
-        void Write(int offset, int value);
+        internal void WriteExtended(int offset, int value)
+        {
+            Value[ExtendedOffset + offset] = (byte)(value >> 24);
+            Value[ExtendedOffset + offset + 1] = (byte)(value >> 16);
+            Value[ExtendedOffset + offset + 2] = (byte)(value >> 8);
+            Value[ExtendedOffset + offset + 3] = (byte)value;
+        }
     }
 }

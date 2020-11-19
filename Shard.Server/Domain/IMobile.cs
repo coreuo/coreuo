@@ -1,21 +1,13 @@
 ﻿namespace Shard.Server.Domain
 {
-    public interface IMobile<TItem, TEntity> : 
-        IEntity<TItem, TEntity>
-        where TItem : IItem<TItem, TEntity>
-        where TEntity : class, IEntity<TItem, TEntity>
+    public interface IMobile<TItem, TEntity, in TIdentity> : 
+        IEntity<TItem, TEntity, TIdentity>
+        where TItem : IItem<TItem, TEntity, TIdentity>
+        where TEntity : class, IEntity<TItem, TEntity, TIdentity>
     {
-        string Name { get; set; }
-
-        byte WarMode { get; set; }
+        byte WarMode { set; }
 
         byte StatusFlags { get; set; }
-
-        ushort LocationX { get; set; }
-
-        ushort LocationY { get; set; }
-
-        sbyte LocationZ { get; set; }
 
         byte Direction { get; set; }
 

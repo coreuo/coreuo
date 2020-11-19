@@ -2,16 +2,16 @@
 {
     public interface IMobileAttributes
     {
-        public short CurrentHitPoints { get; set; }
+        public short CurrentHitPoints { get; }
 
-        public short MaximumHitPoints { get; set; }
+        public short MaximumHitPoints { get; }
 
-        public short CurrentStamina { get; set; }
+        public short CurrentStamina { get; }
 
-        public short MaximumStamina { get; set; }
+        public short MaximumStamina { get; }
 
-        public short CurrentMana { get; set; }
+        public short CurrentMana { get; }
 
-        public short MaximumMana { get; set; }
+        public short MaximumMana { get; }
     }
 }

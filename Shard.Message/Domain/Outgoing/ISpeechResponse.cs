@@ -6,11 +6,11 @@ namespace Shard.Message.Domain.Outgoing
         IHue,
         ISpeech
     {
-        ushort SpeechGraphic { get; set; }
+        ushort SpeechGraphics { get; }
 
         internal void WriteSpeechResponse(IData data)
         {
-            data.Write(7, SpeechGraphic);
+            data.Write(7, SpeechGraphics);
 
             data.Write(9, SpeechType);
 

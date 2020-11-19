@@ -2,8 +2,8 @@
 {
     public interface IAttribute
     {
-        int Number { get; set; }
+        int Number { get; }
 
-        string Arguments { get; set; }
+        string Arguments { get; }
     }
 }

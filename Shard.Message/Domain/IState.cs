@@ -6,6 +6,8 @@ namespace Shard.Message.Domain
 {
     public interface IState<TData, TMobile, TItem, TEntity, TAttribute, TSkillInfo> :
         IAccountLogin,
+        ICharacterCreation,
+        ICharacterLogin,
         IChatRequest,
         IClientSeed,
         IEncryptionResponse,
@@ -13,13 +15,11 @@ namespace Shard.Message.Domain
         IPingRequest,
         IMoveRequest,
         ICharacterList<TMobile>,
-        IClientVersionRequest,
         IEncryptionRequest,
         IMoveResponse,
         IPingResponse,
         ISeasonChange,
         IClientType,
-        ILoginComplete,
         IEntityQuery,
         IEntityUse,
         IPaperDollOpen,

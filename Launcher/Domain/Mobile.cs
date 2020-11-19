@@ -7,216 +7,151 @@ namespace Launcher.Domain
     public class Mobile : Entity,
         Shard.Message.Domain.IMobile<Item, Skill>,
         Shard.Message.Extended.Domain.IMobile<Map, MapPatch>,
-        Shard.Server.Domain.IMobile<Item, Entity>,
-        Shard.Mobiles.Domain.IMobile<Item>
+        Shard.Server.Domain.IMobile<Item, Entity, Identity>,
+        Shard.Entity.Items.Domain.IMobile,
+        Shard.Mobile.Race.Domain.IMobile
     {
-        [NotMapped] public int Pattern { get; set; }
+        public short CurrentHitPoints { get; } = 67;
 
-        public int Slot { get; set; }
+        public short MaximumHitPoints { get; } = 67;
 
-        [NotMapped] public string Password { get; set; }
-
-        public byte Profession { get; set; }
-
-        public short CurrentHitPoints { get; set; }
-
-        public short MaximumHitPoints { get; set; }
-
-        [NotMapped] public byte CanBeRenamed { get; set; }
+        [NotMapped] public byte CanBeRenamed { get; } = 0;
 
         [NotMapped] public int ClientFlags { get; set; } = 0x6;
 
-        [NotMapped] public byte LightLevel { get; set; }
+        [NotMapped] public byte LightLevel { get; } = 0;
 
-        [NotMapped] public int LoginUnknownFirst { get; set; }
+        [NotMapped] public int LoginUnknownFirst { get; } = 0;
 
-        public short Body { get; set; }
+        [NotMapped] public byte UnknownMobileUpdateFirst { get; } = 0;
 
-        [NotMapped] public byte UnknownMobileUpdateFirst { get; set; }
+        [NotMapped] public short UnknownMobileUpdateSecond { get; } = 0;
 
-        [NotMapped] public short UnknownMobileUpdateSecond { get; set; }
-
-        [NotMapped] public byte LoginUnknownSecond { get; set; } = 0xFF;
-
-        public ushort Hue { get; set; }
+        [NotMapped] public byte LoginUnknownSecond { get; } = 0xFF;
 
         [NotMapped] public byte StatusFlags { get; set; } = 0x10;
 
         public byte Gender { get; set; }
 
-        public byte Sex { get; set; }
+        public short Strength { get; set; } = 35;
 
-        public short Strength { get; set; }
+        public short Dexterity { get; set; } = 35;
 
-        public short SkinColor { get; set; }
+        public short Intelligence { get; set; } = 10;
 
-        [NotMapped] public int UnknownCharacterCreationFirst { get; set; }
+        public short CurrentStamina { get; } = 35;
 
-        [NotMapped] public int UnknownCharacterCreationSecond { get; set; }
+        public short MaximumStamina { get; } = 35;
 
-        public byte SkillFirst { get; set; }
+        public short CurrentMana { get; } = 10;
 
-        public byte SkillFirstValue { get; set; }
+        public short MaximumMana { get; } = 10;
 
-        public byte SkillSecond { get; set; }
+        public int GoldInPack { get; } = 1267;
 
-        public byte SkillSecondValue { get; set; }
+        public short ArmorRating { get; } = 44;
 
-        public byte SkillThird { get; set; }
+        public short Weight { get; } = 108;
 
-        public byte SkillThirdValue { get; set; }
-
-        public byte SkillFourth { get; set; }
-
-        public byte SkillFourthValue { get; set; }
-
-        [NotMapped] public byte[] UnknownCharacterCreationThird { get; set; }
-
-        [NotMapped] public byte UnknownCharacterCreationFourth { get; set; }
-
-        public short HairColor { get; set; }
-
-        public short HairStyle { get; set; }
-
-        [NotMapped] public byte UnknownCharacterCreationFifth { get; set; }
-
-        [NotMapped] public int UnknownCharacterCreationSixth { get; set; }
-
-        [NotMapped] public byte UnknownCharacterCreationSeventh { get; set; }
-
-        public short ShirtColor { get; set; }
-
-        public short ShirtStyle { get; set; }
-
-        [NotMapped] public byte UnknownCharacterCreationEighth { get; set; }
-
-        public short FaceColor { get; set; }
-
-        public short FaceStyle { get; set; }
-
-        [NotMapped] public byte UnknownCharacterCreationNinth { get; set; }
-
-        public short BeardStyle { get; set; }
-
-        public short BeardColor { get; set; }
-
-        public short Dexterity { get; set; }
-
-        public short Intelligence { get; set; }
-
-        public short CurrentStamina { get; set; }
-
-        public short MaximumStamina { get; set; }
-
-        public short CurrentMana { get; set; }
-
-        public short MaximumMana { get; set; }
-
-        public int GoldInPack { get; set; }
-
-        public short ArmorRating { get; set; }
-
-        public short Weight { get; set; }
-
-        public short MaximumWeight { get; set; }
+        public short MaximumWeight { get; } = 222;
 
         public byte Race { get; set; }
 
-        public short StatsCap { get; set; }
+        public short StatsCap { get; } = 225;
 
-        public byte Followers { get; set; }
+        public byte Followers { get; } = 0;
 
-        public byte MaximumFollowers { get; set; }
+        public byte MaximumFollowers { get; } = 5;
 
-        public short FireResist { get; set; }
+        public short FireResist { get; } = 44;
 
-        public short ColdResist { get; set; }
+        public short ColdResist { get; } = 44;
 
-        public short PoisonResist { get; set; }
+        public short PoisonResist { get; } = 44;
 
-        public short EnergyResist { get; set; }
+        public short EnergyResist { get; } = 44;
 
-        public short Luck { get; set; }
+        public short Luck { get; } = 0;
 
-        public short DamageMinimum { get; set; }
+        public short DamageMinimum { get; } = 2;
 
-        public short DamageMaximum { get; set; }
+        public short DamageMaximum { get; } = 10;
 
-        public int TithingPoints { get; set; }
+        public int TithingPoints { get; } = 0;
 
-        public short MaximumPhysicalResistance { get; set; }
+        public short MaximumPhysicalResistance { get; } = 70;
 
-        public short MaximumFireResistance { get; set; }
+        public short MaximumFireResistance { get; } = 70;
 
-        public short MaximumColdResistance { get; set; }
+        public short MaximumColdResistance { get; } = 70;
 
-        public short MaximumPoisonResistance { get; set; }
+        public short MaximumPoisonResistance { get; } = 70;
 
-        public short MaximumEnergyResistance { get; set; }
+        public short MaximumEnergyResistance { get; } = 70;
 
-        public short HitChanceIncrease { get; set; }
+        public short HitChanceIncrease { get; } = 0;
 
-        public short SwingSpeedIncrease { get; set; }
+        public short SwingSpeedIncrease { get; } = 0;
 
-        public short DamageChanceIncrease { get; set; }
+        public short DamageChanceIncrease { get; } = 0;
 
-        public short LowerReagentCost { get; set; }
+        public short LowerReagentCost { get; } = 0;
 
-        public short HitPointsRegeneration { get; set; }
+        public short HitPointsRegeneration { get; } = 0;
 
-        public short StaminaRegeneration { get; set; }
+        public short StaminaRegeneration { get; } = 0;
 
-        public short ManaRegeneration { get; set; }
+        public short ManaRegeneration { get; } = 0;
 
-        public short ReflectPhysicalDamage { get; set; }
+        public short ReflectPhysicalDamage { get; } = 0;
 
-        public short EnhancePotions { get; set; }
+        public short EnhancePotions { get; } = 0;
 
-        public short DefenseChanceIncrease { get; set; }
+        public short DefenseChanceIncrease { get; } = 0;
 
-        public short SpellDamageIncrease { get; set; }
+        public short SpellDamageIncrease { get; } = 0;
 
-        public short FasterCastRecovery { get; set; }
+        public short FasterCastRecovery { get; } = 0;
 
-        public short FasterCasting { get; set; }
+        public short FasterCasting { get; } = 0;
 
-        public short LowerManaCost { get; set; }
+        public short LowerManaCost { get; } = 0;
 
-        public short StrengthIncrease { get; set; }
+        public short StrengthIncrease { get; } = 0;
 
-        public short DexterityIncrease { get; set; }
+        public short DexterityIncrease { get; } = 0;
 
-        public short IntelligenceIncrease { get; set; }
+        public short IntelligenceIncrease { get; } = 0;
 
-        public short HitPointsIncrease { get; set; }
+        public short HitPointsIncrease { get; } = 0;
 
-        public short StaminaIncrease { get; set; }
+        public short StaminaIncrease { get; } = 0;
 
-        public short ManaIncrease { get; set; }
+        public short ManaIncrease { get; } = 0;
 
-        public short MaximumHitPointsIncrease { get; set; }
+        public short MaximumHitPointsIncrease { get; } = 0;
 
-        public short MaximumStaminaIncrease { get; set; }
+        public short MaximumStaminaIncrease { get; } = 0;
 
-        public short MaximumManaIncrease { get; set; }
+        public short MaximumManaIncrease { get; } = 0;
 
-        public byte Notoriety { get; set; }
+        public byte Notoriety { get; } = 3;
 
-        [NotMapped] public int LoginUnknownThird { get; set; }
+        [NotMapped] public int LoginUnknownThird { get; } = 0;
 
-        [NotMapped] public int LoginUnknownFourth { get; set; }
+        [NotMapped] public int LoginUnknownFourth { get; } = 0;
 
-        [NotMapped] public byte LoginUnknownFifth { get; set; }
+        [NotMapped] public byte LoginUnknownFifth { get; } = 0;
 
-        [NotMapped] public ushort BoundaryWidth { get; set; } = 2304;
+        [NotMapped] public ushort BoundaryWidth { get; } = 2304;
 
-        [NotMapped] public ushort BoundaryHeight { get; set; } = 1600;
+        [NotMapped] public ushort BoundaryHeight { get; } = 1600;
 
-        [NotMapped] public ushort LoginUnknownSixth { get; set; }
+        [NotMapped] public ushort LoginUnknownSixth { get; } = 0;
 
-        [NotMapped] public int LoginUnknownSeventh { get; set; }
+        [NotMapped] public int LoginUnknownSeventh { get; } = 0;
 
-        public List<Skill> Skills { get; set; } = Enumerable.Range(1, 58).ToList().Select(i => new Skill
+        public List<Skill> Skills { get; } = Enumerable.Range(1, 58).ToList().Select(i => new Skill
         {
             SkillId = (ushort)i,
             Value = 1200,
@@ -226,23 +161,11 @@ namespace Launcher.Domain
 
         }).ToList();
 
-        [NotMapped] public short FirstLoginCharacterUnknown { get; set; }
+        [NotMapped] public string ProfileHeader { get; } = "Generic Humanoid";
 
-        [NotMapped] public int SecondLoginCharacterUnknown { get; set; }
+        [NotMapped] public string ProfileGraphics { get; } = string.Empty;
 
-        public int LoginCount { get; set; }
-
-        [NotMapped] public byte[] ThirdLoginCharacterUnknown { get; set; }
-
-        [NotMapped] public int ClientIpAddress { get; set; }
-
-        //[NotMapped] public byte FirstUnknownServerChange { get; set; }
-
-        [NotMapped] public string ProfileHeader { get; set; } = "Generic Player";
-
-        [NotMapped] public string ProfileBody { get; set; } = string.Empty;
-
-        [NotMapped] public string ProfileFooter { get; set; } = "This account is 689 days old.";
+        [NotMapped] public string ProfileFooter { get; } = "This account is 689 days old.";
 
         public byte WarMode { get; set; }
     }

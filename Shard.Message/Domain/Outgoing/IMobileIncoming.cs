@@ -5,8 +5,8 @@ using Shard.Message.Domain.Shared;
 namespace Shard.Message.Domain.Outgoing
 {
     public interface IMobileIncoming<TMobileEquip> :
-        ISerial,
-        IBody,
+        ISerialGet,
+        IGraphics,
         ITarget,
         IDirection,
         IHue,
@@ -14,13 +14,13 @@ namespace Shard.Message.Domain.Outgoing
         INotoriety
         where TMobileEquip : IMobileItem
     {
-        public List<TMobileEquip> Items { get; set; }
+        public List<TMobileEquip> Items { get; }
 
         internal void WriteMobileIncoming(IData data)
         {
             data.Write(3, Serial);
 
-            data.Write(7, Body);
+            data.Write(7, Graphic);
 
             data.Write(9, LocationX);
 

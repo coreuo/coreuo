@@ -3,7 +3,7 @@
 namespace Shard.Message.Domain.Outgoing
 {
     public interface IEntityRemove :
-        ISerial
+        ISerialGet
     {
         internal void WriteEntityRemove(IData data)
         {

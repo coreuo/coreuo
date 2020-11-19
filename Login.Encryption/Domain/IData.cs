@@ -4,8 +4,8 @@
     {
         public byte[] Value { get; }
 
-        public int Offset { get; set; }
+        public int Offset { get; }
 
-        public int Length { get; set; }
+        public int Length { get; }
     }
 }

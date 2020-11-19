@@ -3,9 +3,9 @@
 namespace Shard.Message.Domain.Outgoing
 {
     public interface IItemWorld :
-        ISerial,
+        ISerialGet,
         IAmount,
-        IItemId,
+        IGraphics,
         IDirection,
         ILocation,
         IHue
@@ -18,7 +18,7 @@ namespace Shard.Message.Domain.Outgoing
 
             data.Write(3, Serial | (amount ? 1 << 31 : 0));
 
-            data.Write(7, ItemId);
+            data.Write(7, Graphic);
 
             if(amount) data.Write(9, Amount);
 

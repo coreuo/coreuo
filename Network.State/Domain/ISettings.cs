@@ -4,9 +4,9 @@ namespace Network.State.Domain
 {
     public interface ISettings
     {
-        string IpAddress { get; set; }
+        string IpAddress { get; }
 
-        int Port { get; set; }
+        int Port { get; }
 
         Action<string> Output { get; }
     }

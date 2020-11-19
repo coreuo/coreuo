@@ -13,6 +13,6 @@ namespace Login.Server.Domain
 
         List<TShard> Shards { get; }
 
-        Random Random { get; set; }
+        Random Random { get; }
     }
 }

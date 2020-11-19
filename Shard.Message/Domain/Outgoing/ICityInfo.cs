@@ -4,7 +4,7 @@
     {
         string Name { get; }
 
-        string Town { get; set; }
+        string Town { get; }
 
         internal void WriteCity(int characterListSize, int index, IData data)
         {

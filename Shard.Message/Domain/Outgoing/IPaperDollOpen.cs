@@ -2,7 +2,7 @@
 {
     public interface IPaperDollOpen
     {
-        byte PaperDollFlags { get; set; }
+        byte PaperDollFlags { get; }
 
         internal void WritePaperDollOpen(IData data)
         {

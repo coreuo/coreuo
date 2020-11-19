@@ -2,9 +2,9 @@
 {
     public interface IExtendedData
     {
-        public int ExtendedOffset { get; set; }
+        public int ExtendedOffset { set; }
 
-        public int ExtendedLength { get; set; }
+        public int ExtendedLength { set; }
 
         internal int ReadExtendedData(IData data)
         {

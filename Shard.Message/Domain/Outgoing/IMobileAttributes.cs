@@ -3,7 +3,7 @@
 namespace Shard.Message.Domain.Outgoing
 {
     public interface IMobileAttributes :
-        ISerial,
+        ISerialGet,
         Shared.IMobileAttributes
     {
         /*internal void WriteMobileAttributes(IData data)

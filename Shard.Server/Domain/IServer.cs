@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Shard.Server.Domain
 {
-    public interface IServer<in TServer, in TState, in TMobile, in TItem, TEntity, in TTarget>
-        where TServer : IServer<TServer, TState, TMobile, TItem, TEntity, TTarget>
-        where TState : IState<TMobile, TItem, TEntity, TTarget>
-        where TEntity : class, TTarget, IEntity<TItem, TEntity>
-        where TMobile : TEntity, IMobile<TItem, TEntity>
-        where TItem : TEntity, IItem<TItem, TEntity>
+    public interface IServer<TServer, in TState, in TMobile, in TItem, TEntity, TIdentity, in TTarget>
+        where TServer : IServer<TServer, TState, TMobile, TItem, TEntity, TIdentity, TTarget>
+        where TState : IState<TMobile, TItem, TEntity, TIdentity, TTarget>
+        where TMobile : TEntity, IMobile<TItem, TEntity, TIdentity>
+        where TItem : TEntity, IItem<TItem, TEntity, TIdentity>
+        where TEntity : class, TTarget, IEntity<TItem, TEntity, TIdentity>
         where TTarget : ITarget
     {
         HashSet<TEntity> Entities { get; }
@@ -71,19 +71,9 @@ namespace Shard.Server.Domain
 
         Action<TState, TMobile> ProfileResponse { get; }
 
-        //HashSet<Action<TServer, TItem>> Containers { get; }
-
-        internal bool IsContainer(TItem item) => item.ItemId == 3701;
-
         Action<TState, TEntity> EntityDisplay { get; }
 
         Action<TState, TEntity> EntityContent { get; }
-
-        Action<TServer, TMobile> Human { get; }
-
-        Action<TServer, TMobile> Rat { get; }
-
-        //Action<TServer, TItem>[] GetItemTypes(TItem item);
 
         Action<TState, TEntity> EntityRemove { get; }
 
@@ -93,9 +83,9 @@ namespace Shard.Server.Domain
 
         Action<TState, TItem> EntityContentItem { get; }
 
-        void SetItemParent(TEntity parent, params TItem[] items);
+        void SetItemParent(TEntity entity, TItem item);
 
-        void RemoveItemParent(params TItem[] items);
+        Action<TItem> RemoveItemParent { get; }
 
         Action<TState, TItem> ItemWorld { get; }
 
@@ -106,6 +96,48 @@ namespace Shard.Server.Domain
         Action<TState, TMobile> SpeechResponse { get; }
 
         Action<TState> TargetRequest { get; }
+
+        Action<TEntity, string> AssignName { get; }
+
+        Action<TEntity, ushort?> AssignGraphic { get; }
+
+        Action<TEntity, ushort?> AssignHue { get; }
+
+        Action<TState, TMobile> AssignMobileItems { get; }
+
+        Action<TState, HashSet<TIdentity>> AssignRace { get; }
+
+        Action<TState, HashSet<TIdentity>> AssignGender { get; }
+
+        Action<TMobile> UpdateRace { get; }
+
+        Action<TMobile> UpdateGender { get; }
+
+        Action<TItem> AssignLayer { get; }
+
+        Action<TItem> AssignDisplayIndex { get; }
+
+        Action<TItem> AssignDisplay { get; }
+
+        Action<HashSet<TIdentity>> AssignIdentities { get; }
+
+        TIdentity Humanoid { get; }
+
+        TIdentity Mobile { get; }
+
+        TIdentity Alive { get; }
+
+        TIdentity Character { get; }
+
+        TIdentity Hair { get; }
+
+        TIdentity Face { get; }
+
+        TIdentity Beard { get; }
+
+        TIdentity Container { get; }
+
+        TIdentity Item { get; }
 
         internal void MoveItem(TState state, TEntity parent, TItem item)
         {

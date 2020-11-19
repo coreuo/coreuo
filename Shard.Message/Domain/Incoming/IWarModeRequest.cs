@@ -2,7 +2,7 @@
 {
     public interface IWarModeRequest
     {
-        byte WarMode { get; set; }
+        byte WarMode { set; }
 
         internal int ReadWarModeRequest(IData data)
         {

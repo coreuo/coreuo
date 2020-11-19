@@ -2,6 +2,6 @@
 {
     public interface IParentSerial
     {
-        int ParentSerial { get; set; }
+        int ParentSerial { set; }
     }
 }

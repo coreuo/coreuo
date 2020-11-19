@@ -2,9 +2,9 @@
 {
     public interface IAccountLogin
     {
-        string Name { get; set; }
+        string Name { set; }
 
-        string Password { get; set; }
+        string Password { set; }
 
         int ReadAccountLogin(IData data)
         {

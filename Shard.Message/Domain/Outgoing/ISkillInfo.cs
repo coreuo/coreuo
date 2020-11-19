@@ -2,15 +2,15 @@
 {
     public interface ISkillInfo
     {
-        ushort SkillId { get; set; }
+        ushort SkillId { get; }
 
-        ushort Value { get; set; }
+        ushort Value { get; }
 
-        ushort Base { get; set; }
+        ushort Base { get; }
 
-        byte Lock { get; set; }
+        byte Lock { get; }
 
-        ushort Cap { get; set; }
+        ushort Cap { get; }
 
         internal void WriteSkillInfo(int index, IData data)
         {

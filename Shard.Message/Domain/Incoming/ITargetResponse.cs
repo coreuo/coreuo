@@ -4,10 +4,11 @@ namespace Shard.Message.Domain.Incoming
 {
     public interface ITargetResponse :
         Shared.ITarget,
-        ISerial,
-        ILocation,
-        IItemId
+        ISerialSet,
+        ILocation
     {
+        ushort Graphic { set; }
+
         internal int ReadTargetResponse(IData data)
         {
             TargetMode = data.ReadByte(1);
@@ -24,7 +25,7 @@ namespace Shard.Message.Domain.Incoming
 
             LocationZ = data.ReadSByte(16);
 
-            ItemId = data.ReadUShort(17);
+            Graphic = data.ReadUShort(17);
 
             return 19;
         }

@@ -8,7 +8,7 @@ namespace Thread.Runner.Domain
 
         bool Running { get; set; }
 
-        DateTime DateTime { get; set; }
+        DateTime DateTime { set; }
 
         public Action ThreadStart { get; }
 

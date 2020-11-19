@@ -2,9 +2,9 @@
 {
     public interface IClientType
     {
-        public short UnknownClientTypeFirst { get; set; }
+        public short UnknownClientTypeFirst { set; }
 
-        public int ClientType { get; set; }
+        public int ClientType { set; }
 
         internal int ReadClientType(IData data)
         {

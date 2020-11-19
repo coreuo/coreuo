@@ -3,102 +3,102 @@
 namespace Shard.Message.Domain.Outgoing
 {
     public interface IMobileStatus :
-        ISerial,
+        ISerialGet,
         IName,
         Shared.IMobileAttributes,
         IClientFlags,
         IMobileStats,
         IRace
     {
-        public byte CanBeRenamed { get; set; }
+        public byte CanBeRenamed { get; }
 
-        public byte Sex { get; set; }
+        public byte Gender { get; }
 
-        public int GoldInPack { get; set; }
+        public int GoldInPack { get; }
 
-        public short ArmorRating { get; set; }
+        public short ArmorRating { get; }
 
-        public short Weight { get; set; }
+        public short Weight { get; }
 
-        public short MaximumWeight { get; set; }
+        public short MaximumWeight { get; }
 
-        public short StatsCap { get; set; }
+        public short StatsCap { get; }
 
-        public byte Followers { get; set; }
+        public byte Followers { get; }
 
-        public byte MaximumFollowers { get; set; }
+        public byte MaximumFollowers { get; }
 
-        public short FireResist { get; set; }
+        public short FireResist { get; }
 
-        public short ColdResist { get; set; }
+        public short ColdResist { get; }
 
-        public short PoisonResist { get; set; }
+        public short PoisonResist { get; }
 
-        public short EnergyResist { get; set; }
+        public short EnergyResist { get; }
 
-        public short Luck { get; set; }
+        public short Luck { get; }
 
-        public short DamageMinimum { get; set; }
+        public short DamageMinimum { get; }
 
-        public short DamageMaximum { get; set; }
+        public short DamageMaximum { get; }
 
-        public int TithingPoints { get; set; }
+        public int TithingPoints { get; }
 
-        public short MaximumPhysicalResistance { get; set; }
+        public short MaximumPhysicalResistance { get; }
 
-        public short MaximumFireResistance { get; set; }
+        public short MaximumFireResistance { get; }
 
-        public short MaximumColdResistance { get; set; }
+        public short MaximumColdResistance { get; }
 
-        public short MaximumPoisonResistance { get; set; }
+        public short MaximumPoisonResistance { get; }
 
-        public short MaximumEnergyResistance { get; set; }
+        public short MaximumEnergyResistance { get; }
 
-        public short HitChanceIncrease { get; set; }
+        public short HitChanceIncrease { get; }
 
-        public short SwingSpeedIncrease { get; set; }
+        public short SwingSpeedIncrease { get; }
 
-        public short DamageChanceIncrease { get; set; }
+        public short DamageChanceIncrease { get; }
 
-        public short LowerReagentCost { get; set; }
+        public short LowerReagentCost { get; }
 
-        public short HitPointsRegeneration { get; set; }
+        public short HitPointsRegeneration { get; }
 
-        public short StaminaRegeneration { get; set; }
+        public short StaminaRegeneration { get; }
 
-        public short ManaRegeneration { get; set; }
+        public short ManaRegeneration { get; }
 
-        public short ReflectPhysicalDamage { get; set; }
+        public short ReflectPhysicalDamage { get; }
 
-        public short EnhancePotions { get; set; }
+        public short EnhancePotions { get; }
 
-        public short DefenseChanceIncrease { get; set; }
+        public short DefenseChanceIncrease { get; }
 
-        public short SpellDamageIncrease { get; set; }
+        public short SpellDamageIncrease { get; }
 
-        public short FasterCastRecovery { get; set; }
+        public short FasterCastRecovery { get; }
 
-        public short FasterCasting { get; set; }
+        public short FasterCasting { get; }
 
-        public short LowerManaCost { get; set; }
+        public short LowerManaCost { get; }
 
-        public short StrengthIncrease { get; set; }
+        public short StrengthIncrease { get; }
 
-        public short DexterityIncrease { get; set; }
+        public short DexterityIncrease { get; }
 
-        public short IntelligenceIncrease { get; set; }
+        public short IntelligenceIncrease { get; }
 
-        public short HitPointsIncrease { get; set; }
+        public short HitPointsIncrease { get; }
 
-        public short StaminaIncrease { get; set; }
+        public short StaminaIncrease { get; }
 
-        public short ManaIncrease { get; set; }
+        public short ManaIncrease { get; }
 
-        public short MaximumHitPointsIncrease { get; set; }
+        public short MaximumHitPointsIncrease { get; }
 
-        public short MaximumStaminaIncrease { get; set; }
+        public short MaximumStaminaIncrease { get; }
 
-        public short MaximumManaIncrease { get; set; }
+        public short MaximumManaIncrease { get; }
 
         internal void WriteMobileStatus(IData data)
         {
@@ -114,7 +114,7 @@ namespace Shard.Message.Domain.Outgoing
 
             data.Write(42, (byte)ClientFlags);
 
-            data.Write(43, Sex);
+            data.Write(43, Gender);
 
             data.Write(44, Strength);
 

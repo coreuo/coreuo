@@ -2,7 +2,7 @@
 {
     public interface ISupportedFeatures
     {
-        int FeatureFlags { get; set; }
+        int FeatureFlags { get; }
 
         internal void WriteSupportedFeatures(IData data)
         {

@@ -4,7 +4,7 @@ using Shard.Message.Domain.Shared;
 namespace Shard.Message.Domain.Outgoing
 {
     public interface IEntityInfo<TAttribute> :
-        ISerial,
+        ISerialGet,
         IAttributes<TAttribute>
         where TAttribute : IAttribute
     {

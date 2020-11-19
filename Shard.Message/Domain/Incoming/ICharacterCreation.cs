@@ -6,67 +6,65 @@ namespace Shard.Message.Domain.Incoming
         IPattern,
         ISlot,
         IName,
+        IPassword,
         IClientFlags,
         IRace,
+        IHue,
         IMobileStats
     {
-        public string Password { get; set; }
+        public byte Profession { set; }
 
-        public byte Profession { get; set; }
+        public byte Gender { set; }
 
-        public byte Gender { get; set; }
+        public int UnknownCharacterCreationFirst { set; }
 
-        public short SkinColor { get; set; }
+        public int UnknownCharacterCreationSecond { set; }
 
-        public int UnknownCharacterCreationFirst { get; set; }
+        public byte SkillFirst { set; }
 
-        public int UnknownCharacterCreationSecond { get; set; }
+        public byte SkillFirstValue { set; }
 
-        public byte SkillFirst { get; set; }
+        public byte SkillSecond { set; }
 
-        public byte SkillFirstValue { get; set; }
+        public byte SkillSecondValue { set; }
 
-        public byte SkillSecond { get; set; }
+        public byte SkillThird { set; }
 
-        public byte SkillSecondValue { get; set; }
+        public byte SkillThirdValue { set; }
 
-        public byte SkillThird { get; set; }
+        public byte SkillFourth { set; }
 
-        public byte SkillThirdValue { get; set; }
+        public byte SkillFourthValue { set; }
 
-        public byte SkillFourth { get; set; }
+        public byte[] UnknownCharacterCreationThird { set; }
 
-        public byte SkillFourthValue { get; set; }
+        public byte UnknownCharacterCreationFourth { set; }
 
-        public byte[] UnknownCharacterCreationThird { get; set; }
+        public ushort HairHue { set; }
 
-        public byte UnknownCharacterCreationFourth { get; set; }
+        public ushort HairGraphic { set; }
 
-        public short HairColor { get; set; }
+        public byte UnknownCharacterCreationFifth { set; }
 
-        public short HairStyle { get; set; }
+        public int UnknownCharacterCreationSixth { set; }
 
-        public byte UnknownCharacterCreationFifth { get; set; }
+        public byte UnknownCharacterCreationSeventh { set; }
 
-        public int UnknownCharacterCreationSixth { get; set; }
+        public short ShirtColor { set; }
 
-        public byte UnknownCharacterCreationSeventh { get; set; }
+        public short ShirtStyle { set; }
 
-        public short ShirtColor { get; set; }
+        public byte UnknownCharacterCreationEighth { set; }
 
-        public short ShirtStyle { get; set; }
+        public ushort FaceHue { set; }
 
-        public byte UnknownCharacterCreationEighth { get; set; }
+        public ushort FaceGraphic { set; }
 
-        public short FaceColor { get; set; }
+        public byte UnknownCharacterCreationNinth { set; }
 
-        public short FaceStyle { get; set; }
+        public ushort BeardGraphic { set; }
 
-        public byte UnknownCharacterCreationNinth { get; set; }
-
-        public short BeardStyle { get; set; }
-
-        public short BeardColor { get; set; }
+        public ushort BeardHue { set; }
 
         internal int ReadCharacterCreation(IData data)
         {
@@ -92,7 +90,7 @@ namespace Shard.Message.Domain.Incoming
 
             Intelligence = data.ReadByte(77);
 
-            SkinColor = data.ReadShort(78);
+            Hue = data.ReadUShort(78);
 
             UnknownCharacterCreationFirst = data.ReadInt(80);
 
@@ -118,9 +116,9 @@ namespace Shard.Message.Domain.Incoming
 
             UnknownCharacterCreationFourth = data.ReadByte(121);
 
-            HairColor = data.ReadShort(122);
+            HairHue = data.ReadUShort(122);
 
-            HairStyle = data.ReadShort(124);
+            HairGraphic = data.ReadUShort(124);
 
             UnknownCharacterCreationFifth = data.ReadByte(126);
 
@@ -134,15 +132,15 @@ namespace Shard.Message.Domain.Incoming
 
             UnknownCharacterCreationEighth = data.ReadByte(136);
 
-            FaceColor = data.ReadShort(137);
+            FaceHue = data.ReadUShort(137);
 
-            FaceStyle = data.ReadShort(139);
+            FaceGraphic = data.ReadUShort(139);
 
             UnknownCharacterCreationNinth = data.ReadByte(141);
 
-            BeardStyle = data.ReadShort(142);
+            BeardHue = data.ReadUShort(142);
 
-            BeardColor = data.ReadShort(144);
+            BeardGraphic = data.ReadUShort(144);
 
             return data.ReadShort(1);
         }

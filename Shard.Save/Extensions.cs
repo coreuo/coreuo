@@ -15,13 +15,15 @@ namespace Shard.Save
         public static (Domain.Save<TSave>, TType) AddCustom<TSave, TType, TValue>(this (Domain.Save<TSave> save, TType type) context, Expression<Func<TType, TValue>> property)
             where TSave : Domain.Save<TSave>, new()
         {
+            return AddCustom(context, property, v => JsonSerializer.Serialize(v, default), v => JsonSerializer.Deserialize<TValue>(v, default));
+        }
+
+        private static (Domain.Save<TSave>, TType) AddCustom<TSave, TType, TSource, TTarget>(this (Domain.Save<TSave> save, TType type) context, Expression<Func<TType, TSource>> property, Expression<Func<TSource, TTarget>> source, Expression<Func<TTarget, TSource>> target)
+            where TSave : Domain.Save<TSave>, new()
+        {
             var expression = (MemberExpression)property.Body;
 
-            var converter = new ValueConverter<TValue, string>
-            (
-                v => JsonSerializer.Serialize(v, default),
-                v => JsonSerializer.Deserialize<TValue>(v, default)
-            );
+            var converter = new ValueConverter<TSource, TTarget>(source, target);
 
             context.save.CustomMapping.Add((typeof(TType), expression.Member.Name, converter));
 

@@ -40,7 +40,7 @@ namespace Shard.Message.Domain
 
         void Write(int offset, int value);
 
-        int WriteAscii(int offset, string text, int? size = null);
+        void WriteAscii(int offset, string text, int size);
 
         int WriteAsciiTerminated(int offset, string text);
 

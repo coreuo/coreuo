@@ -2,6 +2,6 @@
 {
     public interface IShard
     {
-        int AuthorizationId { get; set; }
+        int AuthorizationId { set; }
     }
 }

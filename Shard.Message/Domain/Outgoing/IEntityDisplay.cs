@@ -3,15 +3,15 @@
 namespace Shard.Message.Domain.Outgoing
 {
     public interface IEntityDisplay :
-        ISerial
+        ISerialGet
     {
-        public short EntityDisplayId { get; }
+        public ushort Display { get; }
 
         internal void WriteEntityDisplay(IData data)
         {
             data.Write(1, Serial);
 
-            data.Write(5, EntityDisplayId);
+            data.Write(5, Display);
         }
     }
 }

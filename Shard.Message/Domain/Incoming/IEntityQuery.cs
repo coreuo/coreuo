@@ -5,7 +5,7 @@ namespace Shard.Message.Domain.Incoming
 {
     public interface IEntityQuery
     {
-        List<int> SerialList { get; set; }
+        List<int> SerialList { set; }
 
         internal int ReadEntityQuery(IData data)
         {

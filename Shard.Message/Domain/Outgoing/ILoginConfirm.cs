@@ -3,28 +3,28 @@
 namespace Shard.Message.Domain.Outgoing
 {
     public interface ILoginConfirm :
-        ISerial,
-        IBody,
+        ISerialGet,
+        IGraphics,
         ITarget,
         IDirection
     {
-        public int LoginUnknownFirst { get; set; }
+        public int LoginUnknownFirst { get; }
 
-        public byte LoginUnknownSecond { get; set; }
+        public byte LoginUnknownSecond { get; }
 
-        public int LoginUnknownThird { get; set; }
+        public int LoginUnknownThird { get; }
 
-        public int LoginUnknownFourth { get; set; }
+        public int LoginUnknownFourth { get; }
 
-        public byte LoginUnknownFifth { get; set; }
+        public byte LoginUnknownFifth { get; }
 
-        public ushort BoundaryWidth { get; set; }
+        public ushort BoundaryWidth { get; }
 
-        public ushort BoundaryHeight { get; set; }
+        public ushort BoundaryHeight { get; }
 
-        public ushort LoginUnknownSixth { get; set; }
+        public ushort LoginUnknownSixth { get; }
 
-        public int LoginUnknownSeventh { get; set; }
+        public int LoginUnknownSeventh { get; }
 
         internal void WriteLoginConfirm(IData data)
         {
@@ -32,7 +32,7 @@ namespace Shard.Message.Domain.Outgoing
 
             data.Write(5, LoginUnknownFirst);
 
-            data.Write(9, Body);
+            data.Write(9, Graphic);
 
             data.Write(11, LocationX);
 

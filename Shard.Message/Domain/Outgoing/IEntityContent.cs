@@ -6,7 +6,7 @@ namespace Shard.Message.Domain.Outgoing
 {
     public interface IEntityContent<TItem, TEntity>
         where TItem : IEntityContentItem<TEntity>
-        where TEntity : ISerial
+        where TEntity : ISerialGet
     {
         List<TItem> Items { get; }
 

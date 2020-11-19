@@ -3,22 +3,22 @@
 namespace Shard.Message.Domain.Outgoing
 {
     public interface IMobileUpdate :
-        ISerial,
-        IBody,
+        ISerialGet,
+        IGraphics,
         IHue,
         IStatusFlags,
         ITarget,
         IDirection
     {
-        public byte UnknownMobileUpdateFirst { get; set; }
+        public byte UnknownMobileUpdateFirst { get; }
 
-        public short UnknownMobileUpdateSecond { get; set; }
+        public short UnknownMobileUpdateSecond { get; }
 
         internal void WriteMobileUpdate(IData data)
         {
             data.Write(1, Serial);
 
-            data.Write(5, Body);
+            data.Write(5, Graphic);
 
             data.Write(7, UnknownMobileUpdateFirst);
 

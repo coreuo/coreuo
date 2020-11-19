@@ -44,15 +44,15 @@ namespace Launcher.Domain
 
         public EndPoint EndPoint { get; set; }
 
-        public ConcurrentQueue<LoginState> ListenQueue { get; set; } = new ConcurrentQueue<LoginState>();
+        public ConcurrentQueue<LoginState> ListenQueue { get; } = new();
         
         public bool Listening { get; set; }
 
-        public List<LoginState> States { get; set; } = new List<LoginState>();
+        public List<LoginState> States { get; } = new();
 
-        public Random Random { get; set; } = new Random();
+        public Random Random { get; } = new();
 
-        public List<ShardServer> Shards { get; set; }
+        public List<ShardServer> Shards { get; }
 
         public Action ThreadStart => () => NetworkListenerHandlers.Start(this);
 

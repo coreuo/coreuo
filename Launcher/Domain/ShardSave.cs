@@ -8,7 +8,7 @@ namespace Launcher.Domain
     public class ShardSave : 
         Shard.Save.Domain.Save<ShardSave>
     {
-        public override string Path { get; set; } = "Save.db";
+        protected override string Path { get; } = "Save.db";
 
         public ShardServer Load() => SaveHandlers.Load(this);
 
