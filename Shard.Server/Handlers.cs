@@ -24,6 +24,8 @@ namespace Shard.Server
                 server.AssignRace(state, identities);
 
                 server.AssignGender(state, identities);
+
+                server.AssignProfession(state, identities);
             }
             
             server.AssignIdentities(identities);
@@ -75,7 +77,7 @@ namespace Shard.Server
             server.UpdateGender(mobile);
         }
 
-        private static void AssignItem(TServer server, TState state, TItem item)
+        private static void AssignItem(TServer server, TState state, TItem item, ushort? hue = null)
         {
             if (state != null && item.Is(server.Face)) AssignEntity(server, item, state.FaceGraphic, state.FaceHue);
 
@@ -83,7 +85,7 @@ namespace Shard.Server
 
             else if (state != null && item.Is(server.Beard)) AssignEntity(server, item, state.BeardGraphic, state.BeardHue);
 
-            else AssignEntity(server, item);
+            else AssignEntity(server, item, null, hue);
 
             server.AssignLayer(item);
 
@@ -107,18 +109,20 @@ namespace Shard.Server
 
         private static TMobile CreateMobile(TServer server, params TIdentity[] identities) => CreateMobile(server, null, identities);
 
-        public static TItem CreateItem(TServer server, TState state, params TIdentity[] identities)
+        public static TItem CreateItem(TServer server, TState state, ushort? hue = null, params TIdentity[] identities)
         {
             var item = CreateItem(server);
 
             item.Set(CreateIdentities(server, state, server.Item, identities));
 
-            AssignItem(server, state, item);
+            AssignItem(server, state, item, hue);
 
             return item;
         }
 
-        public static TItem CreateItem(TServer server, params TIdentity[] identities) => CreateItem(server, null, identities);
+        public static TItem CreateItem(TServer server, params TIdentity[] identities) => CreateItem(server, null, null, identities);
+
+        public static TItem CreateItem(TServer server, ushort hue, params TIdentity[] identities) => CreateItem(server, null, hue, identities);
 
         public static void SetItemParent(TServer server, TEntity parent, TItem item)
         {

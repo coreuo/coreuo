@@ -25,11 +25,11 @@ namespace Shard.Entity.Items.Domain
 
         TIdentity RedBook { get;  }
 
-        TIdentity Robe { get; }
-
         TIdentity Candle { get;  }
 
         TIdentity Dagger { get;  }
+
+        void AssignProfessionItems(TMobile mobile);
 
         internal void AddItem(TEntity entity, TIdentity identity, ushort amount = 1)
         {

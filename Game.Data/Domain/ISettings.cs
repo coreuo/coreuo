@@ -66,5 +66,13 @@ namespace Game.Data.Domain
         void AddHumanFemaleShoesGraphics(IEnumerable<ushort> values);
 
         void AddElfFemaleShoesGraphics(IEnumerable<ushort> values);
+
+        void AddHumanMaleProfessionItems(sbyte id, IReadOnlyList<ushort> values);
+
+        void AddHumanFemaleProfessionItems(sbyte id, IReadOnlyList<ushort> values);
+
+        void AddElfMaleProfessionItems(sbyte id, IReadOnlyList<ushort> values);
+
+        void AddElfFemaleProfessionItems(sbyte id, IReadOnlyList<ushort> values);
     }
 }

@@ -71,6 +71,14 @@ namespace Game.Data
             LoadHumanFemaleShoesGraphics(settings);
 
             LoadElfFemaleShoesGraphics(settings);
+
+            LoadHumanMaleProfessionItems(settings);
+
+            LoadHumanFemaleProfessionItems(settings);
+
+            LoadElfMaleProfessionItems(settings);
+
+            LoadElfFemaleProfessionItems(settings);
         }
 
         private static void LoadStringData(TSettings settings)
@@ -385,6 +393,62 @@ namespace Game.Data
             var document = settings.CsvDocuments[0x3C43AEE43E0626A8];
 
             settings.AddElfFemaleShoesGraphics(document.Data[1].Select(v => Convert.ToUInt16(v)));
+        }
+
+        private static void LoadHumanMaleProfessionItems(TSettings settings)
+        {
+            var document = settings.CsvDocuments[0x72587BA3107BA0B6];
+
+            for (var i = 0; i < document.Data[0].Length; i++)
+            {
+                sbyte id = string.IsNullOrEmpty(document.Data[2][i]) ? 0 : Convert.ToSByte(document.Data[2][i]);
+
+                if(id == 0) continue;
+
+                settings.AddHumanMaleProfessionItems(id, document.Data.Skip(3).Select(d => string.IsNullOrEmpty(d[i]) ? (ushort)0 : Convert.ToUInt16(d[i])).ToList());
+            }
+        }
+
+        private static void LoadHumanFemaleProfessionItems(TSettings settings)
+        {
+            var document = settings.CsvDocuments[0x947FEEDB39E641C3];
+
+            for (var i = 0; i < document.Data[0].Length; i++)
+            {
+                sbyte id = string.IsNullOrEmpty(document.Data[2][i]) ? 0 : Convert.ToSByte(document.Data[2][i]);
+
+                if (id == 0) continue;
+
+                settings.AddHumanFemaleProfessionItems(id, document.Data.Skip(3).Select(d => string.IsNullOrEmpty(d[i]) ? (ushort)0 : Convert.ToUInt16(d[i])).ToList());
+            }
+        }
+
+        private static void LoadElfMaleProfessionItems(TSettings settings)
+        {
+            var document = settings.CsvDocuments[0xA2E3E341D0829A73];
+
+            for (var i = 0; i < document.Data[0].Length; i++)
+            {
+                sbyte id = string.IsNullOrEmpty(document.Data[2][i]) ? 0 : Convert.ToSByte(document.Data[2][i]);
+
+                if (id == 0) continue;
+
+                settings.AddElfMaleProfessionItems(id, document.Data.Skip(3).Select(d => string.IsNullOrEmpty(d[i]) ? (ushort)0 : Convert.ToUInt16(d[i])).ToList());
+            }
+        }
+
+        private static void LoadElfFemaleProfessionItems(TSettings settings)
+        {
+            var document = settings.CsvDocuments[0x241C57F10355D74D];
+
+            for (var i = 0; i < document.Data[0].Length; i++)
+            {
+                sbyte id = string.IsNullOrEmpty(document.Data[2][i]) ? 0 : Convert.ToSByte(document.Data[2][i]);
+
+                if (id == 0) continue;
+
+                settings.AddElfFemaleProfessionItems(id, document.Data.Skip(3).Select(d => string.IsNullOrEmpty(d[i]) ? (ushort)0 : Convert.ToUInt16(d[i])).ToList());
+            }
         }
 
         public static void AssignName(TSettings settings, TEntity entity, string name)

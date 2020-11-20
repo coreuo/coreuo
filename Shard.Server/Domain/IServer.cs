@@ -139,6 +139,8 @@ namespace Shard.Server.Domain
 
         TIdentity Item { get; }
 
+        void AssignProfession(TState state, HashSet<TIdentity> identities);
+
         internal void MoveItem(TState state, TEntity parent, TItem item)
         {
             Action action = parent switch

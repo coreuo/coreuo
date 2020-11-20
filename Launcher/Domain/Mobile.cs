@@ -8,8 +8,9 @@ namespace Launcher.Domain
         Shard.Message.Domain.IMobile<Item, Skill>,
         Shard.Message.Extended.Domain.IMobile<Map, MapPatch>,
         Shard.Server.Domain.IMobile<Item, Entity, Identity>,
-        Shard.Entity.Items.Domain.IMobile,
-        Shard.Mobile.Race.Domain.IMobile
+        Shard.Entity.Items.Domain.IMobile<Item>,
+        Shard.Mobile.Race.Domain.IMobile,
+        Shard.Mobile.Profession.Domain.IMobile<Identity>
     {
         public short CurrentHitPoints { get; } = 67;
 
@@ -168,5 +169,7 @@ namespace Launcher.Domain
         [NotMapped] public string ProfileFooter { get; } = "This account is 689 days old.";
 
         public byte WarMode { get; set; }
+
+        public Item Backpack { get; set; }
     }
 }

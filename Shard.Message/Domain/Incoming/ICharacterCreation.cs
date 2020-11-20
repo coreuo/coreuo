@@ -12,7 +12,7 @@ namespace Shard.Message.Domain.Incoming
         IHue,
         IMobileStats
     {
-        public byte Profession { set; }
+        public sbyte Profession { set; }
 
         public byte Gender { set; }
 
@@ -76,7 +76,7 @@ namespace Shard.Message.Domain.Incoming
 
             Password = data.ReadAscii(41, 30);
 
-            Profession = data.ReadByte(71);
+            Profession = data.ReadSByte(71);
 
             ClientFlags = data.ReadByte(72);
 

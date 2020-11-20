@@ -50,6 +50,8 @@ namespace Shard.Entity.Identity
 
         public static bool Is(TEntity entity, params TIdentity[] identities) => identities.All(entity.Identities.Contains);
 
+        public static bool Is(TEntity entity, IEnumerable<TIdentity> identities) => identities.All(entity.Identities.Contains);
+
         public static void Set(TEntity entity, params TIdentity[] identities)
         {
             foreach (var identity in identities) SetIdentity(entity, identity);

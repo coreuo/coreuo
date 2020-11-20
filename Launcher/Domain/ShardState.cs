@@ -22,7 +22,8 @@ namespace Launcher.Domain
         Shard.Server.Domain.IState<Mobile, Item, Entity, Identity, Target>,
         Shard.Entity.Items.Domain.IState,
         Shard.Mobile.Race.Domain.IState,
-        Shard.Entity.Graphic.Domain.IState
+        Shard.Entity.Graphic.Domain.IState,
+        Shard.Mobile.Profession.Domain.IState
     {
         // ReSharper disable once UnusedMember.Global
         public int Id { get; set; }
@@ -90,7 +91,7 @@ namespace Launcher.Domain
 
         [NotMapped] public string Password { get; set; }
 
-        [NotMapped] public byte Profession { get; set; }
+        [NotMapped] public sbyte Profession { get; set; }
 
         [NotMapped] public byte Gender { get; set; }
 

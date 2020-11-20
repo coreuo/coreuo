@@ -14,6 +14,7 @@
     <ProjectReference Include="..\Shard.Entity.Graphic\Shard.Entity.Graphic.csproj" />
     <ProjectReference Include="..\Shard.Entity.Identity\Shard.Entity.Identity.csproj" />
     <ProjectReference Include="..\Shard.Entity.Items\Shard.Entity.Items.csproj" />
+    <ProjectReference Include="..\Shard.Mobile.Profession\Shard.Mobile.Profession.csproj" />
     <ProjectReference Include="..\Shard.Mobile.Race\Shard.Mobile.Race.csproj" />
     <ProjectReference Include="..\Shard.Save\Shard.Save.csproj" />
     <ProjectReference Include="..\Shard.Message.Compression\Shard.Message.Compression.csproj" />

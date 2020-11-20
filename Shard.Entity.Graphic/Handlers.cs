@@ -179,11 +179,11 @@ namespace Shard.Entity.Graphic
             UpdateValue(ranges, entity.HueIndex, v => entity.Hue = v);
         }*/
 
-        private static void AssignValue(TServer server, TEntity entity, string name, IReadOnlyCollection<Range> ranges, ushort? value, Action<ushort> valueAssigner, Action<int> indexAssigner)
+        private static void AssignValue(TServer server, TEntity entity, string name, IReadOnlyCollection<Range> ranges, ushort? value, Action<ushort> valueAssigner, Action<int> indexAssigner, bool random)
         {
             if (value == null)
             {
-                var index = server.Random.Next(ranges.Size());
+                var index = random ? server.Random.Next(ranges.Size()) : 0;
 
                 indexAssigner(index);
 
@@ -205,7 +205,7 @@ namespace Shard.Entity.Graphic
 
             if(!ranges.Any()) throw new InvalidOperationException($"Unknown graphic ranges for entity ({entity})");
 
-            AssignValue(server, entity, nameof(entity.Graphic), ranges, value, v => entity.Graphic = v, i => entity.GraphicIndex = i);
+            AssignValue(server, entity, nameof(entity.Graphic), ranges, value, v => entity.Graphic = v, i => entity.GraphicIndex = i, false);
         }
 
         public static void AssignHue(TServer server, TEntity entity, ushort? value)
@@ -214,12 +214,24 @@ namespace Shard.Entity.Graphic
 
             if (!ranges.Any()) throw new InvalidOperationException($"Unknown hue ranges for entity ({entity})");
 
-            AssignValue(server, entity, nameof(entity.Hue), ranges, value, v => entity.Hue = v, i => entity.HueIndex = i);
+            AssignValue(server, entity, nameof(entity.Hue), ranges, value, v => entity.Hue = v, i => entity.HueIndex = i, true);
         }
 
         public static void AssignDisplayIndex(TServer server, TEntity entity)
         {
             entity.DisplayIndex = server.Containers.Select((t, i) => new {Type = t, Index = i}).Single(g => entity.Is(g.Type)).Index;
+        }
+
+        public static HashSet<TIdentity> GetIdentitiesByGraphic(TServer server, ushort graphic)
+        {
+            try
+            {
+                return server.GraphicRanges.Where(p => p.Value.Contains(graphic)).OrderBy(p => p.Value.Size()).First().Key;
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException($"Unknown identities for graphic ({graphic}) {e}");
+            }
         }
     }
 }
