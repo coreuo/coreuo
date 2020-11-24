@@ -1,19 +1,18 @@
-﻿using System;
-
-namespace Shard.Entity.Items.Domain
+﻿namespace Shard.Entity.Items.Domain
 {
     public interface IServer<in TState, in TMobile, TItem, in TEntity, TIdentity>
+        where TState : class
         where TItem : IItem
     {
         TItem CreateItem(params TIdentity[] identities);
 
         void SetItemParent(TEntity parent, TItem item);
 
-        Action<TState, TMobile> AssignFace { get; }
+        void AssignFace(TMobile mobile, TState state = null);
 
-        Action<TState, TMobile> AssignHair { get; }
+        void AssignHair(TMobile mobile, TState state = null);
 
-        Action<TState, TMobile> AssignBeard { get; }
+        void AssignBeard(TMobile mobile, TState state = null);
 
         TIdentity Humanoid { get;  }
 

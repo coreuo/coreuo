@@ -6,9 +6,9 @@ namespace Shard.Message.Extended.Domain
         where TState : IState<TData>
         where TData : IData
     {
-        Action<TState> ClientLanguage { get; }
+        void ClientLanguage(TState state);
 
-        Action<TState> StatusClose { get; }
+        void StatusClose(TState state);
 
         public string Identity { get; }
 

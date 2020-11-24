@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 
 namespace Shard.Message.Compression.Domain
 {
     public interface IState<TData>
         where TData : IData
     {
-        Func<TData> GetBuffer { get; }
+        TData GetBuffer();
 
         ConcurrentQueue<TData> BufferQueue { get; }
     }

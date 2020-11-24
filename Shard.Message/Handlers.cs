@@ -224,7 +224,7 @@ namespace Shard.Message
 
         public static void SpeechResponse(TState state, TMobile mobile)
         {
-            state.Write(0xAE, 48 + 2 * state.SpeechText.Length + 2, data =>
+            state.Write(0xAE, 48 + 2 * state.SpeechText?.Length ?? 0 + 2, data =>
             {
                 mobile.WriteMobileSpeech(data);
 

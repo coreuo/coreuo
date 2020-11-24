@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Network.Listener.Domain
+﻿namespace Network.Listener.Domain
 {
     public interface ISettings
     {
@@ -8,8 +6,8 @@ namespace Network.Listener.Domain
 
         string IpAddress { get; set; }
 
-        int Port { get; set; }
+        int? Port { get; set; }
 
-        Action<string> Output { get; }
+        void Output(string text);
     }
 }

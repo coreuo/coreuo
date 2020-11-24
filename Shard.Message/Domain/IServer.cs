@@ -19,47 +19,47 @@ namespace Shard.Message.Domain
         where TAttribute : IAttribute
         where TSkillInfo : ISkill
     {
-        public Action<TState> ClientSeed { get; }
+        void ClientSeed(TState state);
 
-        public Action<TState> EncryptionResponse { get; }
+        void EncryptionResponse(TState state);
 
-        public Action<TState> AccountLogin { get; }
+        void AccountLogin(TState state);
 
-        public Action<TState> CharacterCreate { get; }
+        void CharacterCreate(TState state);
 
-        public Action<TState> MobileQuery { get; }
+        void MobileQuery(TState state);
 
-        public Action<TState, TData> ExtendedData { get; }
+        void ExtendedData(TState state, TData data);
 
-        public Action<TState> ChatRequest { get; }
+        void ChatRequest(TState state);
 
-        public Action<TState> PingRequest { get; }
+        void PingRequest(TState state);
 
-        public Action<TState> MoveRequest { get; }
+        void MoveRequest(TState state);
 
-        public Action<TState> ClientType { get; }
+        void ClientType(TState state);
 
-        public Action<TState> CharacterLogin { get; }
+        void CharacterLogin(TState state);
 
-        public Action<TState> EntityQuery { get; }
+        void EntityQuery(TState state);
 
-        public Action<TState> EntityUse { get; }
+        void EntityUse(TState state);
 
-        public Action<TState> ProfileRequest { get; }
+        void ProfileRequest(TState state);
 
-        public Action<TState> ItemPick { get; }
+        void ItemPick(TState state);
 
-        public Action<TState> ItemPlace { get; }
+        void ItemPlace(TState state);
 
-        public Action<TState> ItemWear { get; }
+        void ItemWear(TState state);
 
-        public Action<TState> WarModeRequest { get; }
+        void WarModeRequest(TState state);
 
-        public Action<TState> SpeechRequest { get; }
+        void SpeechRequest(TState state);
 
-        public Action<TState> TargetResponse { get; }
+        void TargetResponse(TState state);
 
-        Action<string> Output { get; }
+        void Output(string text);
 
         internal int Read(TState state, TData data)
         {

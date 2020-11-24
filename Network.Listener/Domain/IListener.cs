@@ -14,6 +14,8 @@ namespace Network.Listener.Domain
 
         internal void BeginListen()
         {
+            if(EndPoint == null) throw new InvalidOperationException("Unable to begin listen, please initialize first.");
+
             try
             {
                 BeginListen(EndPoint);

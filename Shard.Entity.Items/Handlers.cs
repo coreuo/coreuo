@@ -4,20 +4,20 @@ namespace Shard.Entity.Items
 {
     public static class Handlers<TServer, TState, TMobile, TItem, TEntity, TIdentity>
         where TServer : IServer<TState, TMobile, TItem, TEntity, TIdentity>
-        where TState : IState
+        where TState : class, IState
         where TMobile : TEntity, IMobile<TItem>
         where TItem : class, TEntity, IItem
         where TEntity : IEntity<TIdentity>
     {
-        public static void AssignMobileItems(TServer server, TState state, TMobile mobile)
+        public static void AssignMobileItems(TServer server, TMobile mobile, TState state = null)
         {
             if (mobile.Is(server.Humanoid))
             {
-                server.AssignFace(state, mobile);
+                server.AssignFace(mobile, state);
 
-                server.AssignHair(state, mobile);
+                server.AssignHair(mobile, state);
 
-                server.AssignBeard(state, mobile);
+                server.AssignBeard(mobile, state);
             }
 
             var backpack = mobile.Backpack = server.CreateItem(server.Backpack);

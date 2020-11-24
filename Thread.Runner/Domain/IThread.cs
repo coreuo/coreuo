@@ -10,15 +10,15 @@ namespace Thread.Runner.Domain
 
         DateTime DateTime { set; }
 
-        public Action ThreadStart { get; }
+        void ThreadStart();
 
-        public Action ThreadUnlock { get; }
+        void ThreadUnlock();
 
-        public Action ThreadSlice { get; }
+        void ThreadSlice();
 
-        public Action ThreadStop { get; }
+        Action ThreadStop { get; }
 
-        Action<string> Output { get; }
+        void Output(string text);
 
         internal void Run()
         {

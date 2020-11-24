@@ -8,7 +8,7 @@ namespace Shard.Message.Extended.Domain
         IStatusClose
         where TData : IData
     {
-        Action<int, Action<TData>, string> ExtendedData { get; }
+        void ExtendedData(int size, Action<TData> writer, string name);
 
         internal void Write(short id, int size, Action<IData> writer)
         {

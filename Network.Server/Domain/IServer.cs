@@ -18,13 +18,13 @@ namespace Network.Server.Domain
 
         bool Running { set; }
 
-        Action<TState> StateStart { get; }
+        void StateStart(TState state);
 
-        Action<TState> StateStop { get; }
+        void StateStop(TState state);
 
-        Action<TState, TData> DataReceived { get; }
+        void DataReceived(TState state, TData data);
 
-        Action<string> Output { get; }
+        void Output(string text);
 
         internal void ProcessListenQueue()
         {

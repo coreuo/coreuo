@@ -1,5 +1,4 @@
-﻿using System;
-using Shard.Save;
+﻿using Shard.Save;
 
 namespace Launcher.Domain
 {
@@ -12,7 +11,7 @@ namespace Launcher.Domain
 
         public ShardServer Load() => SaveHandlers.Load(this);
 
-        public Action Process => () => SaveHandlers.Process(this);
+        public void Process() => SaveHandlers.Process(this);
 
         public ShardSave()
         {

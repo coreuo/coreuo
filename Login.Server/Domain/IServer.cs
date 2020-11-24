@@ -7,9 +7,9 @@ namespace Login.Server.Domain
         where TState : IState
         where TShard : IShard
     {
-        Action<TState> ShardList { get; }
+        void ShardList(TState state);
 
-        Action<TState> ShardServer { get; }
+        void ShardServer(TState state);
 
         List<TShard> Shards { get; }
 

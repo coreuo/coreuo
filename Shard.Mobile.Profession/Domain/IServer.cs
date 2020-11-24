@@ -4,6 +4,7 @@ using System.Linq;
 namespace Shard.Mobile.Profession.Domain
 {
     public interface IServer<TItem, in TEntity, TIdentity>
+        where TIdentity : class
     {
         TIdentity Male { get; }
 

@@ -1,4 +1,5 @@
-﻿using Shard.Message.Domain.Shared;
+﻿using System;
+using Shard.Message.Domain.Shared;
 
 namespace Shard.Message.Domain.Outgoing
 {
@@ -12,6 +13,8 @@ namespace Shard.Message.Domain.Outgoing
     {
         internal void WriteItemWearUpdate(IData data)
         {
+            if (Parent == null) throw new InvalidOperationException($"Unknown item ({this}) parent.");
+
             data.Write(1, Serial);
 
             data.Write(5, Graphic);

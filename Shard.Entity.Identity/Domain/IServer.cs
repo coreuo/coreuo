@@ -17,7 +17,7 @@ namespace Shard.Entity.Identity.Domain
 
         private TIdentity Identity(string guid, string name)
         {
-            var identity = new TIdentity { Guid = new Guid(guid), Name = name };
+            var identity = new TIdentity{ Guid = new Guid(guid), Name = name };
 
             IdentityNames.Add(identity.Name, identity);
 
@@ -488,7 +488,7 @@ namespace Shard.Entity.Identity.Domain
         TIdentity Dress { get; set; }
         TIdentity Skirt { get; set; }
 
-        internal void LoadIdentities()
+        internal void Initialize()
         {
             IdentityNames.Clear();
 

@@ -1,4 +1,5 @@
 ﻿using Shard.Message.Domain.Shared;
+using System;
 
 namespace Shard.Message.Domain.Outgoing
 {
@@ -102,6 +103,8 @@ namespace Shard.Message.Domain.Outgoing
 
         internal void WriteMobileStatus(IData data)
         {
+            if (Name == null) throw new InvalidOperationException($"Unknown mobile ({this}) name.");
+
             data.Write(3, Serial);
 
             data.WriteAscii(7, Name, 30);

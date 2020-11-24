@@ -45,18 +45,6 @@ namespace Shard.Server.Domain
 
         string Name { get; }
 
-        ushort FaceHue { get; }
-
-        ushort FaceGraphic { get; }
-
-        ushort HairHue { get; }
-
-        ushort HairGraphic { get; }
-
-        ushort BeardGraphic { get; }
-
-        ushort BeardHue { get; }
-
         internal void TransferMove(TMobile mobile)
         {
             Action action = (Direction & 0xF) switch

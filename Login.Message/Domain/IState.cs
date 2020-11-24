@@ -10,11 +10,11 @@ namespace Login.Message.Domain
         IShardSelect
         where TData : IData, new()
     {
-        Func<TData> GetBuffer { get; }
+        TData GetBuffer();
 
-        Action<TData> Send { get; }
+        void Send(TData data);
 
-        Action<string> Output { get; }
+        void Output(string text);
 
         internal void Write(byte id, int size, Action<IData> message)
         {

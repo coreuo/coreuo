@@ -1,4 +1,5 @@
-﻿using Shard.Message.Domain.Shared;
+﻿using System;
+using Shard.Message.Domain.Shared;
 
 namespace Shard.Message.Domain.Outgoing
 {
@@ -14,6 +15,8 @@ namespace Shard.Message.Domain.Outgoing
     {
         internal void WriteEntityContentItem(int offset, int currentSize, IData data)
         {
+            if (Parent == null) throw new InvalidOperationException($"Unknown entity content item ({this}) parent.");
+
             data.Write(offset + currentSize, Serial);
 
             data.Write(offset + currentSize + 4, Graphic);

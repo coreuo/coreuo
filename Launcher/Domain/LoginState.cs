@@ -20,7 +20,7 @@ namespace Launcher.Domain
 
         public string IpAddress { get; set; }
 
-        public int Port { get; set; }
+        public int? Port { get; set; }
 
         public bool Locked { get; set; }
 
@@ -114,11 +114,11 @@ namespace Launcher.Domain
 
         public int ShardIndex { get; set; }
 
-        public Func<Data> GetBuffer => () => NetworkStateHandlers.GetBuffer(this);
+        public void Send(Data data) => NetworkStateHandlers.Send(this, data);
 
-        public Action<Data> Send => data => NetworkStateHandlers.Send(this, data);
+        public Data GetBuffer() => NetworkStateHandlers.GetBuffer(this);
 
-        public Action<string> Output => text => Console.WriteLine($"[{DateTime.Now:O}] {Identity}.{text}");
+        public void Output(string text) => Console.WriteLine($"[{DateTime.Now:O}] {Identity}.{text}");
 
     }
 }

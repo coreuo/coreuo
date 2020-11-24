@@ -44,9 +44,9 @@ namespace Launcher.Domain
 
         public bool Is(IEnumerable<Identity> identities) => EntityIdentityHandlers.Is(this, identities);
 
-        public void Set(params Identity[] identities) => EntityIdentityHandlers.Set(this, identities);
+        public void Assign(params Identity[] identities) => EntityIdentityHandlers.Assign(this, identities);
 
-        public void Set(IEnumerable<Identity> identities) => EntityIdentityHandlers.Set(this, identities);
+        public void Assign(IEnumerable<Identity> identities) => EntityIdentityHandlers.Assign(this, identities);
 
         public byte Direction { get; set; }
 

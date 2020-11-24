@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace Login.Message.Domain.Outgoing
@@ -17,6 +18,10 @@ namespace Login.Message.Domain.Outgoing
             for (var i = 0; i < Shards.Count; i++)
             {
                 var shard = Shards[i];
+
+                if (shard.Identity == null) throw new InvalidOperationException("Unknown shard identity.");
+
+                if (shard.IpAddress == null) throw new InvalidOperationException("Unknown shard ip address.");
 
                 data.Write(6 + 40 * i, (short)i);
 

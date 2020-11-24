@@ -6,7 +6,7 @@ namespace Network.State.Domain
     public interface IState<TData> : ISocket
         where TData : IData
     {
-        Func<TData> GetBuffer { get; }
+        TData GetBuffer();
 
         bool Locked { get; set; }
 

@@ -12,14 +12,14 @@ namespace Shard.Entity.Identity
     {
         private static void LoadIdentities(TServer server, TEntity entity)
         {
-            entity.GuidIdentities ??= new HashSet<Guid>();
+            entity.GuidIdentities = new HashSet<Guid>();
 
-            entity.Identities ??= entity.GuidIdentities.Select(g => server.IdentityGuids[g]).ToHashSet();
+            entity.Identities = entity.GuidIdentities.Select(g => server.IdentityGuids[g]).ToHashSet();
         }
 
         public static void LoadIdentities(TServer server)
         {
-            server.LoadIdentities();
+            server.Initialize();
 
             foreach (var entity in server.Entities) LoadIdentities(server, entity);
         }
@@ -34,8 +34,10 @@ namespace Shard.Entity.Identity
             identities.UnionWith(candidates[server.Random.Next(candidates.Count)]);
         }
 
-        private static void SetIdentity(TEntity entity, TIdentity identity)
+        private static void AssignIdentity(TEntity entity, TIdentity identity)
         {
+            if(identity == null) throw new InvalidOperationException("Unable to assign null identity.");
+
             entity.GuidIdentities.Add(identity.Guid);
 
             entity.Identities.Add(identity);
@@ -52,14 +54,14 @@ namespace Shard.Entity.Identity
 
         public static bool Is(TEntity entity, IEnumerable<TIdentity> identities) => identities.All(entity.Identities.Contains);
 
-        public static void Set(TEntity entity, params TIdentity[] identities)
+        public static void Assign(TEntity entity, params TIdentity[] identities)
         {
-            foreach (var identity in identities) SetIdentity(entity, identity);
+            foreach (var identity in identities) AssignIdentity(entity, identity);
         }
 
-        public static void Set(TEntity entity, IEnumerable<TIdentity> identities)
+        public static void Assign(TEntity entity, IEnumerable<TIdentity> identities)
         {
-            foreach (var identity in identities) SetIdentity(entity, identity);
+            foreach (var identity in identities) AssignIdentity(entity, identity);
         }
     }
 }

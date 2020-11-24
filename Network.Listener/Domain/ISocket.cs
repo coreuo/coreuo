@@ -10,13 +10,13 @@ namespace Network.Listener.Domain
 
         EndPoint EndPoint { get; set; }
 
-        IPEndPoint IpEndPoint => (IPEndPoint) EndPoint;
+        IPEndPoint IpEndPoint => (IPEndPoint)EndPoint;
 
         internal void Initialize()
         {
             Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-            EndPoint = new IPEndPoint(IPAddress.Parse(IpAddress), Port);
+            EndPoint = IpAddress != null && Port != null ? new IPEndPoint(IPAddress.Parse(IpAddress), Port.Value) : null;
         }
 
         internal void BeginListen(EndPoint endpoint)

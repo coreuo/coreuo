@@ -9,17 +9,17 @@ namespace Login.Message.Domain
         where TData : IData, new()
         where TShard : IShard, IShardServer
     {
-        Action<TState, TData> Decrypt { get; }
+        void Decrypt(TState state, TData data);
 
-        Action<TState> ClientConnect { get; }
+        void ClientConnect(TState state);
 
-        Action<TState> AccountLogin { get; }
+        void AccountLogin(TState state);
 
-        Action<TState> HardwareInfo { get; }
+        void HardwareInfo(TState state);
 
-        Action<TState> ShardSelect { get; }
+        void ShardSelect(TState state);
 
-        Action<string> Output { get; }
+        void Output(string text);
 
         internal int Read(TState state, TData data)
         {

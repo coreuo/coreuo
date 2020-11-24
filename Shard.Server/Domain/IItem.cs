@@ -1,6 +1,6 @@
 ﻿namespace Shard.Server.Domain
 {
-    public interface IItem<TItem, TEntity, TIdentity> : 
+    public interface IItem<TItem, TEntity, in TIdentity> : 
         IEntity<TItem, TEntity, TIdentity>
         where TItem : IItem<TItem, TEntity, TIdentity>
         where TEntity : class, IEntity<TItem, TEntity, TIdentity>

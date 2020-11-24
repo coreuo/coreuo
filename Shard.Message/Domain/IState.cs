@@ -40,13 +40,13 @@ namespace Shard.Message.Domain
         where TEntity : IEntity<TAttribute, TItem, TEntity>
         where TSkillInfo : ISkill
     {
-        Func<TData> GetBuffer { get; }
+        TData GetBuffer();
 
-        Func<TData, TData> Compress { get; }
+        TData Compress(TData data);
 
-        Action<TData> Send { get; }
+        void Send(TData data);
 
-        Action<string> Output { get; }
+        void Output(string text);
 
         internal void Write(byte id, int size, Action<IData> writer = null, bool compress = true, string writerName = null)
         {

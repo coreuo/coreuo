@@ -15,8 +15,8 @@ namespace Shard.Server.Domain
 
         bool Is(params TIdentity[] identities);
 
-        void Set(params TIdentity[] identities);
+        void Assign(params TIdentity[] identities);
 
-        void Set(IEnumerable<TIdentity> identities);
+        void Assign(IEnumerable<TIdentity> identities);
     }
 }

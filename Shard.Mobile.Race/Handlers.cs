@@ -6,8 +6,8 @@ using Shard.Mobile.Race.Domain;
 namespace Shard.Mobile.Race
 {
     public static class Handlers<TServer, TState, TMobile, TItem, TEntity, TIdentity>
-        where TServer : IServer<TState, TItem, TEntity, TIdentity>
-        where TState : IState
+        where TServer : IServer<TItem, TEntity, TIdentity>
+        where TState : class, IState
         where TMobile : class, TEntity, IMobile
         where TItem : class, TEntity, IItem
         where TEntity : class, IEntity<TIdentity>
@@ -61,7 +61,7 @@ namespace Shard.Mobile.Race
             Transfer(parent, set, server.Male, server.Female);
         }
 
-        private static void AssignItem(TServer server, TState state, TMobile parent, TIdentity identity, bool randomAssign)
+        private static void AssignItem(TServer server, TMobile parent, TIdentity identity, ushort? graphic, ushort? hue, bool exclude)
         {
             var set = new HashSet<TIdentity> {identity};
 
@@ -69,32 +69,32 @@ namespace Shard.Mobile.Race
 
             TransferGender(server, parent, set);
 
-            if (randomAssign && server.GraphicRanges.TryGetValue(set, out var ranges) && server.Random.Next(ranges.Size() + 1) == 0) return;
+            if (exclude && server.GraphicRanges.TryGetValue(set, out var ranges) && server.Random.Next(ranges.Size() + 1) == 0) return;
 
-            var item = server.CreateItem(state, set.ToArray());
+            var item = server.CreateItem(graphic, hue, set.ToArray());
 
             server.SetItemParent(parent, item);
         }
 
-        public static void AssignFace(TServer server, TState state, TMobile parent)
+        public static void AssignFace(TServer server, TMobile parent, TState state = null)
         {
             if (state?.FaceGraphic == 0) throw new InvalidOperationException($"Invalid state face ({state.FaceGraphic})");
 
-            AssignItem(server, state, parent, server.Face, false);
+            AssignItem(server, parent, server.Face, state?.FaceGraphic, state?.FaceHue, false);
         }
 
-        public static void AssignHair(TServer server, TState state, TMobile parent)
+        public static void AssignHair(TServer server, TMobile parent, TState state = null)
         {
             if (state?.HairGraphic == 0) return;
 
-            AssignItem(server, state, parent, server.Hair, state == null);
+            AssignItem(server, parent, server.Hair, state?.HairGraphic, state?.HairHue, state == null);
         }
 
-        public static void AssignBeard(TServer server, TState state, TMobile parent)
+        public static void AssignBeard(TServer server, TMobile parent, TState state = null)
         {
             if (!parent.Is(server.Human) || !parent.Is(server.Male) || state?.BeardGraphic == 0) return;
 
-            AssignItem(server, state, parent, server.Beard, state == null);
+            AssignItem(server, parent, server.Beard, state?.BeardGraphic, state?.BeardHue, state == null);
         }
     }
 }

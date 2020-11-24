@@ -56,7 +56,7 @@ namespace Launcher.Domain
 
         public string IpAddress { get; set; }
 
-        public int Port { get; set; }
+        public int? Port { get; set; }
 
         public int Seed { get; set; }
 
@@ -173,15 +173,15 @@ namespace Launcher.Domain
 
         [NotMapped] public byte PaperDollFlags { get; } = 0x3;
 
-        public Action<int, Action<Data>, string> ExtendedData => (size, writer, name) => ShardMessageHandlers.ExtendedData(this, size, writer, name);
+        public void ExtendedData(int size, Action<Data> writer, string name) => ShardMessageHandlers.ExtendedData(this, size, writer, name);
 
-        public Func<Data, Data> Compress => data => CompressionHandlers.Compress(this, data);
+        public Data Compress(Data data) => CompressionHandlers.Compress(this, data);
 
-        public Action<Data> Send => data => NetworkStateHandlers.Send(this, data);
+        public void Send(Data data) => NetworkStateHandlers.Send(this, data);
 
-        public Func<Data> GetBuffer => () => NetworkStateHandlers.GetBuffer(this);
+        public Data GetBuffer() => NetworkStateHandlers.GetBuffer(this);
 
-        public Action<string> Output => text => Console.WriteLine($"[{DateTime.Now:O}] {Identity}.{text}");
+        public void Output(string text) => Console.WriteLine($"[{DateTime.Now:O}] {Identity}.{text}");
 
         public byte ProfileRequestMode { get; set; }
 

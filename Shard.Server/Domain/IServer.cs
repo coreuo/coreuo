@@ -5,7 +5,7 @@ namespace Shard.Server.Domain
 {
     public interface IServer<TServer, in TState, in TMobile, in TItem, TEntity, TIdentity, in TTarget>
         where TServer : IServer<TServer, TState, TMobile, TItem, TEntity, TIdentity, TTarget>
-        where TState : IState<TMobile, TItem, TEntity, TIdentity, TTarget>
+        where TState : class, IState<TMobile, TItem, TEntity, TIdentity, TTarget>
         where TMobile : TEntity, IMobile<TItem, TEntity, TIdentity>
         where TItem : TEntity, IItem<TItem, TEntity, TIdentity>
         where TEntity : class, TTarget, IEntity<TItem, TEntity, TIdentity>
@@ -21,105 +21,105 @@ namespace Shard.Server.Domain
 
         int MaximumItemSerial { get; set; }
 
-        Action<TState> EncryptionRequest { get; }
+        void EncryptionRequest(TState state);
 
-        Action<TState> SupportedFeatures { get; }
+        void SupportedFeatures(TState state);
 
-        Action<TState> CharacterList { get; }
+        void CharacterList(TState state);
 
-        Action<TState, TMobile> LoginConfirm { get; }
+        void LoginConfirm(TState state, TMobile mobile);
 
-        Action<TState, TMobile> MapChange { get; }
+        void MapChange(TState state, TMobile mobile);
 
-        Action<TState, TMobile> MapPatches { get; }
+        void MapPatches(TState state, TMobile mobile);
 
-        Action<TState> SeasonChange { get; }
+        void SeasonChange(TState state);
 
-        Action<TState, TMobile> MobileUpdate { get; }
+        void MobileUpdate(TState state, TMobile mobile);
 
-        Action<TState> GlobalLight { get; }
+        void GlobalLight(TState state);
 
-        Action<TState, TMobile> MobileLight { get; }
+        void MobileLight(TState state, TMobile mobile);
 
-        Action<TState, TMobile> MobileIncoming { get; }
+        void MobileIncoming(TState state, TMobile mobile);
 
-        Action<TState, TMobile> MobileStatus { get; }
+        void MobileStatus(TState state, TMobile mobile);
 
-        Action<TState, TMobile> WarModeResponse { get; }
+        void WarModeResponse(TState state, TMobile mobile);
 
-        Action<TState> LoginComplete { get; }
+        void LoginComplete(TState state);
 
-        Action<TState> ServerTime { get; }
+        void ServerTime(TState state);
 
-        Action<TState, TMobile> SkillInfo { get; }
+        void SkillInfo(TState state, TMobile mobile);
 
-        Action<TState> PingResponse { get; }
+        void PingResponse(TState state);
 
-        Action<TState, TMobile> MoveResponse { get; }
+        void MoveResponse(TState state, TMobile mobile);
 
-        Action<TState> ClientVersionRequest { get; }
+        void ClientVersionRequest(TState state);
 
-        //Action<TState, TMobile> ServerChange { get; }
+        //void ServerChange(TState state, TMobile mobile);
 
-        Action<TState, TEntity> EntityInfo { get; }
+        void EntityInfo(TState state, TEntity entity);
 
-        Action<TState, TEntity> EntityAttributes { get; }
+        void EntityAttributes(TState state, TEntity entity);
 
-        //Action<TState, TMobile> MobileAttributes { get; }
+        //void MobileAttributes(TState state, TMobile mobile);
 
-        Action<TState, TMobile> PaperDollOpen { get; }
+        void PaperDollOpen(TState state, TMobile mobile);
 
-        Action<TState, TMobile> ProfileResponse { get; }
+        void ProfileResponse(TState state, TMobile mobile);
 
-        Action<TState, TEntity> EntityDisplay { get; }
+        void EntityDisplay(TState state, TEntity entity);
 
-        Action<TState, TEntity> EntityContent { get; }
+        void EntityContent(TState state, TEntity entity);
 
-        Action<TState, TEntity> EntityRemove { get; }
+        void EntityRemove(TState state, TEntity entity);
 
-        Action<TState, TTarget> SoundPlay { get; }
+        void SoundPlay(TState state, TTarget target);
 
-        Action<TState> ItemPlaceApproved { get; }
+        void ItemPlaceApproved(TState state);
 
-        Action<TState, TItem> EntityContentItem { get; }
+        void EntityContentItem(TState state, TItem item);
 
         void SetItemParent(TEntity entity, TItem item);
 
-        Action<TItem> RemoveItemParent { get; }
+        void RemoveItemParent(TItem item);
 
-        Action<TState, TItem> ItemWorld { get; }
+        void ItemWorld(TState state, TItem item);
 
-        Action<TState, TItem> ItemWearUpdate { get; }
+        void ItemWearUpdate(TState state, TItem item);
 
-        Action<TState, TMobile> MobileMoving { get; }
+        void MobileMoving(TState state, TMobile mobile);
 
-        Action<TState, TMobile> SpeechResponse { get; }
+        void SpeechResponse(TState state, TMobile mobile);
 
-        Action<TState> TargetRequest { get; }
+        void TargetRequest(TState state);
 
-        Action<TEntity, string> AssignName { get; }
+        void AssignName(TEntity entity, string name);
 
-        Action<TEntity, ushort?> AssignGraphic { get; }
+        void AssignGraphic(TEntity entity, ushort? graphic);
 
-        Action<TEntity, ushort?> AssignHue { get; }
+        void AssignHue(TEntity entity, ushort? hue);
 
-        Action<TState, TMobile> AssignMobileItems { get; }
+        void AssignMobileItems(TMobile mobile, TState state = null);
 
-        Action<TState, HashSet<TIdentity>> AssignRace { get; }
+        void AssignRace(TState state, HashSet<TIdentity> identitySet);
 
-        Action<TState, HashSet<TIdentity>> AssignGender { get; }
+        void AssignGender(TState state, HashSet<TIdentity> identitySet);
 
-        Action<TMobile> UpdateRace { get; }
+        void UpdateRace(TMobile mobile);
 
-        Action<TMobile> UpdateGender { get; }
+        void UpdateGender(TMobile mobile);
 
-        Action<TItem> AssignLayer { get; }
+        void AssignLayer(TItem item);
 
-        Action<TItem> AssignDisplayIndex { get; }
+        void AssignDisplayIndex(TItem item);
 
-        Action<TItem> AssignDisplay { get; }
+        void AssignDisplay(TItem item);
 
-        Action<HashSet<TIdentity>> AssignIdentities { get; }
+        void AssignIdentities(HashSet<TIdentity> identitySet);
 
         TIdentity Humanoid { get; }
 
@@ -129,11 +129,7 @@ namespace Shard.Server.Domain
 
         TIdentity Character { get; }
 
-        TIdentity Hair { get; }
-
         TIdentity Face { get; }
-
-        TIdentity Beard { get; }
 
         TIdentity Container { get; }
 

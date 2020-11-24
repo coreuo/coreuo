@@ -9,6 +9,7 @@ namespace Shard.Mobile.Profession
         where TServer : IServer<TItem, TEntity, TIdentity>
         where TState : IState
         where TMobile : TEntity, IMobile<TIdentity>
+        where TIdentity : class
     {
         private static void AddProfessionItems(TServer server, sbyte id, IReadOnlyList<ushort> values, params TIdentity[] identities)
         {

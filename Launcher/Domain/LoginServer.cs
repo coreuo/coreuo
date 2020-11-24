@@ -32,7 +32,7 @@ namespace Launcher.Domain
 
         public string IpAddress { get; set; } = "127.0.0.1";
 
-        public int Port { get; set; } = 12593;
+        public int? Port { get; set; } = 12593;
 
         public bool Locked { get; set; }
 
@@ -54,39 +54,39 @@ namespace Launcher.Domain
 
         public List<ShardServer> Shards { get; }
 
-        public Action ThreadStart => () => NetworkListenerHandlers.Start(this);
+        public void ThreadStart() => NetworkListenerHandlers.Start(this);
 
-        public Action ThreadUnlock => () =>
+        public void ThreadUnlock()
         {
             NetworkListenerHandlers.Stop(this);
 
             NetworkServerHandlers.Stop(this);
-        };
+        }
 
-        public Action ThreadSlice => () => NetworkServerHandlers.Slice(this);
+        public void ThreadSlice() => NetworkServerHandlers.Slice(this);
 
         public Action ThreadStop => () => Shards.ForEach(ThreadHandlers.Stop);
 
-        public Action<LoginState> StateStart => NetworkStateHandlers.Start;
+        public void StateStart(LoginState state) => NetworkStateHandlers.Start(state);
 
-        public Action<LoginState> StateStop => NetworkStateHandlers.Stop;
+        public void StateStop(LoginState state) => NetworkStateHandlers.Stop(state);
 
-        public Action<LoginState, Data> DataReceived => (state, data) => LoginMessageHandlers.Received(this, state, data);
+        public void DataReceived(LoginState state, Data data) => LoginMessageHandlers.Received(this, state, data);
 
-        public Action<LoginState, Data> Decrypt => LoginEncryptionHandlers.Decrypt;
+        public void Decrypt(LoginState state, Data data) => LoginEncryptionHandlers.Decrypt(state, data);
 
-        public Action<LoginState> ClientConnect => LoginEncryptionHandlers.ClientConnect;
+        public void ClientConnect(LoginState state) => LoginEncryptionHandlers.ClientConnect(state);
 
-        public Action<LoginState> AccountLogin => state => LoginServerHandlers.AccountLogin(this, state);
+        public void AccountLogin(LoginState state) => LoginServerHandlers.AccountLogin(this, state);
 
-        public Action<LoginState> ShardSelect => state => LoginServerHandlers.ShardSelect(this, state);
+        public void ShardSelect(LoginState state) => LoginServerHandlers.ShardSelect(this, state);
 
-        public Action<LoginState> HardwareInfo => _ => { };
+        public void HardwareInfo(LoginState state) { }
 
-        public Action<LoginState> ShardList => state => LoginMessageHandlers.ShardList(this, state);
+        public void ShardList(LoginState state) => LoginMessageHandlers.ShardList(this, state);
 
-        public Action<LoginState> ShardServer => state => LoginMessageHandlers.ShardServer(this, state);
+        public void ShardServer(LoginState state) => LoginMessageHandlers.ShardServer(this, state);
 
-        public Action<string> Output => text => Console.WriteLine($"[{DateTime.Now:O}] {Identity}.{text}");
+        public void Output(string text) => Console.WriteLine($"[{DateTime.Now:O}] {Identity}.{text}");
     }
 }

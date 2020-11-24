@@ -21,6 +21,8 @@ namespace Shard.Entity.Graphic.Domain
 
         public LimitCollection<TIdentity> Limit(params RangeLimit[] entries)
         {
+            if (_pointer == null) return this;
+
             _collection.Add(_pointer, entries);
 
             return this;

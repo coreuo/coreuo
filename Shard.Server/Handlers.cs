@@ -13,26 +13,26 @@ namespace Shard.Server
         where TItem : class, TEntity, IItem<TItem, TEntity, TIdentity>, new()
         where TTarget : ITarget
     {
-        private static IEnumerable<TIdentity> CreateIdentities(TServer server, TState state, TIdentity baseIdentity, params TIdentity[] additionalIdentities)
+        private static IEnumerable<TIdentity> CreateIdentitySet(TServer server, TIdentity baseIdentity, TState state = null, params TIdentity[] additionalIdentities)
         {
-            var identities = new HashSet<TIdentity>(new[] {baseIdentity}.Union(additionalIdentities));
+            var identitySet = new HashSet<TIdentity>(new[] {baseIdentity}.Union(additionalIdentities));
 
-            if (state != null && identities.Contains(server.Mobile))
+            if (state != null && identitySet.Contains(server.Mobile))
             {
-                identities.Add(server.Character);
+                identitySet.Add(server.Character);
 
-                server.AssignRace(state, identities);
+                server.AssignRace(state, identitySet);
 
-                server.AssignGender(state, identities);
+                server.AssignGender(state, identitySet);
 
-                server.AssignProfession(state, identities);
+                server.AssignProfession(state, identitySet);
             }
             
-            server.AssignIdentities(identities);
+            server.AssignIdentities(identitySet);
 
-            if (identities.Contains(server.Mobile)) identities.Add(server.Alive);
+            if (identitySet.Contains(server.Mobile)) identitySet.Add(server.Alive);
 
-            return identities;
+            return identitySet;
         }
 
         private static TMobile CreateMobile(TServer server)
@@ -62,13 +62,13 @@ namespace Shard.Server
             server.AssignName(entity, name);
         }
 
-        private static void AssignMobile(TServer server, TState state, TMobile mobile)
+        private static void AssignMobile(TServer server, TMobile mobile, TState state = null)
         {
             if (state != null) AssignEntity(server, mobile, null, state.Hue, state.Name);
 
             else AssignEntity(server, mobile);
 
-            server.AssignMobileItems(state, mobile);
+            server.AssignMobileItems(mobile, state);
 
             if (!mobile.Is(server.Humanoid)) return;
 
@@ -77,15 +77,9 @@ namespace Shard.Server
             server.UpdateGender(mobile);
         }
 
-        private static void AssignItem(TServer server, TState state, TItem item, ushort? hue = null)
+        private static void AssignItem(TServer server, TItem item, ushort? graphic = null, ushort? hue = null)
         {
-            if (state != null && item.Is(server.Face)) AssignEntity(server, item, state.FaceGraphic, state.FaceHue);
-
-            else if (state != null && item.Is(server.Hair)) AssignEntity(server, item, state.HairGraphic, state.HairHue);
-
-            else if (state != null && item.Is(server.Beard)) AssignEntity(server, item, state.BeardGraphic, state.BeardHue);
-
-            else AssignEntity(server, item, null, hue);
+            AssignEntity(server, item, graphic, hue);
 
             server.AssignLayer(item);
 
@@ -96,33 +90,31 @@ namespace Shard.Server
             server.AssignDisplay(item);
         }
 
-        private static TMobile CreateMobile(TServer server, TState state, params TIdentity[] identities)
+        private static TMobile CreateMobile(TServer server, TState state = null, params TIdentity[] identities)
         {
+            var identitySet = CreateIdentitySet(server, server.Mobile, state, identities);
+
             var mobile = CreateMobile(server);
 
-            mobile.Set(CreateIdentities(server, state, server.Mobile, identities));
+            mobile.Assign(identitySet);
 
-            AssignMobile(server, state, mobile);
+            AssignMobile(server, mobile, state);
 
             return mobile;
         }
 
         private static TMobile CreateMobile(TServer server, params TIdentity[] identities) => CreateMobile(server, null, identities);
 
-        public static TItem CreateItem(TServer server, TState state, ushort? hue = null, params TIdentity[] identities)
+        public static TItem CreateItem(TServer server, ushort? graphic = null, ushort? hue = null, params TIdentity[] identities)
         {
             var item = CreateItem(server);
 
-            item.Set(CreateIdentities(server, state, server.Item, identities));
+            item.Assign(CreateIdentitySet(server, server.Item, null, identities));
 
-            AssignItem(server, state, item, hue);
+            AssignItem(server, item, graphic, hue);
 
             return item;
         }
-
-        public static TItem CreateItem(TServer server, params TIdentity[] identities) => CreateItem(server, null, null, identities);
-
-        public static TItem CreateItem(TServer server, ushort hue, params TIdentity[] identities) => CreateItem(server, null, hue, identities);
 
         public static void SetItemParent(TServer server, TEntity parent, TItem item)
         {
@@ -157,7 +149,7 @@ namespace Shard.Server
         {
             var character = CreateMobile(server, server.Humanoid);
 
-            character.Set(server.Character);
+            character.Assign(server.Character);
 
             server.AssignName(character, "Random character");
 
@@ -205,7 +197,7 @@ namespace Shard.Server
 
         public static void MobileQuery(TServer server, TState state)
         {
-            var action = state.MobileQueryType switch
+            Action<TState,TMobile> action = state.MobileQueryType switch
             {
                 0x04 => server.MobileStatus,
                 0x05 => server.SkillInfo,
@@ -230,6 +222,8 @@ namespace Shard.Server
 
         public static void MoveRequest(TServer server, TState state)
         {
+            if (state.Mobile == null) throw new InvalidOperationException("Unknown state mobile.");
+
             state.TransferMove(state.Mobile);
 
             server.MoveResponse(state, state.Mobile);
@@ -322,7 +316,7 @@ namespace Shard.Server
 
                     foreach (var item in container.Items) server.EntityInfo(state, item);
                 },
-                _ => throw new InvalidOperationException($"Unknown entity type {entity.GetType().Name}.")
+                _ => throw new InvalidOperationException($"Unknown entity type ({entity?.GetType().Name}).")
             };
 
             action();
@@ -344,6 +338,8 @@ namespace Shard.Server
 
         public static void ItemPick(TServer server, TState state)
         {
+            if (state.Mobile == null) throw new InvalidOperationException("Unknown state mobile.");
+
             var item = server.Entities.OfType<TItem>().Single(e => e.Serial == state.Serial);
 
             server.EntityRemove(state, item);
@@ -377,6 +373,8 @@ namespace Shard.Server
 
         public static void WarModeRequest(TServer server, TState state)
         {
+            if (state.Mobile == null) throw new InvalidOperationException("Unknown state mobile.");
+
             state.TransferWarMode(state.Mobile);
 
             server.WarModeResponse(state, state.Mobile);
@@ -386,7 +384,10 @@ namespace Shard.Server
 
         public static void SpeechRequest(TServer server, TState state)
         {
-            if (state.SpeechText.StartsWith(".add")) server.TargetRequest(state);
+            if (state.Mobile == null) throw new InvalidOperationException("Unknown state mobile.");
+
+            if (state.SpeechText?.StartsWith(".add") ?? false) server.TargetRequest(state);
+
             else server.SpeechResponse(state, state.Mobile);
         }
 

@@ -32,7 +32,7 @@ namespace Launcher.Domain
         Shard.Server.Domain.IServer<ShardServer, ShardState, Mobile, Item, Entity, Identity, Target>,
         Game.Data.Domain.ISettings<TileArt, CsvDocument>,
         Shard.Entity.Items.Domain.IServer<ShardState, Mobile, Item, Entity, Identity>,
-        Shard.Mobile.Race.Domain.IServer<ShardState, Item, Entity, Identity>,
+        Shard.Mobile.Race.Domain.IServer<Item, Entity, Identity>,
         Shard.Entity.Identity.Domain.IServer<Entity, Identity>,
         Shard.Entity.Graphic.Domain.IServer<Identity>,
         Shard.Mobile.Profession.Domain.IServer<Item, Entity, Identity>
@@ -42,13 +42,13 @@ namespace Launcher.Domain
 
         public Random Random { get; } = new();
 
-        public Action<ShardState> StatusClose => _ => { };
+        public void StatusClose(ShardState state){}
 
         public string Identity { get; set; } = nameof(ShardServer);
 
         public string IpAddress { get; set; } = "127.0.0.1";
 
-        public int Port { get; set; } = 12594;
+        public int? Port { get; set; } = 12594;
 
         public string GamePath { get; } = "C:\\Program Files (x86)\\EA Games\\Ultima Online Kingdom Reborn";
 
@@ -86,7 +86,7 @@ namespace Launcher.Domain
             new City {Name = "New Haven", Town = "New Haven Bank"}
         };
 
-        public Action ThreadStart => () =>
+        public void ThreadStart()
         {
             ShardEntityIdentityHandlers.LoadIdentities(this);
 
@@ -99,70 +99,68 @@ namespace Launcher.Domain
             GameDataHandlers.Load(this);
 
             NetworkListenerHandlers.Start(this);
-        };
+        }
 
-        public Action ThreadUnlock => () =>
+        public void ThreadUnlock()
         {
             TileArts.Clear();
 
             NetworkListenerHandlers.Stop(this);
 
             NetworkServerHandlers.Stop(this);
-        };
+        }
 
-        public Action ThreadSlice => () => NetworkServerHandlers.Slice(this);
+        public void ThreadSlice() => NetworkServerHandlers.Slice(this);
 
         public Action ThreadStop { get; set; } = () => { };
 
-        public Action<ShardState> StateStart => NetworkStateHandlers.Start;
+        public void StateStart(ShardState state) => NetworkStateHandlers.Start(state);
 
-        public Action<ShardState> StateStop => NetworkStateHandlers.Stop;
+        public void StateStop(ShardState state) => NetworkStateHandlers.Stop(state);
 
-        public Action<ShardState, Data> DataReceived =>
-            (state, data) => ShardMessageHandlers.Received(this, state, data);
+        public void DataReceived(ShardState state, Data data) => ShardMessageHandlers.Received(this, state, data);
 
-        public Action<ShardState> ClientSeed => state => ShardServerHandlers.ClientSeed(this, state);
+        public void ClientSeed(ShardState state) => ShardServerHandlers.ClientSeed(this, state);
 
-        public Action<ShardState> EncryptionResponse => _ => { };
+        public void EncryptionResponse(ShardState state){}
 
-        public Action<ShardState> AccountLogin => state => ShardServerHandlers.AccountLogin(this, state);
+        public void AccountLogin(ShardState state) => ShardServerHandlers.AccountLogin(this, state);
 
-        public Action<ShardState> CharacterCreate => state => ShardServerHandlers.CharacterCreate(this, state);
+        public void CharacterCreate(ShardState state) => ShardServerHandlers.CharacterCreate(this, state);
 
-        public Action<ShardState> MobileQuery => state => ShardServerHandlers.MobileQuery(this, state);
+        public void MobileQuery(ShardState state) => ShardServerHandlers.MobileQuery(this, state);
 
-        public Action<ShardState, Data> ExtendedData =>
-            (state, data) => ShardExtendedMessageHandlers.Received(this, state, data);
+        public void ExtendedData(ShardState state, Data data) => ShardExtendedMessageHandlers.Received(this, state, data);
 
-        public Action<ShardState> ChatRequest => _/*state*/ => { };//ShardServerHandlers.ChatRequest(this, state);
+        public void ChatRequest(ShardState state){}//ShardServerHandlers.ChatRequest(this, state);
 
-        public Action<ShardState> PingRequest => state => ShardServerHandlers.PingRequest(this, state);
+        public void PingRequest(ShardState state) => ShardServerHandlers.PingRequest(this, state);
 
-        public Action<ShardState> MoveRequest => state => ShardServerHandlers.MoveRequest(this, state);
+        public void MoveRequest(ShardState state) => ShardServerHandlers.MoveRequest(this, state);
 
-        public Action<ShardState> ClientType => _ => { };
+        public void ClientType(ShardState state){}
 
-        public Action<ShardState> CharacterLogin => state => ShardServerHandlers.CharacterLogin(this, state);
+        public void CharacterLogin(ShardState state) => ShardServerHandlers.CharacterLogin(this, state);
 
-        public Action<ShardState> EntityQuery => state => ShardServerHandlers.EntityQuery(this, state);
+        public void EntityQuery(ShardState state) => ShardServerHandlers.EntityQuery(this, state);
 
-        public Action<ShardState> EntityUse => state => ShardServerHandlers.EntityUse(this, state);
+        public void EntityUse(ShardState state) => ShardServerHandlers.EntityUse(this, state);
 
-        public Action<ShardState> ProfileRequest => state => ShardServerHandlers.ProfileRequest(this, state);
+        public void ProfileRequest(ShardState state) => ShardServerHandlers.ProfileRequest(this, state);
 
-        public Action<ShardState> ItemPick => state => ShardServerHandlers.ItemPick(this, state);
+        public void ItemPick(ShardState state) => ShardServerHandlers.ItemPick(this, state);
 
-        public Action<ShardState> ItemPlace => state => ShardServerHandlers.ItemPlace(this, state);
+        public void ItemPlace(ShardState state) => ShardServerHandlers.ItemPlace(this, state);
 
-        public Action<ShardState> ItemWear => state => ShardServerHandlers.ItemWear(this, state);
+        public void ItemWear(ShardState state) => ShardServerHandlers.ItemWear(this, state);
 
-        public Action<ShardState> WarModeRequest => state => ShardServerHandlers.WarModeRequest(this, state);
+        public void WarModeRequest(ShardState state) => ShardServerHandlers.WarModeRequest(this, state);
 
-        public Action<ShardState> SpeechRequest => state => ShardServerHandlers.SpeechRequest(this, state);
+        public void SpeechRequest(ShardState state) => ShardServerHandlers.SpeechRequest(this, state);
 
-        public Action<ShardState> TargetResponse => _/*state*/ => { };//ShardServerHandlers.TargetResponse(this, state);
+        public void TargetResponse(ShardState state){}//ShardServerHandlers.TargetResponse(this, state);
 
-        public Action<ShardState> ClientLanguage => _/*state*/ => { };//ShardServerHandlers.ClientLanguage(this, state);
+        public void ClientLanguage(ShardState state){}//ShardServerHandlers.ClientLanguage(this, state);
 
         public HashSet<Entity> Entities { get; } = new();
 
@@ -174,121 +172,121 @@ namespace Launcher.Domain
 
         [NotMapped] public int MaximumItemSerial { get; set; } = 0x40000000;
 
-        public Action<ShardState> EncryptionRequest => ShardMessageHandlers.EncryptionRequest;
+        public void EncryptionRequest(ShardState state) => ShardMessageHandlers.EncryptionRequest(state);
 
-        public Action<ShardState> SupportedFeatures => state => ShardMessageHandlers.SupportedFeatures(this, state);
+        public void SupportedFeatures(ShardState state) => ShardMessageHandlers.SupportedFeatures(this, state);
 
-        public Action<ShardState> CharacterList => state => ShardMessageHandlers.CharacterList(this, state);
+        public void CharacterList(ShardState state) => ShardMessageHandlers.CharacterList(this, state);
 
-        public Action<ShardState, Mobile> LoginConfirm => ShardMessageHandlers.LoginConfirm;
+        public void LoginConfirm(ShardState state, Mobile mobile) => ShardMessageHandlers.LoginConfirm(state, mobile);
 
-        public Action<ShardState, Mobile> MapChange => ShardExtendedMessageHandlers.MapChange;
+        public void MapChange(ShardState state, Mobile mobile) => ShardExtendedMessageHandlers.MapChange(state, mobile);
 
-        public Action<ShardState, Mobile> MapPatches => ShardExtendedMessageHandlers.MapPatch;
+        public void MapPatches(ShardState state, Mobile mobile) => ShardExtendedMessageHandlers.MapPatch(state, mobile);
 
-        public Action<ShardState> SeasonChange => ShardMessageHandlers.SeasonChange;
+        public void SeasonChange(ShardState state) => ShardMessageHandlers.SeasonChange(state);
 
-        public Action<ShardState, Mobile> MobileUpdate => ShardMessageHandlers.MobileUpdate;
+        public void MobileUpdate(ShardState state, Mobile mobile) => ShardMessageHandlers.MobileUpdate(state, mobile);
 
-        public Action<ShardState> GlobalLight => state => ShardMessageHandlers.GlobalLight(this, state);
+        public void GlobalLight(ShardState state) => ShardMessageHandlers.GlobalLight(this, state);
 
-        public Action<ShardState, Mobile> MobileLight => ShardMessageHandlers.MobileLight;
+        public void MobileLight(ShardState state, Mobile mobile) => ShardMessageHandlers.MobileLight(state, mobile);
 
-        public Action<ShardState, Mobile> MobileIncoming => ShardMessageHandlers.MobileIncoming;
+        public void MobileIncoming(ShardState state, Mobile mobile) => ShardMessageHandlers.MobileIncoming(state, mobile);
 
-        public Action<ShardState, Mobile> MobileStatus => ShardMessageHandlers.MobileStatus;
+        public void MobileStatus(ShardState state, Mobile mobile) => ShardMessageHandlers.MobileStatus(state, mobile);
 
-        public Action<ShardState, Mobile> WarModeResponse => ShardMessageHandlers.WarModeResponse;
+        public void WarModeResponse(ShardState state, Mobile mobile) => ShardMessageHandlers.WarModeResponse(state, mobile);
 
-        public Action<ShardState> LoginComplete => ShardMessageHandlers.LoginComplete;
+        public void LoginComplete(ShardState state) => ShardMessageHandlers.LoginComplete(state);
 
-        public Action<ShardState> ServerTime => state => ShardMessageHandlers.ServerTime(this, state);
+        public void ServerTime(ShardState state) => ShardMessageHandlers.ServerTime(this, state);
 
-        public Action<ShardState, Mobile> SkillInfo => ShardMessageHandlers.SkillInfo;
+        public void SkillInfo(ShardState state, Mobile mobile) => ShardMessageHandlers.SkillInfo(state, mobile);
 
-        public Action<ShardState> PingResponse => ShardMessageHandlers.PingResponse;
+        public void PingResponse(ShardState state) => ShardMessageHandlers.PingResponse(state);
 
-        public Action<ShardState, Mobile> MoveResponse => ShardMessageHandlers.MoveResponse;
+        public void MoveResponse(ShardState state, Mobile mobile) => ShardMessageHandlers.MoveResponse(state, mobile);
 
-        public Action<ShardState> ClientVersionRequest => ShardMessageHandlers.ClientVersionRequest;
+        public void ClientVersionRequest(ShardState state) => ShardMessageHandlers.ClientVersionRequest(state);
 
-        //public Action<ShardState, Mobile> ServerChange => ShardMessageHandlers.ServerChange;
+        //public void ServerChange(ShardState state, Mobile mobile) => ShardMessageHandlers.ServerChange(state, mobile);
 
-        public Action<ShardState, Entity> EntityInfo => ShardMessageHandlers.EntityInfo;
+        public void EntityInfo(ShardState state, Entity entity) => ShardMessageHandlers.EntityInfo(state, entity);
 
-        public Action<ShardState, Entity> EntityAttributes => ShardMessageHandlers.EntityAttributes;
+        public void EntityAttributes(ShardState state, Entity entity) => ShardMessageHandlers.EntityAttributes(state, entity);
 
-        //public Action<ShardState, Mobile> MobileAttributes => ShardMessageHandlers.MobileAttributes;
+        //public void MobileAttributes(ShardState state, Mobile mobile) => ShardMessageHandlers.MobileAttributes(state, mobile);
 
-        public Action<ShardState, Mobile> PaperDollOpen => ShardMessageHandlers.PaperDollOpen;
+        public void PaperDollOpen(ShardState state, Mobile mobile) => ShardMessageHandlers.PaperDollOpen(state, mobile);
 
-        public Action<ShardState, Mobile> ProfileResponse => ShardMessageHandlers.ProfileResponse;
+        public void ProfileResponse(ShardState state, Mobile mobile) => ShardMessageHandlers.ProfileResponse(state, mobile);
 
-        public Action<string> Output => text => Console.WriteLine($"[{DateTime.Now:O}] {Identity}.{text}");
+        public void Output(string text) => Console.WriteLine($"[{DateTime.Now:O}] {Identity}.{text}");
 
-        public Action<ShardState, Entity> EntityDisplay => ShardMessageHandlers.EntityDisplay;
+        public void EntityDisplay(ShardState state, Entity entity) => ShardMessageHandlers.EntityDisplay(state, entity);
 
-        public Action<ShardState, Entity> EntityContent => ShardMessageHandlers.EntityContent;
+        public void EntityContent(ShardState state, Entity entity) => ShardMessageHandlers.EntityContent(state, entity);
 
-        public Action<ShardState, Entity> EntityRemove => ShardMessageHandlers.EntityRemove;
+        public void EntityRemove(ShardState state, Entity entity) => ShardMessageHandlers.EntityRemove(state, entity);
 
-        public Item CreateItem(params Identity[] identities) => ShardServerHandlers.CreateItem(this, identities);
+        public Item CreateItem(params Identity[] identities) => ShardServerHandlers.CreateItem(this, identities: identities);
 
-        public Item CreateItem(ShardState state, params Identity[] identities) => ShardServerHandlers.CreateItem(this, state, null, identities);
+        public Item CreateItem(ushort? graphic, ushort? hue, params Identity[] identities) => ShardServerHandlers.CreateItem(this, graphic, hue, identities);
 
         public HashSet<Identity> GetIdentitiesByGraphic(ushort graphic) => ShardEntityGraphicHandlers.GetIdentitiesByGraphic(this, graphic);
 
-        public Item CreateItem(ushort hue, params Identity[] identities) => ShardServerHandlers.CreateItem(this, hue, identities);
+        public Item CreateItem(ushort hue, params Identity[] identities) => ShardServerHandlers.CreateItem(this, null, hue, identities);
 
         public void SetItemParent(Entity parent, Item item) => ShardServerHandlers.SetItemParent(this, parent, item);
 
-        public Action<ShardState, Mobile> AssignFace => (state, mobile) => ShardMobileRaceHandlers.AssignFace(this, state, mobile);
+        public void AssignFace(Mobile mobile, ShardState state = null) => ShardMobileRaceHandlers.AssignFace(this, mobile, state);
 
-        public Action<ShardState, Mobile> AssignHair => (state, mobile) => ShardMobileRaceHandlers.AssignHair(this, state, mobile);
+        public void AssignHair(Mobile mobile, ShardState state = null) => ShardMobileRaceHandlers.AssignHair(this, mobile, state);
 
-        public Action<ShardState, Mobile> AssignBeard => (state, mobile) => ShardMobileRaceHandlers.AssignBeard(this, state, mobile);
+        public void AssignBeard(Mobile mobile, ShardState state = null) => ShardMobileRaceHandlers.AssignBeard(this, mobile, state);
 
-        public Action<Item> RemoveItemParent => ShardServerHandlers.RemoveItemParent;
+        public void RemoveItemParent(Item item) => ShardServerHandlers.RemoveItemParent(item);
 
-        public Action<ShardState, Item> ItemWorld => ShardMessageHandlers.ItemWorld;
+        public void ItemWorld(ShardState state, Item item) => ShardMessageHandlers.ItemWorld(state, item);
 
-        public Action<ShardState, Item> ItemWearUpdate => ShardMessageHandlers.ItemWearUpdate;
+        public void ItemWearUpdate(ShardState state, Item item) => ShardMessageHandlers.ItemWearUpdate(state, item);
 
-        public Action<ShardState, Mobile> MobileMoving => ShardMessageHandlers.MobileMoving;
+        public void MobileMoving(ShardState state, Mobile mobile) => ShardMessageHandlers.MobileMoving(state, mobile);
 
-        public Action<ShardState, Mobile> SpeechResponse => ShardMessageHandlers.SpeechResponse;
+        public void SpeechResponse(ShardState state, Mobile mobile) => ShardMessageHandlers.SpeechResponse(state, mobile);
 
-        public Action<ShardState> TargetRequest => ShardMessageHandlers.TargetRequest;
+        public void TargetRequest(ShardState state) => ShardMessageHandlers.TargetRequest(state);
 
-        public Action<Entity, string> AssignName => (entity, name) => GameDataHandlers.AssignName(this, entity, name);
+        public void AssignName(Entity entity, string name) => GameDataHandlers.AssignName(this, entity, name);
 
-        public Action<Entity, ushort?> AssignGraphic => (entity, graphic) => ShardEntityGraphicHandlers.AssignGraphic(this, entity, graphic);
+        public void AssignGraphic(Entity entity, ushort? graphic) => ShardEntityGraphicHandlers.AssignGraphic(this, entity, graphic);
 
-        public Action<Entity, ushort?> AssignHue => (entity, hue) => ShardEntityGraphicHandlers.AssignHue(this, entity, hue);
+        public void AssignHue(Entity entity, ushort? hue) => ShardEntityGraphicHandlers.AssignHue(this, entity, hue);
 
-        public Action<ShardState, Mobile> AssignMobileItems => (state, mobile) => ShardEntityItemsHandlers.AssignMobileItems(this, state, mobile);
+        public void AssignMobileItems(Mobile mobile, ShardState state = null) => ShardEntityItemsHandlers.AssignMobileItems(this, mobile, state);
 
-        public Action<ShardState, HashSet<Identity>> AssignRace => (state, identities) => ShardMobileRaceHandlers.AssignRace(this, state, identities);
+        public void AssignRace(ShardState state, HashSet<Identity> identities) => ShardMobileRaceHandlers.AssignRace(this, state, identities);
 
-        public Action<ShardState, HashSet<Identity>> AssignGender => (state, identities) => ShardMobileRaceHandlers.AssignGender(this, state, identities);
+        public void AssignGender(ShardState state, HashSet<Identity> identities) => ShardMobileRaceHandlers.AssignGender(this, state, identities);
 
-        public Action<Mobile> UpdateRace => mobile => ShardMobileRaceHandlers.UpdateRace(this, mobile);
+        public void UpdateRace(Mobile mobile) => ShardMobileRaceHandlers.UpdateRace(this, mobile);
 
-        public Action<Mobile> UpdateGender => mobile =>  ShardMobileRaceHandlers.UpdateGender(this, mobile);
+        public void UpdateGender(Mobile mobile) => ShardMobileRaceHandlers.UpdateGender(this, mobile);
 
-        public Action<Item> AssignLayer => item => GameDataHandlers.AssignLayer(this, item);
+        public void AssignLayer(Item item) => GameDataHandlers.AssignLayer(this, item);
 
-        public Action<Item> AssignDisplayIndex => item => ShardEntityGraphicHandlers.AssignDisplayIndex(this, item);
+        public void AssignDisplayIndex(Item item) => ShardEntityGraphicHandlers.AssignDisplayIndex(this, item);
 
-        public Action<Item> AssignDisplay => item => GameDataHandlers.AssignDisplay(this, item);
+        public void AssignDisplay(Item item) => GameDataHandlers.AssignDisplay(this, item);
 
-        public Action<HashSet<Identity>> AssignIdentities => identities => ShardEntityIdentityHandlers.AssignIdentities(this, identities);
+        public void AssignIdentities(HashSet<Identity> identities) => ShardEntityIdentityHandlers.AssignIdentities(this, identities);
 
-        public Action<ShardState, Target> SoundPlay => ShardMessageHandlers.SoundPlay;
+        public void SoundPlay(ShardState state, Target target) => ShardMessageHandlers.SoundPlay(state, target);
 
-        public Action<ShardState> ItemPlaceApproved => ShardMessageHandlers.ItemPlaceApproved;
+        public void ItemPlaceApproved(ShardState state) => ShardMessageHandlers.ItemPlaceApproved(state);
 
-        public Action<ShardState, Item> EntityContentItem => ShardMessageHandlers.EntityContentItem;
+        public void EntityContentItem(ShardState state, Item item) => ShardMessageHandlers.EntityContentItem(state, item);
 
         public List<string> StringData { get; } = new();
 
@@ -420,17 +418,17 @@ namespace Launcher.Domain
 
         [NotMapped] public Identity CustomProfession { get; set; }
 
-        public Dictionary<HashSet<Identity>, List<(HashSet<Identity> identities, ushort hue)>> Professions { get; } = new();
+        [NotMapped] public Dictionary<HashSet<Identity>, List<(HashSet<Identity> identities, ushort hue)>> Professions { get; } = new();
 
         public void AssignProfession(ShardState state, HashSet<Identity> identities) => ShardMobileProfessionHandlers.AssignProfession(this, state, identities);
 
-        public Dictionary<HashSet<Identity>, List<Range>> GraphicRanges { get; set; }
+        [NotMapped] public Dictionary<HashSet<Identity>, List<Range>> GraphicRanges { get; set; } = new();
 
-        public Dictionary<HashSet<Identity>, List<Range>> HueRanges { get; set; }
+        [NotMapped] public Dictionary<HashSet<Identity>, List<Range>> HueRanges { get; set; } = new();
 
-        public List<Identity> Containers { get; set; }
+        [NotMapped] public List<Identity> Containers { get; set; } = new();
 
-        [NotMapped] public List<HashSet<Identity>> IdentityTree { get; set; }
+        [NotMapped] public List<HashSet<Identity>> IdentityTree { get; set; } = new();
 
         //Layer 1
         [NotMapped] public Identity BookOfArms { get; set; }

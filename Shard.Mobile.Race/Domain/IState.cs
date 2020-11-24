@@ -8,8 +8,14 @@
 
         ushort HairGraphic { get; }
 
+        ushort HairHue { get; }
+
         ushort BeardGraphic { get; }
 
+        ushort BeardHue { get; }
+
         ushort FaceGraphic { get; }
+
+        ushort FaceHue { get; }
     }
 }

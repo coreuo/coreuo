@@ -1,4 +1,5 @@
 ﻿using Shard.Message.Domain.Shared;
+using System;
 
 namespace Shard.Message.Domain.Outgoing
 {
@@ -10,6 +11,10 @@ namespace Shard.Message.Domain.Outgoing
 
         internal void WriteSpeechResponse(IData data)
         {
+            if (SpeechLanguage == null) throw new InvalidOperationException("Unknown speech language.");
+
+            if (SpeechText == null) throw new InvalidOperationException("Unknown speech text.");
+
             data.Write(7, SpeechGraphics);
 
             data.Write(9, SpeechType);

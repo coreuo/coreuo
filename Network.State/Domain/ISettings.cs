@@ -1,13 +1,11 @@
-﻿using System;
-
-namespace Network.State.Domain
+﻿namespace Network.State.Domain
 {
     public interface ISettings
     {
         string IpAddress { get; }
 
-        int Port { get; }
+        int? Port { get; }
 
-        Action<string> Output { get; }
+        void Output(string text);
     }
 }

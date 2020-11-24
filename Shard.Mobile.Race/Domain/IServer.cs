@@ -3,14 +3,12 @@ using System.Collections.Generic;
 
 namespace Shard.Mobile.Race.Domain
 {
-    public interface IServer<in TState, TItem, in TEntity, TIdentity>
-        where TState : IState
-        where TItem : IItem
+    public interface IServer<TItem, in TEntity, TIdentity> where TItem : IItem
         where TEntity : IEntity<TIdentity>
     {
         Dictionary<HashSet<TIdentity>, List<Range>> GraphicRanges { get; }
 
-        TItem CreateItem(TState state, params TIdentity[] identities);
+        TItem CreateItem(ushort? graphic, ushort? hue, params TIdentity[] identities);
 
         void SetItemParent(TEntity entity, TItem item);
 
