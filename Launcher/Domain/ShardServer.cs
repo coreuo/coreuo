@@ -50,7 +50,7 @@ namespace Launcher.Domain
 
         public int? Port { get; set; } = 2594;
 
-        public string GamePath { get; set; } = "C:\\Program Files (x86)\\EA Games\\Ultima Online Kingdom Reborna";
+        public string GamePath { get; set; } = "C:\\Program Files (x86)\\EA Games\\Ultima Online Kingdom Reborn";
 
         [NotMapped] public bool Locked { get; set; }
 
