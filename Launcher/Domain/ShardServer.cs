@@ -48,7 +48,7 @@ namespace Launcher.Domain
 
         public string IpAddress { get; set; } = "127.0.0.1";
 
-        public int? Port { get; set; } = 12594;
+        public int? Port { get; set; } = 2594;
 
         public string GamePath { get; } = "C:\\Program Files (x86)\\EA Games\\Ultima Online Kingdom Reborn";
 
