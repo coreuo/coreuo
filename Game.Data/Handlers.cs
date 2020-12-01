@@ -24,6 +24,13 @@ namespace Game.Data
 
         public static void Load(TSettings settings)
         {
+            if (!Directory.Exists(settings.GamePath))
+            {
+                Console.WriteLine("Please type Ultima Online Kingdom Reborn folder path:");
+
+                settings.GamePath = Console.ReadLine();
+            }
+
             LoadStringData(settings);
 
             LoadTileArts(settings);

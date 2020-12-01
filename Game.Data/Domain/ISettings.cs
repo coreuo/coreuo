@@ -7,7 +7,7 @@ namespace Game.Data.Domain
         where TTileArt : ITileArt
         where TCsvDocument : ICsvDocument
     {
-        string GamePath { get; }
+        string GamePath { get; set; }
 
         List<string> StringData { get; }
 
