@@ -44,7 +44,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shard.Entity.Identity", "Sh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shard.Entity.Graphic", "Shard.Entity.Graphic\Shard.Entity.Graphic.csproj", "{0B8CC40E-369B-48D7-B7A4-579E3C147B6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shard.Mobile.Profession", "Shard.Mobile.Profession\Shard.Mobile.Profession.csproj", "{E1FA042A-5C1A-4DFB-8E2E-696896B943E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shard.Mobile.Profession", "Shard.Mobile.Profession\Shard.Mobile.Profession.csproj", "{E1FA042A-5C1A-4DFB-8E2E-696896B943E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

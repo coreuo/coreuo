@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Game.Data.Domain;
-using Mythic.Package;
+using Ultima.Package;
 
 namespace Game.Data
 {
@@ -92,28 +92,33 @@ namespace Game.Data
         {
             var path = Path.Combine(settings.GamePath, Dictionary);
 
-            var package = new MythicPackage(path);
+            using var packageStream = File.OpenRead(path);
 
-            var file = package.Blocks.Single().Files.Single();
+            using var packageReader = new BinaryReader(packageStream);
 
-            var bytes = file.Unpack(path);
+            var package = UltimaPackage.FromReader(packageReader);
 
-            using var stream = new MemoryStream(bytes);
+            var file = package.GetBlocks(packageReader).Single().GetFiles(packageReader).Single();
 
-            using var reader = new BinaryReader(stream);
-
-            stream.Seek(0x10, SeekOrigin.Begin);
-
-            while (stream.Position < stream.Length)
+            file.GetData(packageReader, (reader, total) =>
             {
-                var length = reader.ReadInt16();
+                reader.ReadBytes(0x10);
 
-                bytes = reader.ReadBytes(length);
+                var current = 0x10;
 
-                var name = System.Text.Encoding.ASCII.GetString(bytes).Split('%').First();
+                while (current < total)
+                {
+                    var length = reader.ReadInt16();
 
-                settings.StringData.Add(name);
-            }
+                    var bytes = reader.ReadBytes(length);
+
+                    var name = System.Text.Encoding.ASCII.GetString(bytes).Split('%').First();
+
+                    settings.StringData.Add(name);
+
+                    current += 2 + length;
+                }
+            });
         }
 
         /*public static void LoadCliLoc(TSettings settings)
@@ -154,50 +159,53 @@ namespace Game.Data
         {
             var path = Path.Combine(settings.GamePath, TileArt);
 
-            var package = new MythicPackage(path);
+            using var packageStream = File.OpenRead(path);
 
-            foreach (var file in package.Blocks.SelectMany(b => b.Files))
+            using var packageReader = new BinaryReader(packageStream);
+
+            var package = UltimaPackage.FromReader(packageReader);
+
+            var buffer = new byte[100];
+
+            foreach (var file in package.GetBlocks(packageReader).SelectMany(b => b.GetFiles(packageReader)))
             {
-                var bytes = file.Unpack(path);
-
-                using var stream = new MemoryStream(bytes);
-
-                using var reader = new BinaryReader(stream);
-
-                stream.Seek(2, SeekOrigin.Begin);
-
-                var index = reader.ReadInt32();
-
-                var name = settings.StringData[index > 0 ? index - 1 : 0];
-
-                var id = reader.ReadUInt16();
-
-                stream.Seek(59, SeekOrigin.Begin);
-
-                var flags = reader.ReadUInt64();
-
-                stream.Seek(115, SeekOrigin.Begin);
-
-                var count = reader.ReadByte();
-
-                var properties = new Dictionary<byte, int>();
-
-                for (var i = 0; i < count; i++) properties[reader.ReadByte()] = reader.ReadInt32();
-
-                if (!properties.TryGetValue(0, out var weight)) weight = 0;
-
-                if (!properties.TryGetValue(3, out var height)) height = 0;
-
-                if (!properties.TryGetValue(6, out var layer)) layer = 0;
-
-                settings.TileArts.Add(id, new TTileArt
+                file.GetData(packageReader, (reader, total) =>
                 {
-                    Graphic = id,
-                    Name = name,
-                    Flags = flags,
-                    Weight = (ushort) weight,
-                    Height = height,
-                    Layer = (byte) layer
+                    reader.ReadInt16();
+
+                    var index = reader.ReadInt32();
+
+                    var name = settings.StringData[index > 0 ? index - 1 : 0];
+
+                    var id = reader.ReadUInt16();
+
+                    reader.BaseStream.Read(buffer, 0, 51);
+
+                    var flags = reader.ReadUInt64();
+
+                    reader.BaseStream.Read(buffer, 0, 48);
+
+                    var count = reader.ReadByte();
+
+                    var properties = new Dictionary<byte, int>();
+
+                    for (var i = 0; i < count; i++) properties[reader.ReadByte()] = reader.ReadInt32();
+
+                    if (!properties.TryGetValue(0, out var weight)) weight = 0;
+
+                    if (!properties.TryGetValue(3, out var height)) height = 0;
+
+                    if (!properties.TryGetValue(6, out var layer)) layer = 0;
+
+                    settings.TileArts.Add(id, new TTileArt
+                    {
+                        Graphic = id,
+                        Name = name,
+                        Flags = flags,
+                        Weight = (ushort)weight,
+                        Height = height,
+                        Layer = (byte)layer
+                    });
                 });
             }
         }
@@ -208,39 +216,42 @@ namespace Game.Data
 
             var path = Path.Combine(settings.GamePath, GameData);
 
-            var package = new MythicPackage(path);
+            using var packageStream = File.OpenRead(path);
 
-            foreach (var file in package.Blocks.SelectMany(b => b.Files))
+            using var packageReader = new BinaryReader(packageStream);
+
+            var package = UltimaPackage.FromReader(packageReader);
+
+            var buffer = new byte[100];
+
+            foreach (var file in package.GetBlocks(packageReader).SelectMany(b => b.GetFiles(packageReader)))
             {
-                var bytes = file.Unpack(path);
-
-                if(bytes.First() > sbyte.MaxValue) continue;
-
-                using var stream = new MemoryStream(bytes);
-
-                using var reader = new StreamReader(stream);
-
-                var lines = new List<string>();
-
-                string line;
-
-                while ((line = reader.ReadLine()) != null)
+                file.GetData(packageReader, (reader, total) =>
                 {
-                    if(line.StartsWith('#')) continue;
+                    using var text = new StreamReader(reader.BaseStream, leaveOpen: true);
 
-                    lines.Add(line);
-                }
+                    var lines = new List<string>();
 
-                settings.CsvDocuments.Add(file.FileHash, new TCsvDocument
-                {
-                    Header = lines.First().Split(','),
-                    Data = lines
-                        .Skip(1)
-                        .Select(l => l.Split(','))
-                        .SelectMany(inner => inner.Select((item, index) => new {item, index}))
-                        .GroupBy(i => i.index, i => i.item)
-                        .Select(g => g.ToArray())
-                        .ToArray()
+                    string line;
+
+                    while ((line = text.ReadLine()) != null)
+                    {
+                        if (line.StartsWith('#')) continue;
+
+                        lines.Add(line);
+                    }
+
+                    settings.CsvDocuments.Add(file.FileNameHash, new TCsvDocument
+                    {
+                        Header = lines.First().Split(','),
+                        Data = lines
+                            .Skip(1)
+                            .Select(l => l.Split(','))
+                            .SelectMany(inner => inner.Select((item, index) => new {item, index}))
+                            .GroupBy(i => i.index, i => i.item)
+                            .Select(g => g.ToArray())
+                            .ToArray()
+                    });
                 });
             }
         }

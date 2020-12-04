@@ -5,7 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mythic.Package" Version="1.0.5" />
+    <PackageReference Include="Ultima.Package" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="C:\Users\David Janousek\.nuget\packages\ultima.package\1.0.0\contentFiles\any\net5.0\Dictionary.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
